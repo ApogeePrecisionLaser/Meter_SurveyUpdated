@@ -1,0 +1,1229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <distributable/>
+    <context-param>
+        <param-name>driverClass</param-name>
+        <param-value>com.mysql.jdbc.Driver</param-value>
+    </context-param>
+    <context-param>
+        <param-name>connectionString</param-name>
+        <param-value>jdbc:mysql://localhost:3306/meter_survey</param-value>
+    </context-param>
+    <context-param>
+        <param-name>db_username</param-name>
+        <param-value>root</param-value>
+    </context-param>
+    <context-param>
+        <description>	</description>
+        <param-name>db_password</param-name>
+        <param-value>root</param-value>
+    </context-param>
+    <!--    <context-param>
+        <param-name>ssadvtRepositoryPath</param-name>
+        <param-value>C:\ssadvt_repository</param-value>
+    </context-param>-->
+    <!--     <listener>
+        <description>ServletContextListener</description>
+        <listener-class>com.ssadvt.general.listener.MyServletContextListener</listener-class>
+    </listener>-->
+    <!--  show album code start-->
+      <!-- Starting of Water Supply Controller -->
+    <servlet>
+        <servlet-name>waterTreatmentPlantCont</servlet-name>
+        <servlet-class>com.survey.waterworks.controller.WaterTreatmentPlantController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>waterTreatmentPlantCont</servlet-name>
+        <url-pattern>/waterTreatmentPlantCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>overHeadTankCont</servlet-name>
+        <servlet-class>com.survey.waterworks.controller.OverHeadTankController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>overHeadTankCont</servlet-name>
+        <url-pattern>/overHeadTankCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ohLevelCont</servlet-name>
+        <servlet-class>com.survey.waterworks.controller.OHLevelController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ohLevelCont</servlet-name>
+        <url-pattern>/ohLevelCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>rawWaterCont</servlet-name>
+        <servlet-class>com.survey.waterworks.controller.RawWaterController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>rawWaterCont</servlet-name>
+        <url-pattern>/rawWaterCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>rawWaterLevelCont</servlet-name>
+        <servlet-class>com.survey.waterworks.controller.RawWaterLevelController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>rawWaterLevelCont</servlet-name>
+        <url-pattern>/rawWaterLevelCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>sourceWaterCont</servlet-name>
+        <servlet-class>com.survey.waterworks.controller.SourceWaterController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>sourceWaterCont</servlet-name>
+        <url-pattern>/sourceWaterCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>sourceWaterLevelCont</servlet-name>
+        <servlet-class>com.survey.waterworks.controller.SourceWaterLevelController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>sourceWaterLevelCont</servlet-name>
+        <url-pattern>/sourceWaterLevelCont.do</url-pattern>
+    </servlet-mapping>
+    <!-- Ending of Water Supply Controller -->
+    <!-- Starting of Water Supply View -->
+    <servlet>
+        <servlet-name>waterTreatmentPlantView</servlet-name>
+        <jsp-file>/view/dataEntry/waterTreatmentPlantView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>waterTreatmentPlantView</servlet-name>
+        <url-pattern>/waterTreatmentPlantView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>overHeadTankView</servlet-name>
+        <jsp-file>/view/dataEntry/overHeadTankView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>overHeadTankView</servlet-name>
+        <url-pattern>/overHeadTankView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ohLevelView</servlet-name>
+        <jsp-file>/view/dataEntry/ohLevelView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ohLevelView</servlet-name>
+        <url-pattern>/ohLevelView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>rawWaterView</servlet-name>
+        <jsp-file>/view/dataEntry/rawWaterView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>rawWaterView</servlet-name>
+        <url-pattern>/rawWaterView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>rawWaterLevelView</servlet-name>
+        <jsp-file>/view/dataEntry/rawWaterLevelView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>rawWaterLevelView</servlet-name>
+        <url-pattern>/rawWaterLevelView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>sourceWaterView</servlet-name>
+        <jsp-file>/view/dataEntry/sourceWaterView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>sourceWaterView</servlet-name>
+        <url-pattern>/sourceWaterView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>sourceWaterLevelView</servlet-name>
+        <jsp-file>/view/dataEntry/sourceWaterLevelView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>sourceWaterLevelView</servlet-name>
+        <url-pattern>/sourceWaterLevelView</url-pattern>
+    </servlet-mapping>
+    <!-- Ending of Water Supply View -->
+    <!--Start of City Type Controller -->
+    <servlet>
+        <servlet-name>City_Type_View</servlet-name>
+        <jsp-file>/view/dataEntry/cityView.jsp</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>SwitchingPointReport</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.SwitchingPointReport</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LogErrorController</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.LogErrorController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ErrorMessageController</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.ErrorMessageController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>City_Type_View</servlet-name>
+        <url-pattern>/city_TypeView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>CityTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.CityTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CityTypeCont</servlet-name>
+        <url-pattern>/cityTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of City Type Controller -->
+    <servlet>
+        <servlet-name>servlet Dispatcher</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>com.survey.dataEntry.controller</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>servlet Dispatcher</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>webServiceCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.MeterSuverWebServices</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>webServiceCont</servlet-name>
+        <url-pattern>/webServiceCont</url-pattern>
+    </servlet-mapping>
+    <!--end of City Type Controller -->
+    <!--Start of Traffic Type Controller -->
+
+    <!---@@@@@@@@@@@@@@@@@@@@@@@@@@@@Division Controller@@@@@@@@@@@@@@@@@@@@@@-->
+
+    <servlet>
+        <servlet-name>DivisionView</servlet-name>
+        <jsp-file>/view/dataEntry/divisionView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DivisionView</servlet-name>
+        <url-pattern>/divisionView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DivisionCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.DivisionController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DivisionCont</servlet-name>
+        <url-pattern>/divisionCont</url-pattern>
+    </servlet-mapping>
+    <!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+      <!---@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Zone Controller@@@@@@@@@@@@@@@@@@@@@@-->
+
+    <servlet>
+        <servlet-name>ZoneView</servlet-name>
+        <jsp-file>/view/dataEntry/zoneView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ZoneView</servlet-name>
+        <url-pattern>/zoneView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ZoneCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.ZoneController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ZoneCont</servlet-name>
+        <url-pattern>/zoneCont</url-pattern>
+    </servlet-mapping>
+    <!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+      <!---@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Ward Controller@@@@@@@@@@@@@@@@@@@@@@-->
+
+    <servlet>
+        <servlet-name>WardView</servlet-name>
+        <jsp-file>/view/dataEntry/wardView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WardView</servlet-name>
+        <url-pattern>/wardView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>WardCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.WardController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WardCont</servlet-name>
+        <url-pattern>/wardCont</url-pattern>
+    </servlet-mapping>
+    <!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+    <!---@@@@@@@@@@@@@@@@@@@@@@@@@@@@ TubeWellUser Controller@@@@@@@@@@@@@@@@@@@@@@-->
+
+    <servlet>
+        <servlet-name>TubeWellUserView</servlet-name>
+        <jsp-file>/view/dataEntry/tubeWellUserView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TubeWellUserView</servlet-name>
+        <url-pattern>/tubeWellUserView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TubeWellUserCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.TubeWellUserController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TubeWellUserCont</servlet-name>
+        <url-pattern>/tubeWellUserCont</url-pattern>
+    </servlet-mapping>
+    <!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+  <!---@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Zone Controller@@@@@@@@@@@@@@@@@@@@@@-->
+
+    <servlet>
+        <servlet-name>TubeWellDetailView</servlet-name>
+        <jsp-file>/view/dataEntry/tubeWellDetailView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TubeWellDetailView</servlet-name>
+        <url-pattern>/tubeWellDetailView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TubeWellCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.TubeWellDetailController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TubeWellCont</servlet-name>
+        <url-pattern>/tubeWellDetailCont</url-pattern>
+    </servlet-mapping>
+    <!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+    <servlet>
+        <servlet-name>TubeWellSurveyView</servlet-name>
+        <jsp-file>/view/dataEntry/tubeWellSurveyView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TubeWellSurveyView</servlet-name>
+        <url-pattern>/tubeWellSurveyView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TubeWellSurveyCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.TubeWellSurveyController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TubeWellSurveyCont</servlet-name>
+        <url-pattern>/tubeWellSurveyCont</url-pattern>
+    </servlet-mapping>
+    <!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+
+    <servlet>
+        <servlet-name>TubeWellUserDataView</servlet-name>
+        <jsp-file>/view/dataEntry/tubewell_user_data.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TubeWellUserDataView</servlet-name>
+        <url-pattern>/tubeWellUserDataView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TubeWellUserDataCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.TubeWellUserDataController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TubeWellUserDataCont</servlet-name>
+        <url-pattern>/tubeWellUserDataCont</url-pattern>
+    </servlet-mapping>
+    <!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+<!---@@@@@@@@@@@@@@@@@@@@@@@@@@@@TUbeWELl Bore Data Controller@@@@@@@@@@@@@@@@@@@@@@-->
+
+    <servlet>
+        <servlet-name>TubeWellBoreDataView</servlet-name>
+        <jsp-file>/view/dataEntry/tubewellBoreDataView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TubeWellBoreDataView</servlet-name>
+        <url-pattern>/TubeWellBoreDataView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TubeWellBoreDataCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.TubeWellBoreDataController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TubeWellBoreDataCont</servlet-name>
+        <url-pattern>/tubeWellBoreDataCont</url-pattern>
+    </servlet-mapping>
+    <!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+   
+    <!--Start of Traffic Type Controller -->
+    <servlet>
+        <servlet-name>Traffic_Type_View</servlet-name>
+        <jsp-file>/view/dataEntry/trafficView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Traffic_Type_View</servlet-name>
+        <url-pattern>/traffic_TypeView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TrafficTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.TrafficTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TrafficTypeCont</servlet-name>
+        <url-pattern>/trafficTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Traffic Type Controller -->
+    <!--Start of Wattage Type Controller -->
+    <servlet>
+        <servlet-name>Wattage_Type_View</servlet-name>
+        <jsp-file>/view/dataEntry/wattageView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Wattage_Type_View</servlet-name>
+        <url-pattern>/wattage_TypeView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>WattageTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.WattageTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WattageTypeCont</servlet-name>
+        <url-pattern>/wattageTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Wattage Type Controller -->
+    <!--Start of Light Type Controller -->
+    <servlet>
+        <servlet-name>Light_Source_Type_View</servlet-name>
+        <jsp-file>/view/dataEntry/lightSourceView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Light_Source_Type_View</servlet-name>
+        <url-pattern>/lightSource_TypeView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>LightSourceTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.LightSourceTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LightSourceTypeCont</servlet-name>
+        <url-pattern>/lightSourceTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Light Type Controller -->
+    <!--Start of Mounting Type Controller -->
+    <servlet>
+        <servlet-name>Mounting_Type_View</servlet-name>
+        <jsp-file>/view/dataEntry/mountingView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Mounting_Type_View</servlet-name>
+        <url-pattern>/mounting_TypeView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>MountingTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.MountingTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MountingTypeCont</servlet-name>
+        <url-pattern>/mountingTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Mounting Type Controller -->
+    <!--Start of Pole Type Controller -->
+    <servlet>
+        <servlet-name>Pole_Type_View</servlet-name>
+        <jsp-file>/view/dataEntry/poleView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Pole_Type_View</servlet-name>
+        <url-pattern>/pole_TypeView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>PoleTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.PoleTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PoleTypeCont</servlet-name>
+        <url-pattern>/poleTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Pole Type Controller -->
+    <!--Start of Road Use Type Controller -->
+    <servlet>
+        <servlet-name>RoadUse_Type_View</servlet-name>
+        <jsp-file>/view/dataEntry/roadUseView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RoadUse_Type_View</servlet-name>
+        <url-pattern>/roadUse_TypeView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RoadUseTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.RoadUseTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RoadUseTypeCont</servlet-name>
+        <url-pattern>/roadUseTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Road Use Type Controller -->
+    <!--Start of Road Category Type Controller -->
+    <servlet>
+        <servlet-name>Road_Category_Type_View</servlet-name>
+        <jsp-file>/view/dataEntry/roadCategoryView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Road_Category_Type_View</servlet-name>
+        <url-pattern>/roadCat_TypeView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RoadCategoryTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.RoadCategoryTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RoadCategoryTypeCont</servlet-name>
+        <url-pattern>/roadCatTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Road Category Type Controller -->
+    <!--Start of Light Type Controller -->
+    <servlet>
+        <servlet-name>Light_Type_View</servlet-name>
+        <jsp-file>/view/dataEntry/lightView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Light_Type_View</servlet-name>
+        <url-pattern>/light_TypeView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>LightTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.LightTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LightTypeCont</servlet-name>
+        <url-pattern>/lightTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Light Type Controller -->
+    <!--Start of Pole Controller -->
+    <servlet>
+        <servlet-name>Pole_Detail_View</servlet-name>
+        <jsp-file>/view/dataEntry/poleDetailView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Pole_Detail_View</servlet-name>
+        <url-pattern>/poleDetail_View</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>PoleDetailCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.PoleDetailTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PoleDetailCont</servlet-name>
+        <url-pattern>/poleDetailCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Pole Controller -->
+    <!--Start of Road Controller -->
+    <servlet>
+        <servlet-name>Road_Type_View</servlet-name>
+        <jsp-file>/view/dataEntry/roadView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Road_Type_View</servlet-name>
+        <url-pattern>/road_TypeView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RoadTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.RoadTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RoadTypeCont</servlet-name>
+        <url-pattern>/roadTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Road  Controller -->
+    <!--Start of Ward Controller -->
+    <servlet>
+        <servlet-name>Ward_Type_View</servlet-name>
+        <jsp-file>/view/dataEntry/wardView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Ward_Type_View</servlet-name>
+        <url-pattern>/ward_TypeView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>WardTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.WardTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WardTypeCont</servlet-name>
+        <url-pattern>/wardTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Ward  Controller -->
+    <!--Start of Area Controller -->
+    <servlet>
+        <servlet-name>Area_Type_View</servlet-name>
+        <jsp-file>/view/dataEntry/areaView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Area_Type_View</servlet-name>
+        <url-pattern>/area_TypeView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>AreaTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.AreaTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AreaTypeCont</servlet-name>
+        <url-pattern>/areaTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Area  Controller -->
+    <!--Start of Area Controller -->
+    <servlet>
+        <servlet-name>Switching_Point_Detail_View</servlet-name>
+        <jsp-file>/view/dataEntry/switchingPointSurveyView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Switching_Point_Detail_View</servlet-name>
+        <url-pattern>/switching_PointDetailView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>SwitchingPointSurveyCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.SwitchingPointSurveyController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SwitchingPointSurveyCont</servlet-name>
+        <url-pattern>/switchingPointSurvey</url-pattern>
+    </servlet-mapping>
+    <!--end of Area  Controller -->
+    <!--Start of Control Mechanism Controller -->
+    <servlet>
+        <servlet-name>Control_Mechanism_View</servlet-name>
+        <jsp-file>/view/dataEntry/controlMechanismView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Control_Mechanism_View</servlet-name>
+        <url-pattern>/control_MechanismView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ControlMechanismCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.ControlMechanismTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ControlMechanismCont</servlet-name>
+        <url-pattern>/controlMechanismTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Control Mechanism  Controller -->
+    <!--Start of Fuse Controller -->
+    <servlet>
+        <servlet-name>Fuse_View</servlet-name>
+        <jsp-file>/view/dataEntry/fuseView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Fuse_View</servlet-name>
+        <url-pattern>/fuseView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>FuseTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.FuseTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FuseTypeCont</servlet-name>
+        <url-pattern>/fuseTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Fuse  Controller -->
+    <!--Start of Contacter Controller -->
+    <servlet>
+        <servlet-name>Contacter_View</servlet-name>
+        <jsp-file>/view/dataEntry/contacterView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Contacter_View</servlet-name>
+        <url-pattern>/contacterView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ContacterTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.ContacterTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ContacterTypeCont</servlet-name>
+        <url-pattern>/contacterTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Contacter  Controller -->
+    <!--Start of Timer Controller -->
+    <servlet>
+        <servlet-name>Timer_View</servlet-name>
+        <jsp-file>/view/dataEntry/timerView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Timer_View</servlet-name>
+        <url-pattern>/timerView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>TimerTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.TimerTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TimerTypeCont</servlet-name>
+        <url-pattern>/timerTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Timer  Controller -->
+    <!--Start of Mccb Controller -->
+    <servlet>
+        <servlet-name>Mccb_View</servlet-name>
+        <jsp-file>/view/dataEntry/mccbView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Mccb_View</servlet-name>
+        <url-pattern>/mccbView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>MccbTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.MccbTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MccbTypeCont</servlet-name>
+        <url-pattern>/mccbTypeCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Mccb  Controller -->
+    <!--Start of Switching Survey Controller -->
+    <servlet>
+        <servlet-name>SwitchingSurveyView</servlet-name>
+        <jsp-file>/view/dataEntry/switchingSurveyView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SwitchingSurveyView</servlet-name>
+        <url-pattern>/switchingSurveyView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>SwitchingSurveyCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.SwitchingSurveyController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SwitchingSurveyCont</servlet-name>
+        <url-pattern>/switchingSurveyCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Switching Survey  Controller -->
+    <!-- Start of Meter's Switching Point -->
+    <servlet>
+        <servlet-name>SwithingPointController</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.SwithingPointController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SwithingPointController</servlet-name>
+        <url-pattern>/switchingpontCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Switchpoint</servlet-name>
+        <jsp-file>/view/dataEntry/switching_point.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Switchpoint</servlet-name>
+        <url-pattern>/switchpoint_view</url-pattern>
+    </servlet-mapping>
+    <!-- End of Meter's Switching Point -->
+    <!-- Start of Mapping of Switching Point of Survey & Meter -->
+    <servlet>
+        <servlet-name>SwitchingMapView</servlet-name>
+        <jsp-file>/view/dataEntry/switchingMapView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SwitchingMapView</servlet-name>
+        <url-pattern>/switchingMapView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>SwitchingPointMapCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.SwitchingPointMap</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SwitchingPointMapCont</servlet-name>
+        <url-pattern>/switchingPointMap.do</url-pattern>
+    </servlet-mapping>
+    <!-- End of Mapping of Switching Point of Survey & Meter -->
+    <!--Start of Survey Controller -->
+    <servlet>
+        <servlet-name>SurveyView</servlet-name>
+        <jsp-file>/view/dataEntry/surveyView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SurveyView</servlet-name>
+        <url-pattern>/surveyView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>SurveyCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.SurveyController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SurveyCont</servlet-name>
+        <url-pattern>/surveyCont</url-pattern>
+    </servlet-mapping>
+    <!--end of Survey  Controller -->
+    <servlet-mapping>
+        <servlet-name>SwitchingPointReport</servlet-name>
+        <url-pattern>/switchingPointReport.do</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogErrorController</servlet-name>
+        <url-pattern>/logErrorCont</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>logErrorView</servlet-name>
+        <jsp-file>/view/dataEntry/logErrorView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>logErrorView</servlet-name>
+        <url-pattern>/logErrorView</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ErrorMessageController</servlet-name>
+        <url-pattern>/errorMessageCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>errorMessageView</servlet-name>
+        <jsp-file>/view/dataEntry/errorMessageView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>errorMessageView</servlet-name>
+        <url-pattern>/errorMessage</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>/layout/index.jsp</welcome-file>
+    </welcome-file-list>
+    <servlet>
+        <servlet-name>General calendar_view</servlet-name>
+        <jsp-file>/view/general/calendar.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>General calendar_view</servlet-name>
+        <url-pattern>/calendar_view</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>switching point report</servlet-name>
+        <jsp-file>/view/dataEntry/switching_point_report.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>switching point report</servlet-name>
+        <url-pattern>/switchingPointReport</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>zone detail view</servlet-name>
+        <jsp-file>/view/dataEntry/zone_detail_view.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>zone detail view</servlet-name>
+        <url-pattern>/zoneSwitchingDetailView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>zone pole detail switching view</servlet-name>
+        <jsp-file>/view/dataEntry/zone_pole_detail_view.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>zone pole detail switching view</servlet-name>
+        <url-pattern>/zonePoleDetailSwitchingView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>zone pole detail view</servlet-name>
+        <jsp-file>/view/dataEntry/switching_pole_detail_view.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>zone pole detail view</servlet-name>
+        <url-pattern>/zonePoleDetailView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>openMapWindow view</servlet-name>
+        <jsp-file>/view/dataEntry/mapWindow.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>openMapWindow view</servlet-name>
+        <url-pattern>/openMapWindowView</url-pattern>
+    </servlet-mapping>
+    <!-- ........................................................................Done during energyMeter Start..................................................................... -->
+    <servlet>
+        <servlet-name>ServletInitializer</servlet-name>
+        <servlet-class>com.survey.general.controller.ServletInitializer</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>General TimeIntervalController</servlet-name>
+        <servlet-class>com.survey.general.controller.TimeIntervalController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>General TimeIntervalController</servlet-name>
+        <url-pattern>/timeIntervalCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>General meter_reading_view</servlet-name>
+        <jsp-file>/view/general/time_interval.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>General meter_reading_view</servlet-name>
+        <url-pattern>/time_interval_view</url-pattern>
+    </servlet-mapping>
+    <!-- ..............................Web Application Listeners Start................................................ -->
+    <listener>
+        <description>ServletContextListener</description>
+        <listener-class>com.survey.energyMeter.listeners.MyServletContextListener</listener-class>
+    </listener>
+    <listener>
+        <description>ServletContextAttributeListener</description>
+        <listener-class>com.survey.energyMeter.listeners.MyServletContextAttributeListener</listener-class>
+    </listener>
+    <!-- ..............................Web Application Listeners End................................................ -->
+    <!-- ..............................Web Application EnergyMeter Start................................................ -->
+    <servlet>
+        <servlet-name>EnergyMeter MeterReadingController</servlet-name>
+        <servlet-class>com.survey.energyMeter.controller.MeterReadingController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EnergyMeter MeterReadingController</servlet-name>
+        <url-pattern>/meterReadingCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>EnergyMeter meter_reading_view</servlet-name>
+        <jsp-file>/view/energyMeter/meter_reading_view.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EnergyMeter meter_reading_view</servlet-name>
+        <url-pattern>/meter_reading_view</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>EnergyMeterStatusController</servlet-name>
+        <servlet-class>com.survey.energyMeter.controller.EnergyMeterStatusController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EnergyMeterStatusController</servlet-name>
+        <url-pattern>/energyMeterStatusCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>EnergyMeter energyMeter_status_view</servlet-name>
+        <jsp-file>/view/energyMeter/energyMeter_status_view.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EnergyMeter energyMeter_status_view</servlet-name>
+        <url-pattern>/energyMeter_status_view</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>HealthStatusMapController</servlet-name>
+        <servlet-class>com.survey.energyMeter.controller.HealthStatusMapController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HealthStatusMapController</servlet-name>
+        <url-pattern>/healthStatusMapCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>EnergyMeter healthstatusMapView</servlet-name>
+        <jsp-file>/view/energyMeter/healthStatusMapView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EnergyMeter healthstatusMapView</servlet-name>
+        <url-pattern>/healthstatusMapView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>JunctionController</servlet-name>
+        <servlet-class>com.survey.energyMeter.controller.JunctionController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>JunctionController</servlet-name>
+        <url-pattern>/junctionCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>EnergyMeter junctionView</servlet-name>
+        <jsp-file>/view/energyMeter/junctionView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EnergyMeter junctionView</servlet-name>
+        <url-pattern>/junctionView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>EnergyMeterMISController</servlet-name>
+        <servlet-class>com.survey.energyMeter.controller.EnergyMeterMISController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EnergyMeterMISController</servlet-name>
+        <url-pattern>/energyMeterMISCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>EnergyMeter energyMeterChartView</servlet-name>
+        <jsp-file>/view/energyMeter/energyMeterChartView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EnergyMeter energyMeterChartView</servlet-name>
+        <url-pattern>/energyMeterChartView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>EnergyMeter EnergyMeterChartController</servlet-name>
+        <servlet-class>com.survey.energyMeter.general.controller.EnergyMeterChartController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EnergyMeter EnergyMeterChartController</servlet-name>
+        <url-pattern>/energyMeterChartCont.do</url-pattern>
+    </servlet-mapping>
+    <!-- ..............................Web Application EnergyMeter End................................................ -->
+    <!-- ..............................Web Application EnergyMeter General start................................................ -->
+    <servlet>
+        <servlet-name>general connected_ip_view</servlet-name>
+        <jsp-file>/view/general/connected_ip.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>general connected_ip_view</servlet-name>
+        <url-pattern>/connected_ip_view</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>general ConnectedIpCont</servlet-name>
+        <servlet-class>com.survey.energyMeter.general.controller.ConnectedIpController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>general ConnectedIpCont</servlet-name>
+        <url-pattern>/connectedIpCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>general LoggedInJunctionController</servlet-name>
+        <servlet-class>com.survey.energyMeter.general.controller.LoggedInJunctionController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>general LoggedInJunctionController</servlet-name>
+        <url-pattern>/loggedInJunctionCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>general logged_in_junction_view</servlet-name>
+        <jsp-file>/view/general/logged_in_junction_details.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>general logged_in_junction_view</servlet-name>
+        <url-pattern>/loggedInJunctionView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>general HealthStatusController</servlet-name>
+        <servlet-class>com.survey.energyMeter.general.controller.HealthStatusController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>general HealthStatusController</servlet-name>
+        <url-pattern>/healthStatusCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>general healthStatusView</servlet-name>
+        <jsp-file>/view/general/healthStatusView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>general healthStatusView</servlet-name>
+        <url-pattern>/healthStatusView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>general LogHistoryController</servlet-name>
+        <servlet-class>com.survey.energyMeter.general.controller.LogHistoryController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>general LogHistoryController</servlet-name>
+        <url-pattern>/logHistoryCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>general logHistoryView</servlet-name>
+        <jsp-file>/view/general/logHistoryView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>general logHistoryView</servlet-name>
+        <url-pattern>/logHistoryView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>general jun_sunrise_sunset_view</servlet-name>
+        <jsp-file>/view/general/junction_sunrise_sunset.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>general jun_sunrise_sunset_view</servlet-name>
+        <url-pattern>/jun_sunrise_sunset_view</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>general JunSunriseSunsetController</servlet-name>
+        <servlet-class>com.survey.energyMeter.general.controller.Jun_Sunrise_SunsetController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>general JunSunriseSunsetController</servlet-name>
+        <url-pattern>/JunSunriseSunsetCont.do</url-pattern>
+    </servlet-mapping>
+    <!-- ..............................Web Application General End................................................ -->
+    <!-- ........................................................................Done during energyMeter End..................................................................... -->
+    <!--..................................Start Complaint......................... -->
+    <servlet>
+        <servlet-name>Complaint ComplaintRegister</servlet-name>
+        <servlet-class>com.survey.complaint.controller.ComplaintRegisterController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Complaint ComplaintRegister</servlet-name>
+        <url-pattern>/complaintregisterCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Complaint ComplaintRegistorView</servlet-name>
+        <jsp-file>/view/complaint/complaint.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Complaint ComplaintRegistorView</servlet-name>
+        <url-pattern>/complaintregister_view</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Complaint ComplaintStatusView</servlet-name>
+        <jsp-file>/view/complaint/complaint_status.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Complaint ComplaintStatusView</servlet-name>
+        <url-pattern>/complaintstatus_view</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ComplaintStatus</servlet-name>
+        <servlet-class>com.survey.complaint.controller.ComplaintStatusController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ComplaintStatus</servlet-name>
+        <url-pattern>/complaintStatusCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ComplaintAssingedForController</servlet-name>
+        <servlet-class>com.survey.complaint.controller.ComplaintAssingedForController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ComplaintAssingedForController</servlet-name>
+        <url-pattern>/complaintAssingnedForCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Complaint ComplaintAssingedForView</servlet-name>
+        <jsp-file>/view/complaint/complaint_assinged_for.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Complaint ComplaintAssingedForView</servlet-name>
+        <url-pattern>/complaint_aasinged_for_view</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ComplaintFeedbackTypeController</servlet-name>
+        <servlet-class>com.survey.complaint.controller.ComplaintFeedbackTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ComplaintFeedbackTypeController</servlet-name>
+        <url-pattern>/complaintFeedbackTypeCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Complaint ComplaintFeedbackType</servlet-name>
+        <jsp-file>/view/complaint/complaint_feedback_type.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Complaint ComplaintFeedbackType</servlet-name>
+        <url-pattern>/complaintFeedbackType_view</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ComplaintFeedbackController</servlet-name>
+        <servlet-class>com.survey.complaint.controller.ComplaintFeedbackController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ComplaintFeedbackController</servlet-name>
+        <url-pattern>/complaintFeedbackCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Complaint ComplaintFeedback</servlet-name>
+        <jsp-file>/view/complaint/complaint_feedback.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Complaint ComplaintFeedback</servlet-name>
+        <url-pattern>/complaintFeedback_view</url-pattern>
+    </servlet-mapping>
+    <!--complaint  history report -->
+    <servlet>
+        <servlet-name>ComplaintHistroyReportController</servlet-name>
+        <servlet-class>com.survey.complaint.controller.ComplaintHistroyReportController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ComplaintHistroyReportController</servlet-name>
+        <url-pattern>/complaintHistoryReportCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ComplaintHistroyReport</servlet-name>
+        <jsp-file>/view/complaint/complaint_history_report.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ComplaintHistroyReport</servlet-name>
+        <url-pattern>/complaint_history_report_view</url-pattern>
+    </servlet-mapping>
+    <!--complaint  history report -->
+    <servlet>
+        <servlet-name>ComplaintHelpFile </servlet-name>
+        <jsp-file>/view/complaint/complaint_helpfile.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ComplaintHelpFile</servlet-name>
+        <url-pattern>/complaint_helpfile_view</url-pattern>
+    </servlet-mapping>
+    <!--  Complaint History report  -->
+    <!--  Complaint History report  -->
+    <servlet>
+        <servlet-name>ComplaintTypeControllers</servlet-name>
+        <servlet-class>com.survey.complaint.controller.ComplaintTypeControllers</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ComplaintTypeControllers</servlet-name>
+        <url-pattern>/complaintTypesCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Complaint ComplaintTypes</servlet-name>
+        <jsp-file>/view/complaint/complaint_type.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Complaint ComplaintTypes</servlet-name>
+        <url-pattern>/complaintTypes_view</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ComplaintSubTypeControllers</servlet-name>
+        <servlet-class>com.survey.complaint.controller.ComplaintSubTypeControllers</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ComplaintSubTypeControllers</servlet-name>
+        <url-pattern>/complaintSubTypesCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Complaint ComplaintSubTypes</servlet-name>
+        <jsp-file>/view/complaint/complaint_sub_type.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Complaint ComplaintSubTypes</servlet-name>
+        <url-pattern>/complaintSubTypes_view</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>MISController</servlet-name>
+        <servlet-class>com.survey.complaint.controller.ComplaintMISController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MISController</servlet-name>
+        <url-pattern>/complaintMISCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Complaint complaint_mis_view</servlet-name>
+        <jsp-file>/view/complaint/complaint_mis_view.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Complaint complaint_mis_view</servlet-name>
+        <url-pattern>/complaint_mis_view</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Complaint misHTMLView</servlet-name>
+        <jsp-file>/view/complaint/misHTMLView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Complaint misHTMLView</servlet-name>
+        <url-pattern>/misHTMLView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DesignationHierarchyController</servlet-name>
+        <servlet-class>com.survey.complaint.controller.DesignationHierarchyController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DesignationHierarchyController</servlet-name>
+        <url-pattern>/designationHierarchyCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Complaint designationHierarchyView</servlet-name>
+        <jsp-file>/view/complaint/designationHierarchyView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Complaint designationHierarchyView</servlet-name>
+        <url-pattern>/designationHierarchyView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>PersonHierarchyController</servlet-name>
+        <servlet-class>com.survey.complaint.controller.PersonHierarchyController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PersonHierarchyController</servlet-name>
+        <url-pattern>/personHierarchyCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>Complaint personHierarchyView</servlet-name>
+        <jsp-file>/view/complaint/personHierarchyView.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Complaint personHierarchyView</servlet-name>
+        <url-pattern>/personHierarchyView</url-pattern>
+    </servlet-mapping>
+    <!--..................................End Complaint...........................-->
+</web-app>

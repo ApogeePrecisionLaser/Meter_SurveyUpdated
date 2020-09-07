@@ -1,0 +1,199 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package com.survey.energyMeter.controller;
+
+import com.survey.energyMeter.model.MeterReadingModel;
+import com.survey.energyMeter.tableClasses.Readings;
+import com.survey.util.GetDate;
+import com.survey.util.UniqueIDGenerator;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ *
+ * @author Pooja
+ */
+public class MeterReadingController extends HttpServlet {
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+       try {
+             MeterReadingModel meterReadingModel = new MeterReadingModel();
+        ServletContext ctx = getServletContext();
+        meterReadingModel.setDriverClass(ctx.getInitParameter("driverClass"));
+        meterReadingModel.setConnectionString(ctx.getInitParameter("connectionString"));
+        meterReadingModel.setDb_userName(ctx.getInitParameter("db_username"));
+        meterReadingModel.setDb_userPassword(ctx.getInitParameter("db_password"));
+        meterReadingModel.setConnection();
+        try {
+            String jqstring = request.getParameter("action1");
+            String q = request.getParameter("q");   // field own input
+            if (jqstring != null) {
+                List<String> list = null;
+                response.setContentType("text/html");
+                PrintWriter out = response.getWriter();
+                if (jqstring.equals("getJunctionName")) {
+                    list = meterReadingModel.getJunctionList(q);
+                } 
+                Iterator<String> iter = list.iterator();
+                while (iter.hasNext()) {
+                    String data = iter.next();
+                        out.println(data);
+                }
+                return;
+            }
+        } catch (Exception e) {
+            System.out.println("\n Error --MeterReadingController get JQuery Parameters Part-" + e);
+        }
+       
+            int lowerLimit, noOfRowsTraversed, noOfRowsToDisplay = 30, noOfRowsInTable;
+
+            String searchJunction, searchReadingDateFrom, searchReadingDateTo, searchVoltage, searchVoltageValue, searchCurrent, searchCurrentValue, searchConnectedLoad, searchTimeFromHour, searchTimeFromMin, searchTimeToHour, searchTimeToMin;
+
+            String task = "";
+
+            Date dt = new Date();
+            SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+            String hour = dt.getHours() + "";
+            String min = dt.getMinutes() + "";
+            if(hour.length() < 2)
+                hour = "0" + hour;
+            if(min.length() < 2)
+                min = "0" + min;
+
+            task = request.getParameter("task") == null ? "" : request.getParameter("task");
+            searchJunction = request.getParameter("searchJunction") == null ? "" : request.getParameter("searchJunction");
+            searchReadingDateFrom = request.getParameter("searchReadingDateFrom") == null ? "" : request.getParameter("searchReadingDateFrom");
+            searchReadingDateTo = request.getParameter("searchReadingDateTo") == null ? GetDate.getCurrentDate() : request.getParameter("searchReadingDateTo");
+            searchVoltage = request.getParameter("searchVoltage") == null ? "" : request.getParameter("searchVoltage");
+            searchVoltageValue = request.getParameter("searchVoltageValue") == null ? "" : request.getParameter("searchVoltageValue");
+            searchCurrent = request.getParameter("searchCurrent") == null ? "" : request.getParameter("searchCurrent");
+            searchCurrentValue = request.getParameter("searchCurrentValue") == null ? "" : request.getParameter("searchCurrentValue");
+            searchConnectedLoad = request.getParameter("searchConnectedLoad") == null ? "" : request.getParameter("searchConnectedLoad");
+            searchTimeFromHour = request.getParameter("searchTimeFromHour") == null ? "" : request.getParameter("searchTimeFromHour");
+            searchTimeFromMin = request.getParameter("searchTimeFromMin") == null ? "" : request.getParameter("searchTimeFromMin");
+            searchTimeToHour = request.getParameter("searchTimeToHour") == null ? hour : request.getParameter("searchTimeToHour");
+            searchTimeToMin = request.getParameter("searchTimeToMin") == null ? min : request.getParameter("searchTimeToMin");
+
+            if(task.equals("SHOW ALL")) {
+                searchJunction= "";
+                 searchReadingDateFrom = "";
+                 searchReadingDateTo = GetDate.getCurrentDate();
+                 searchVoltageValue = "";
+                 searchCurrentValue = "";
+                 searchConnectedLoad = "";
+                 searchTimeFromHour = "";
+                 searchTimeFromMin = "";
+                 searchTimeToHour = hour;
+                 searchTimeToMin = min;
+            }
+
+            noOfRowsInTable = meterReadingModel.getNoOfRows(searchJunction,searchReadingDateFrom, searchReadingDateTo, searchVoltage, searchVoltageValue, searchCurrent, searchCurrentValue, searchConnectedLoad, searchTimeFromHour, searchTimeFromMin, searchTimeToHour, searchTimeToMin);
+
+            if(task.equals("showPdf")) {
+                String jrxmlFilePath;
+                response.setContentType("application/pdf");
+                ServletOutputStream servletOutputStream = response.getOutputStream();
+                jrxmlFilePath = ctx.getRealPath("/report/meterReadingReport.jrxml");
+                List<Readings> pdfList = meterReadingModel.showData(searchJunction,searchReadingDateFrom, searchReadingDateTo, 0, noOfRowsInTable, searchVoltage, searchVoltageValue, searchCurrent, searchCurrentValue, searchConnectedLoad, searchTimeFromHour, searchTimeFromMin, searchTimeToHour, searchTimeToMin);
+                byte[] reportInbytes = meterReadingModel.generatePdf(jrxmlFilePath, searchJunction,searchReadingDateFrom, searchReadingDateTo, pdfList);
+                response.setContentLength(reportInbytes.length);
+                servletOutputStream.write(reportInbytes, 0, reportInbytes.length);
+                servletOutputStream.flush();
+                servletOutputStream.close();
+                return;
+            }
+
+            try {
+                lowerLimit = Integer.parseInt(request.getParameter("lowerLimit"));
+                noOfRowsTraversed = Integer.parseInt(request.getParameter("noOfRowsTraversed"));
+            } catch (Exception e) {
+                lowerLimit = noOfRowsTraversed = 0;
+            }
+            String buttonAction = request.getParameter("buttonAction"); // Holds the name of any of the four buttons: First, Previous, Next, Delete.
+            if (buttonAction == null) {
+                buttonAction = "none";
+            }
+                if (buttonAction.equals("Next")); // lowerLimit already has value such that it shows forward records, so do nothing here.
+                else if (buttonAction.equals("Previous")) {
+                    int temp = lowerLimit - noOfRowsToDisplay - noOfRowsTraversed;
+                    if (temp < 0) {
+                        noOfRowsToDisplay = lowerLimit - noOfRowsTraversed;
+                        lowerLimit = 0;
+                    } else {
+                        lowerLimit = temp;
+                    }
+                } else if (buttonAction.equals("First")) {
+                    lowerLimit = 0;
+                } else if (buttonAction.equals("Last")) {
+                    lowerLimit = noOfRowsInTable - noOfRowsToDisplay;
+                    if (lowerLimit < 0) {
+                        lowerLimit = 0;
+                    }
+                }
+
+
+            List<Readings> list1 = meterReadingModel.showData(searchJunction,searchReadingDateFrom, searchReadingDateTo,lowerLimit, noOfRowsToDisplay, searchVoltage, searchVoltageValue, searchCurrent, searchCurrentValue, searchConnectedLoad, searchTimeFromHour, searchTimeFromMin, searchTimeToHour, searchTimeToMin);
+            lowerLimit = lowerLimit + list1.size();
+            noOfRowsTraversed = list1.size();
+
+            if ((lowerLimit - noOfRowsTraversed) == 0) {     // if this is the only data in the table or when viewing the data 1st time.
+                request.setAttribute("showFirst", "false");
+                request.setAttribute("showPrevious", "false");
+            }
+            if (lowerLimit == noOfRowsInTable) {             // if No further data (rows) in the table.
+                request.setAttribute("showNext", "false");
+                request.setAttribute("showLast", "false");
+            }
+
+            request.setAttribute("junction", list1);
+            request.setAttribute("searchReadingDateTo", searchReadingDateTo);
+            request.setAttribute("searchReadingDateFrom", searchReadingDateFrom);
+            request.setAttribute("searchJunction", searchJunction);
+
+            request.setAttribute("searchVoltage", searchVoltage);
+            request.setAttribute("searchVoltageValue", searchVoltageValue);
+            request.setAttribute("searchCurrent", searchCurrent);
+            request.setAttribute("searchCurrentValue", searchCurrentValue);
+            request.setAttribute("searchConnectedLoad", searchConnectedLoad);
+            request.setAttribute("searchTimeFromHour", searchTimeFromHour);
+            request.setAttribute("searchTimeFromMin", searchTimeFromMin);
+            request.setAttribute("searchTimeToHour", searchTimeToHour);
+            request.setAttribute("searchTimeToMin", searchTimeToMin);
+
+            request.setAttribute("message", meterReadingModel.getMessage());
+            request.setAttribute("msgBgColor", meterReadingModel.getMsgBgColor());
+            request.setAttribute("IDGenerator", new UniqueIDGenerator());
+            request.setAttribute("lowerLimit", lowerLimit);
+            request.setAttribute("noOfRowsTraversed", noOfRowsTraversed);
+
+            request.getRequestDispatcher("meter_reading_view").forward(request, response);
+            
+        } catch (Exception e) {
+            System.out.println("MeterReadingController- doPostError :" + e);
+        }
+    }
+
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+        doPost(request, response);
+    }
+
+
+}

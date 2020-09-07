@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="complaintReport" pageWidth="595" pageHeight="780" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="0.25" lineColor="#000000"/>
+			<topPen lineWidth="0.25"/>
+			<leftPen lineWidth="0.25"/>
+			<bottomPen lineWidth="0.25"/>
+			<rightPen lineWidth="0.25"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#CCCCFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="complaintDetail">
+		<parameter name="status_id" class="java.lang.Integer"/>
+		<parameter name="posted_by" class="java.lang.String"/>
+		<parameter name="assigned_for" class="java.lang.String"/>
+		<parameter name="delayed_work" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[select cr.pole_id,
+complaint_status , complaint_type, complaint_sub_type ,
+date_format(complaint_date,'%d-%m-%Y') as complaint_date1 ,
+date_format(complition_date,'%d-%m-%Y') as complition_date1 ,concat_ws(' ',p.pole_no,', ', spd.switching_point_name) as pole_no,
+complaint_register_id ,
+k1. key_person_name as posted_person, k2.key_person_name as assigned_person,
+cr.complaint_sub_type_id, cr.complaint_status_id, posted_by, posted_date, complaint_date,
+assinged_for, cr.remark, complition_date
+from complaint_register cr
+left join( key_person k2 ) on k2. key_person_id = cr.assinged_for
+, complaint_status cs ,complaint_type ct, complaint_sub_type cst, pole p,
+key_person k1, switching_point_detail spd
+where spd.switching_point_detail_id = p.switching_point_detail_id AND spd.active='Y' AND cr.pole_id= p.pole_id and p.active='Y'
+and cs.complaint_status_id= cr.complaint_status_id and cr.complaint_sub_type_id = cst.complaint_sub_type_id
+AND ct.complaint_type_id = cst.complaint_type_id and k1.key_person_id= cr.posted_by
+and
+if($P{status_id}=0 || $P{delayed_work}= 'Y',cs.complaint_status_id like'%', cs.complaint_status_id=$P{status_id} )
+and if($P{posted_by}='',k1.key_person_name like'%', k1.key_person_name=$P{posted_by})
+and if($P{assigned_for}='',(k2.key_person_name like'%' or k2.key_person_name is null), k2.key_person_name=$P{assigned_for})
+and if($P{delayed_work}= 'Y', (complition_date < SUBDATE(curdate(),0)  and cs.complaint_status_id != 3), complition_date like '%') and cr.active='Y';]]>
+		</queryString>
+		<field name="pole_id" class="java.lang.Long"/>
+		<field name="complaint_status" class="java.lang.String"/>
+		<field name="complaint_type" class="java.lang.String"/>
+		<field name="complaint_sub_type" class="java.lang.String"/>
+		<field name="complaint_date1" class="java.lang.String"/>
+		<field name="complition_date1" class="java.lang.String"/>
+		<field name="pole_no" class="java.lang.String"/>
+		<field name="complaint_register_id" class="java.lang.Long"/>
+		<field name="posted_person" class="java.lang.String"/>
+		<field name="assigned_person" class="java.lang.String"/>
+		<field name="complaint_sub_type_id" class="java.lang.Integer"/>
+		<field name="complaint_status_id" class="java.lang.Integer"/>
+		<field name="posted_by" class="java.lang.Long"/>
+		<field name="posted_date" class="java.sql.Date"/>
+		<field name="complaint_date" class="java.sql.Date"/>
+		<field name="assinged_for" class="java.lang.Integer"/>
+		<field name="remark" class="java.lang.String"/>
+		<field name="complition_date" class="java.sql.Date"/>
+		<variable name="serial_no" class="java.lang.Integer">
+			<variableExpression><![CDATA[$V{serial_no}+1]]></variableExpression>
+			<initialValueExpression><![CDATA[0]]></initialValueExpression>
+		</variable>
+	</subDataset>
+	<parameter name="status_id" class="java.lang.Integer"/>
+	<parameter name="posted_by" class="java.lang.String"/>
+	<parameter name="assigned_for" class="java.lang.String"/>
+	<parameter name="delayed_work" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select * from city;]]>
+	</queryString>
+	<field name="city_id" class="java.lang.Long"/>
+	<field name="city_name" class="java.lang.String"/>
+	<field name="pin_code" class="java.lang.Long"/>
+	<field name="std_code" class="java.lang.String"/>
+	<field name="state_id" class="java.lang.Long"/>
+	<field name="district_id" class="java.lang.Long"/>
+	<field name="active" class="java.lang.String"/>
+	<background>
+		<band height="740" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="570" height="740"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+		</band>
+	</background>
+	<title>
+		<band height="347" splitType="Stretch">
+			<frame>
+				<reportElement style="table_TD" mode="Opaque" x="5" y="5" width="545" height="22" backcolor="#CCCCFF"/>
+				<staticText>
+					<reportElement x="0" y="0" width="455" height="22"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Complaint Report]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement x="455" y="0" width="90" height="22"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+			<componentElement>
+				<reportElement key="table" style="table" x="5" y="75" width="545" height="52"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="complaintDetail">
+						<datasetParameter name="status_id">
+							<datasetParameterExpression><![CDATA[$P{status_id}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="posted_by">
+							<datasetParameterExpression><![CDATA[$P{posted_by}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="assigned_for">
+							<datasetParameterExpression><![CDATA[$P{assigned_for}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="delayed_work">
+							<datasetParameterExpression><![CDATA[$P{delayed_work}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="23">
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="23" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[S.No.]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter style="table_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="0" rowSpan="1"/>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="34" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="23" height="34"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{serial_no}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="62">
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="62" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Pole No.]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter style="table_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="0" rowSpan="1"/>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="34" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="62" height="34"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{pole_no}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="71">
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="71" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Comp.Status]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter style="table_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="0" rowSpan="1"/>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="34" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="71" height="34"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Mangal" pdfFontName="C:\\Windows\\Fonts\\Mangal.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{complaint_status}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="63">
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="62" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Complaint Type]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter height="0" rowSpan="1"/>
+						<jr:columnHeader height="0" rowSpan="1"/>
+						<jr:columnFooter height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="34" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="63" height="34"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Mangal" pdfFontName="C:\\Windows\\Fonts\\Mangal.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{complaint_type}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="65">
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="61" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Complaint Sub Type]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter style="table_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="0" rowSpan="1"/>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="34" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="65" height="34"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="8" pdfFontName="C:\\Windows\\Fonts\\Mangal.TTF" pdfEncoding="Identity-H"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{complaint_sub_type}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="75">
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="75" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Complaint Date]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter style="table_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="0" rowSpan="1"/>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="34" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="75" height="34"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{complaint_date1}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="74">
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="74" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Completion Date]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter style="table_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="0" rowSpan="1"/>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="34" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="74" height="34"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{complition_date1}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="60">
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="58" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Posted By]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter style="table_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="0" rowSpan="1"/>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="34" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="60" height="34"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{posted_person}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="71">
+						<jr:tableHeader style="table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="71" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Assigned for]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:tableFooter style="table_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table_CH" height="0" rowSpan="1"/>
+						<jr:columnFooter style="table_CH" height="0" rowSpan="1"/>
+						<jr:detailCell style="table_TD" height="34" rowSpan="1">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="71" height="34"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font size="9"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{assigned_person}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<frame>
+				<reportElement x="5" y="32" width="545" height="22" isRemoveLineWhenBlank="true"/>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" x="193" y="0" width="82" height="22">
+						<printWhenExpression><![CDATA[!$P{assigned_for}.equals("")]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Assigned For : ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" x="395" y="0" width="150" height="22">
+						<printWhenExpression><![CDATA[$P{delayed_work}.equals( "Y" )]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Delayed Work Sheet]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="275" y="0" width="120" height="22"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{assigned_for}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="82" height="22">
+						<printWhenExpression><![CDATA[!$P{posted_by}.equals("")]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Posted To : ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="82" y="0" width="111" height="22"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{posted_by}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="complaintReport" pageWidth="600" pageHeight="780" columnWidth="560" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.7715610000000013"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="0.25" lineColor="#000000"/>
+			<topPen lineWidth="0.25"/>
+			<leftPen lineWidth="0.25"/>
+			<bottomPen lineWidth="0.25"/>
+			<rightPen lineWidth="0.25"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#CCCCFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dataset1">
+		<parameter name="comp_no" class="java.lang.Long">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select cf.feedback_id ,cf.complaint_register_id,feedback_type,
+                         date_format(feedback_date,'%d-%m-%Y') as complaint_feedback_date,
+                         date_format(feedback_date,'%h:%i %p')
+                          as feedback_time
+                        from
+                        complaint_feedback cf,feedback_type fd
+                           where cf.feedback_type_id=fd.feedback_type_id and complaint_register_id=$P{comp_no};]]>
+		</queryString>
+		<field name="feedback_id" class="java.lang.Long"/>
+		<field name="complaint_register_id" class="java.lang.Long"/>
+		<field name="feedback_type" class="java.lang.String"/>
+		<field name="complaint_feedback_date" class="java.lang.String"/>
+		<field name="feedback_time" class="java.lang.String"/>
+		<variable name="serial_no" class="java.lang.Integer">
+			<variableExpression><![CDATA[$V{serial_no}+1]]></variableExpression>
+			<initialValueExpression><![CDATA[0]]></initialValueExpression>
+		</variable>
+	</subDataset>
+	<parameter name="complaint_register_id" class="java.lang.Integer"/>
+	<parameter name="assigned_for" class="java.lang.String"/>
+	<parameter name="delayed_work" class="java.lang.String"/>
+	<parameter name="posted_by" class="java.lang.String"/>
+	<parameter name="status_id" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select  complaint_revision_no ,cr.pole_id, cr.remark , complaint_status , complaint_type, complaint_sub_type ,
+                  date_format(complaint_date,'%d-%m-%Y') as complaint_date1 ,
+                  date_format(complition_date,'%d-%m-%Y') as complition_date1 ,
+                  pole_no , complaint_register_id ,
+                  k1. key_person_name as posted_person, k2.key_person_name as assigned_person,
+                  cr.complaint_sub_type_id, cr.complaint_status_id, posted_by, posted_date, complaint_date,
+                  assinged_for,complition_date
+                  from complaint_register cr
+                  left join( key_person k2 ) on k2. key_person_id = cr.assinged_for
+                  ,complaint_status cs ,complaint_type ct,complaint_sub_type cst, pole p,
+                  key_person k1
+                  where cr.pole_id= p.pole_id and p.active='Y'
+                  and cs.complaint_status_id= cr.complaint_status_id and cr.complaint_sub_type_id = cst.complaint_sub_type_id
+                  AND ct.complaint_type_id = cst.complaint_type_id and k1.key_person_id= cr.posted_by
+                  and cr.active ='Y'
+                   and
+                  if($P{complaint_register_id}=0 ,cr.complaint_register_id like '%%', cr.complaint_register_id=$P{complaint_register_id} )
+                  and
+                  if($P{status_id}=0 || $P{delayed_work}= 'Y',cs.complaint_status_id like '%%', cs.complaint_status_id=$P{status_id} )
+                  and if($P{posted_by}='',k1.key_person_name like '%%', k1.key_person_name=$P{posted_by})
+                  and if($P{assigned_for}='',(k2.key_person_name like '%%' or k2.key_person_name is null), k2.key_person_name=$P{assigned_for})
+                  and if($P{delayed_work}= 'Y', (complition_date <=SUBDATE(curdate(),2) and cs.complaint_status_id =2), complition_date like '%%')
+                  order by complaint_register_id desc;]]>
+	</queryString>
+	<field name="complaint_revision_no" class="java.lang.Long"/>
+	<field name="pole_id" class="java.lang.Long"/>
+	<field name="remark" class="java.lang.String"/>
+	<field name="complaint_status" class="java.lang.String"/>
+	<field name="complaint_type" class="java.lang.String"/>
+	<field name="complaint_sub_type" class="java.lang.String"/>
+	<field name="complaint_date1" class="java.lang.String"/>
+	<field name="complition_date1" class="java.lang.String"/>
+	<field name="pole_no" class="java.lang.String"/>
+	<field name="complaint_register_id" class="java.lang.Long"/>
+	<field name="posted_person" class="java.lang.String"/>
+	<field name="assigned_person" class="java.lang.String"/>
+	<field name="complaint_sub_type_id" class="java.lang.Integer"/>
+	<field name="complaint_status_id" class="java.lang.Integer"/>
+	<field name="posted_by" class="java.lang.Long"/>
+	<field name="posted_date" class="java.sql.Date"/>
+	<field name="complaint_date" class="java.sql.Date"/>
+	<field name="assinged_for" class="java.lang.Integer"/>
+	<field name="complition_date" class="java.sql.Date"/>
+	<title>
+		<band height="111" splitType="Stretch">
+			<frame>
+				<reportElement style="table_TD" mode="Opaque" x="5" y="5" width="545" height="22" backcolor="#CCCCFF"/>
+				<staticText>
+					<reportElement x="0" y="0" width="455" height="22"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Complaint  History Report]]></text>
+				</staticText>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement x="455" y="0" width="90" height="22"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="5" y="32" width="545" height="22" isRemoveLineWhenBlank="true"/>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" x="193" y="0" width="82" height="22">
+						<printWhenExpression><![CDATA[!$P{assigned_for}.equals("")]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Assigned For : ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" x="395" y="0" width="150" height="22">
+						<printWhenExpression><![CDATA[$P{delayed_work}.equals( "Y" )]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Delayed Work Sheet]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="275" y="0" width="120" height="22"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{assigned_for}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="82" height="22">
+						<printWhenExpression><![CDATA[!$P{posted_by}.equals("")]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Posted To : ]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="82" y="0" width="111" height="22"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{posted_by}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="83">
+			<frame>
+				<reportElement x="0" y="0" width="497" height="72"/>
+				<textField>
+					<reportElement style="table_TH" positionType="Float" mode="Opaque" x="198" y="0" width="298" height="13"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{complaint_register_id}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="1" y="11" width="90" height="18" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="8" isBold="true"/>
+						<paragraph lineSpacing="Fixed"/>
+					</textElement>
+					<text><![CDATA[Complaint Type]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="1" y="29" width="90" height="15" isRemoveLineWhenBlank="true"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font fontName="Mangal" size="8" pdfFontName="C:\\Windows\\Fonts\\Mangal.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{complaint_type}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="91" y="30" width="81" height="14"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font fontName="Mangal" size="8" pdfFontName="C:\\Windows\\Fonts\\Mangal.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{complaint_status}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="243" y="13" width="74" height="16" isRemoveLineWhenBlank="true"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="8" isBold="true"/>
+						<paragraph lineSpacing="Fixed"/>
+					</textElement>
+					<text><![CDATA[Assigned For]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="243" y="30" width="74" height="14"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{assigned_person}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="400" y="13" width="96" height="16" isRemoveLineWhenBlank="true"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="8" isBold="true"/>
+						<paragraph lineSpacing="Fixed"/>
+					</textElement>
+					<text><![CDATA[Complition Date]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="317" y="13" width="83" height="17" isRemoveLineWhenBlank="true"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="8" isBold="true"/>
+						<paragraph lineSpacing="Fixed"/>
+					</textElement>
+					<text><![CDATA[Complaint Date]]></text>
+				</staticText>
+				<staticText>
+					<reportElement style="table_TH" x="0" y="0" width="198" height="13"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Complaint No]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="317" y="29" width="83" height="14"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{complaint_date1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="400" y="30" width="96" height="14"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{complition_date1}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="91" y="13" width="81" height="16" isRemoveLineWhenBlank="true"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="8" isBold="true"/>
+						<paragraph lineSpacing="Fixed"/>
+					</textElement>
+					<text><![CDATA[Complaint Status]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="172" y="13" width="71" height="16"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Posted By]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="172" y="29" width="71" height="15"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{posted_person}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<componentElement>
+				<reportElement x="1" y="56" width="495" height="16"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataset1">
+						<datasetParameter name="comp_no">
+							<datasetParameterExpression><![CDATA[$F{complaint_register_id}]]></datasetParameterExpression>
+						</datasetParameter>
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:listContents height="16" width="495"/>
+				</jr:list>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

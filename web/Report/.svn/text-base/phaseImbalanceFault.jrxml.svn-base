@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="883" pageHeight="842" columnWidth="843" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="pole_no" class="java.lang.String"/>
+	<field name="difference_amt" class="java.lang.Double"/>
+	<field name="survey_date" class="java.lang.String"/>
+	<field name="r_phase" class="java.lang.String"/>
+	<field name="b_phase" class="java.lang.Long"/>
+	<field name="y_phase" class="java.lang.Long"/>
+	<field name="alert_message" class="java.lang.String"/>
+	<field name="message_factor" class="java.lang.String"/>
+	<field name="meter_no" class="java.lang.String"/>
+	<variable name="sno" class="java.lang.Integer" incrementType="Group" incrementGroup="Group Header1" calculation="Count">
+		<variableExpression><![CDATA[$V{sno}+1]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<group name="Group Header1">
+		<groupExpression><![CDATA[$F{meter_no}]]></groupExpression>
+		<groupHeader>
+			<band height="56">
+				<staticText>
+					<reportElement x="40" y="26" width="112" height="30"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Pole No*]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="152" y="26" width="111" height="30"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Difference Percentage]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="263" y="26" width="67" height="30"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Survey Date]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="464" y="26" width="72" height="30"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Y Phase]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="330" y="26" width="67" height="30"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[R Phase]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="397" y="26" width="67" height="30"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[B Phase]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="680" y="26" width="163" height="30"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Alert Message]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="9" y="26" width="31" height="30"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[S.No.]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="9" y="0" width="100" height="26"/>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{meter_no}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="536" y="26" width="144" height="30"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Message Factor]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="50"/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="699" height="25"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Phase ImBalance Alert Sheet]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="34" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="464" y="0" width="72" height="34" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{y_phase}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="396" y="0" width="67" height="34" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{b_phase}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="330" y="0" width="66" height="34" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{r_phase}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="263" y="0" width="67" height="34" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{survey_date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="40" y="0" width="112" height="34" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pole_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="9" y="0" width="31" height="34"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sno}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="680" y="0" width="163" height="34"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{alert_message}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="536" y="0" width="144" height="34"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{message_factor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="152" y="0" width="111" height="34"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{difference_amt}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
