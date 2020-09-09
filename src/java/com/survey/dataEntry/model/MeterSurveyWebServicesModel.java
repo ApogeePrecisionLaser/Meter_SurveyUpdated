@@ -629,7 +629,14 @@ public class MeterSurveyWebServicesModel {
         }
         return fuse_type;
     }
-
+ public boolean makeDirectory(String dirPathName) {
+        boolean result = false;
+        File directory = new File(dirPathName);
+        if (!directory.exists()) {
+            result = directory.mkdirs();
+        }
+        return result;
+    }
     public String getReasonType(String reason_id) {
         String reason_type = "";
         String query = "select reason_type from reason_type "
@@ -820,7 +827,7 @@ public class MeterSurveyWebServicesModel {
         String imageQuery = "INSERT INTO general_image_details (image_name, image_destination_id, date_time, description,type_of_image_id) "
                 + " VALUES(?, ?, ?, ?, ?)";
         try {
-            PreparedStatement pstmt = connection.prepareStatement(imageQuery);
+            PreparedStatement pstmt = connection.prepareStatement(imageQuery,Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, image_name);
             pstmt.setInt(2, getimage_destination_id(image_uploaded_for));
             pstmt.setString(3, current_date);
@@ -870,7 +877,7 @@ public class MeterSurveyWebServicesModel {
         String imageQuery = "INSERT INTO survey_gen_image_map (survey_id, gen_image_detail_id) "
                 + " VALUES(?, ?)";
         try {
-            PreparedStatement pstmt = connection.prepareStatement(imageQuery);
+            PreparedStatement pstmt = connection.prepareStatement(imageQuery,Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, survey_id);
             pstmt.setInt(2, gen_image_detail_id);
             pstmt.executeUpdate();

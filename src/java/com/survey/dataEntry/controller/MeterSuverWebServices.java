@@ -12,6 +12,7 @@ import com.survey.energyMeter.model.EnergyMeterWebServiceModel;
 import com.survey.tableClasses.SurveyBean;
 import java.io.File;
 import java.io.FileOutputStream;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -794,8 +795,10 @@ public class MeterSuverWebServices {
                 String survey_type=inputJsonObj.get("survey_type").toString();
                 String survey_date=inputJsonObj.get("survey_date").toString();
                 survey_id1=wsSurveyModel.getSurveyIdForImage(service_no,survey_type,survey_date);
+                System.out.println("survey:"+survey_id1);
                 org.json.JSONObject jsn = new org.json.JSONObject(inputJsonObj.toString());
                 org.json.JSONArray jsonArraay = jsn.getJSONArray("image");
+                try{
                 int size = jsonArraay.length();
                 int survey_gen_image_map_id=0;
                 for (int i = 0; i < size; i++) {
@@ -804,8 +807,11 @@ public class MeterSuverWebServices {
                 String fileName = jsonObject.getString("imgname");
                 String image_type = jsonObject.getString("type");
                 int image_type_id=wsSurveyModel.getImage_type_id(image_type);
+                try{
                 String path = "C:/ssadvt_repository/meter_survey/survey_image/tube_well/survey_id_"+survey_id1;
-                makeDirectory(path);
+                
+                wsSurveyModel.makeDirectory(path);
+                
                 String file = path + "/" + fileName;
                 FileOutputStream outputStream = new FileOutputStream(file);
                 outputStream.write(fileAsBytes);
@@ -814,13 +820,19 @@ public class MeterSuverWebServices {
                 survey_gen_image_map_id=wsSurveyModel.insertSurveyImageMapRecord(survey_id1,gen_image_detail_id);
                 // drive d=new drive();
                 //  d.drive(fileName,file,affect,affected+"");
+                }catch(Exception ex){
+                System.out.println("Exception in file image insert:"+ex);
+                }
+              
                 if (survey_gen_image_map_id > 0) {
                     //response = Response.ok(inputJsonObj, MediaType.APPLICATION_JSON).build();
                     response = "success";
                 }else {
                        // response="image";
                 }
-             }
+             }  }catch(Exception e){
+                        System.out.println("Exception in image insertion web service:"+e);
+                        }
                 wsSurveyModel.closeConnection();
 
         return response;
