@@ -644,6 +644,7 @@ public class NewSwitchingPointSurveyController extends HttpServlet {
                 String ext = image_destination.split("\\.")[1];
                 response.setContentType("image/" + ext);
             } else {
+                image_destination = image_destination.replace("$", "\\");
                 File f = new File(image_destination);
                 if (f.exists()) {
                     String ext = image_destination.split("\\.")[1];

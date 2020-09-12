@@ -5,8 +5,8 @@
 
 package com.survey.dataEntry.model;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import com.survey.tableClasses.BoreCasingTypeBean;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -59,7 +59,7 @@ public byte[] generateMapReport(String jrxmlFilePath, List<BoreCasingTypeBean> l
         String query = "INSERT INTO bore_casing_type (bore_casing_type_name, remark) VALUES (?,?) ";
         int rowsAffected = 0;
         try {
-            java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
+           PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, boreCasingTypeBean.getBoreCasingType());
             pstmt.setString(2, boreCasingTypeBean.getRemark());
             rowsAffected = pstmt.executeUpdate();

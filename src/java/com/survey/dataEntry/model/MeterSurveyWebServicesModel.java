@@ -1,7 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+///*
+// * To change this template, choose Tools | Templates
+// * and open the template in the editor.
+// */
 package com.survey.dataEntry.model;
 
 import com.survey.general.model.AlertsModel;
@@ -24,8 +24,15 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+//import org.json.JSONArray;
+//import org.json.JSONObject;
+//import org.json.simple.JSONArray;
+//import org.json.simple.JSONObject;
+import org.codehaus.jettison.json.*;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
 
 /**
  *
@@ -500,7 +507,7 @@ public class MeterSurveyWebServicesModel {
                     obj.put("meter_remark", "");
                      obj.put("sp_remark", "");
 
-                    rowData.add(obj);
+                    rowData.put(obj);
 
            }
         } catch (Exception e) {
@@ -546,7 +553,7 @@ public class MeterSurveyWebServicesModel {
                          while(rset1.next()){
                              JSONObject obj1 = new JSONObject();
                              obj1.put("image_name", rset1.getString("image_name"));//
-                             rowData1.add(obj1);
+                             rowData1.put(obj1);
 
                          }
                         obj.put("image_name_array", rowData1);//
@@ -554,7 +561,7 @@ public class MeterSurveyWebServicesModel {
                         System.out.println(e);
                     }
 
-                    rowData.add(obj);
+                    rowData.put(obj);
            }
         } catch (Exception e) {
             System.out.println("Error inside show data of survey: " + e);
@@ -725,7 +732,7 @@ public class MeterSurveyWebServicesModel {
                     obj.put("longitude", longitude);//
 
 
-                    rowData.add(obj);
+                    rowData.put(obj);
            }
         } catch (Exception e) {
             System.out.println("Error inside show data of survey: " + e);
@@ -741,7 +748,9 @@ public class MeterSurveyWebServicesModel {
         JSONArray rowData = new JSONArray();
         List<String> list = new ArrayList<String>();
         String meter_id = null;
-        String query = " select zone_id_m,zone_m,description "
+        String query = " select IFNULL(zone_id_m, '') zone_id_m, "
+                + " IFNULL(zone_m, '') zone_m,"
+                + " IFNULL(description, '') description "
                        +" from zone_m z ";
         try {
             java.sql.PreparedStatement pstmt = null;
@@ -753,7 +762,7 @@ public class MeterSurveyWebServicesModel {
                     obj.put("zone_id_m", rset.getString("zone_id_m"));
                     obj.put("zone_m", rset.getString("zone_m"));
                     obj.put("description", rset.getString("description"));
-                    rowData.add(obj);
+                    rowData.put(obj);
                 }
         } catch (Exception e) {
             System.out.println("MeterSurveyWebServiceModel getZone_m_data() Error: " + e);
@@ -765,7 +774,9 @@ public class MeterSurveyWebServicesModel {
         JSONArray rowData = new JSONArray();
         List<String> list = new ArrayList<String>();
         String meter_id = null;
-        String query = " select ward_id_m,ward_no_m,remark,zone_id_m,ward_name "
+        String query = " select IFNULL(ward_id_m, '') ward_id_m,"
+                + " IFNULL(ward_no_m, '') ward_no_m,IFNULL(remark, '') remark,"
+                + " IFNULL(zone_id_m, '') zone_id_m,IFNULL(ward_name, '')ward_name "
                        +" from ward_m wm "
                        +" where wm.active='Active'";
         try {
@@ -781,7 +792,7 @@ public class MeterSurveyWebServicesModel {
                     obj.put("zone_id_m", rset.getString("zone_id_m"));
                     obj.put("ward_name", rset.getString("ward_name"));
                     //obj.put("city_id", rset.getString("city_id"));
-                    rowData.add(obj);
+                    rowData.put(obj);
                 }
         } catch (Exception e) {
             System.out.println("MeterSurveyWebServiceModel getWard_m_data() Error: " + e);
@@ -793,7 +804,8 @@ public class MeterSurveyWebServicesModel {
         JSONArray rowData = new JSONArray();
         List<String> list = new ArrayList<String>();
         String meter_id = null;
-        String query = " select area_id,area_name,remark,ward_id_m "
+        String query = " select IFNULL(area_id, '') area_id,IFNULL(area_name, '') area_name,"
+                + " IFNULL(remark, '') remark,IFNULL(ward_id_m, '') ward_id_m "
                        +" from area a "
                        +" where a.active='Y'";
         try {
@@ -808,7 +820,7 @@ public class MeterSurveyWebServicesModel {
                     obj.put("remark", rset.getString("remark"));
                     obj.put("ward_id_m", rset.getString("ward_id_m"));
 
-                    rowData.add(obj);
+                    rowData.put(obj);
                 }
         } catch (Exception e) {
             System.out.println("MeterSurveyWebServiceModel getAreaData() Error: " + e);
@@ -1659,7 +1671,7 @@ public class MeterSurveyWebServicesModel {
                 //  if(rset.getString("value1").equals("c")){
                 JSONObject obj = new JSONObject();
                 JSONArray contacter = new JSONArray();
-                contacter.add(rset.getString("key1"));
+                contacter.put(rset.getString("key1"));
                 obj.put(rset.getString("value1"), contacter);
                 // }
             }
@@ -1757,7 +1769,7 @@ public class MeterSurveyWebServicesModel {
 //                    //obj.put("Company List", rowData);
 ////                    if(updateStatusData(meter_id)>0)
 ////                    {
-//                    rowData.add(obj);
+//                    rowData.put(obj);
 ////                    }
 //
 //                    //}
@@ -1786,13 +1798,13 @@ public class MeterSurveyWebServicesModel {
         if(imei != null && !imei.isEmpty())
             meter_query = "select meter_id from meters_status where status='Yes'";
         String query = "select twd.area_id,m.longitude,m.latitude,m.ivrs_no, if(mb.current_reading is null,0.0,mb.current_reading) as current_reading,if(m.switching_point_id is not null,"
-                + "concat_ws(sp.address1,sp.address2,sp.address3),concat_ws(of.address_line1,of.address_line2,of.address_line3) ) as address,"
+                + "concat_ws(sp.address1,sp.address2,sp.address3),concat_ws(offi.address_line1,offi.address_line2,offi.address_line3) ) as address,"
                 + "tp.type_of_premsis, m.meter_id, m.meter_service_number , m.poll_no , m.meter_name, m.switching_point_id ,m.initial_reading,"
                 + " m.phase,o.organisation_name , tp.type_of_premsis,tp.premises_individual_detail, c.city_name, m.meter_name_auto,m.meter_service_number,"
                 + "m.latitude,m.longitude FROM meters as m LEFT JOIN mpeb_meter_bill as  mb ON mb.meter_id = m.meter_id AND mb.final_revision = 'VALID' "
                 + "and mb.bill_month='Nov-2015' left join switching_point as sp ON m.switching_point_id=sp.switching_point_id "
                 + " left join tube_well_detail as twd ON m.ivrs_no=twd.ivrs_no "
-                + "left join org_office as of ON m.org_office_id=of.org_office_id,city c ,organisation_name o, type_of_premises tp , feeder f, zone z,division d, "
+                + "left join org_office as offi ON m.org_office_id=offi.org_office_id,city c ,organisation_name o, type_of_premises tp , feeder f, zone z,division d, "
                 + "tarrif_gen_details t, premises_tariff_map ptm, company cy, circle ci  ,meters_status as ms "
                 + " WHERE ms.meter_id=m.meter_id  "
                 + " and IF('"+ imei +"'='', ms.status LIKE '%%', ms.status = 'Yes')"
@@ -1835,18 +1847,18 @@ public class MeterSurveyWebServicesModel {
                     //   for (int i = 1; i < numColumns + 1; i++) {
 
                     //   String column_name = rsmd.getColumnLabel(i);
-                    obj.put("area_id", rset.getString("area_id"));
-                    obj.put("pole_type", rset.getString("type_of_premsis"));
-                    obj.put("meter_id", rset.getString("meter_id"));
-                    obj.put("poll_no", rset.getString("poll_no"));
-                    obj.put("meter_name", rset.getString("meter_name"));
-                    obj.put("phase", rset.getString("phase"));
-                    obj.put("initial_reading", rset.getString("current_reading"));
-                    obj.put("meter_address", rset.getString("address"));
-                    obj.put("lattitude", rset.getString("latitude"));
-                    obj.put("longitude", rset.getString("longitude"));
-                    obj.put("service_number", rset.getString("ivrs_no"));
-                    obj.put("meter_name_auto", rset.getString("meter_name_auto"));
+                    obj.put("area_id", rset.getString("area_id") == null? "" : rset.getString("area_id"));
+                    obj.put("pole_type", rset.getString("type_of_premsis") == null? "" : rset.getString("type_of_premsis"));
+                    obj.put("meter_id", rset.getString("meter_id") == null? "" : rset.getString("meter_id"));
+                    obj.put("poll_no", rset.getString("poll_no") == null? "" : rset.getString("poll_no"));
+                    obj.put("meter_name", rset.getString("meter_name") == null? "" : rset.getString("meter_name"));
+                    obj.put("phase", rset.getString("phase") == null? "" : rset.getString("phase"));
+                    obj.put("initial_reading", rset.getString("current_reading") == null? "" : rset.getString("current_reading"));
+                    obj.put("meter_address", rset.getString("address") == null?"" : rset.getString("address"));
+                    obj.put("lattitude", rset.getString("latitude") == null? "" : rset.getString("latitude"));
+                    obj.put("longitude", rset.getString("longitude") == null ? "" : rset.getString("longitude"));
+                    obj.put("service_number", rset.getString("ivrs_no") == null? "" : rset.getString("ivrs_no"));
+                    obj.put("meter_name_auto", rset.getString("meter_name_auto") == null? "" : rset.getString("meter_name_auto"));
 
 
 
@@ -1865,7 +1877,7 @@ public class MeterSurveyWebServicesModel {
                     //obj.put("Company List", rowData);
 //                    if(updateStatusData(meter_id)>0)
 //                    {
-                    rowData.add(obj);
+                    rowData.put(obj);
 //                    }
 
                     //}
@@ -1893,11 +1905,25 @@ public class MeterSurveyWebServicesModel {
 
 //        if(imei != null && !imei.isEmpty())
 //            meter_query = "select meter_id from meters_status where status='Yes'";
-        String query = "select tbd.tubewell_bore_data_id,tbd.tube_well_detail_id,td.ivrs_no,tbd.depth,tbd.bore_diameter, "
-                       +" tbd.bore_casing_type_Id,tbd.motore_capacity,tbd.motor_type_id,tbd.suction_diameter, "
-                       +" tbd.delivery_diameter,tbd.discharge_capacity,tbd.contact_person_name,tbd.contact_person_address, "
-                       +" tbd.contact_person_mobile_no,tbd.operated_by,tbd.type_of_use_id,tbd.operator_name, "
-                       +" tbd.operator_mobile_no,tbd.date_of_installation,tbd.ward_id,tbd.created_date "
+        String query = "select tbd.tubewell_bore_data_id,"
+                + "  tbd.tube_well_detail_id, "
+                + " td.ivrs_no,tbd.depth,tbd.depth,tbd.bore_diameter, "
+                       +" tbd.bore_casing_type_Id, "
+                + " tbd.motore_capacity,"
+                + " tbd.motor_type_id,"
+                + " tbd.suction_diameter, "
+                       +" tbd.delivery_diameter,"
+                + " tbd.discharge_capacity,"
+                + " tbd.contact_person_name,"
+                + " tbd.contact_person_address, "
+                       +" tbd.contact_person_mobile_no,"
+                + " tbd.operated_by,"
+                + " tbd.type_of_use_id,"
+                + " tbd.operator_name, "
+                       +" tbd.operator_mobile_no,"
+                + " tbd.date_of_installation,"
+                + " tbd.ward_id,"
+                + " tbd.created_date "
                        +" from tubewell_bore_data tbd,tube_well_detail td "
                        +" where tbd.tube_well_detail_id=td.tube_well_detail_id "
                        +" and tbd.active='Y'";
@@ -1909,31 +1935,31 @@ public class MeterSurveyWebServicesModel {
                 rset = pstmt.executeQuery();
                 while (rset.next()) {
                     JSONObject obj = new JSONObject();
-                    obj.put("tubewell_bore_data_id", rset.getString("tubewell_bore_data_id"));
-                    obj.put("tube_well_detail_id", rset.getString("tube_well_detail_id"));
-                    obj.put("ivrs_no", rset.getString("ivrs_no"));
-                    obj.put("depth", rset.getString("depth"));
-                    obj.put("bore_diameter", rset.getString("bore_diameter"));
-                    obj.put("bore_casing_type_Id", rset.getString("bore_casing_type_Id"));
-                    obj.put("motore_capacity", rset.getString("motore_capacity"));
-                    obj.put("motor_type_id", rset.getString("motor_type_id"));
-                    obj.put("suction_diameter", rset.getString("suction_diameter"));
-                    obj.put("delivery_diameter", rset.getString("delivery_diameter"));
-                    obj.put("discharge_capacity", rset.getString("discharge_capacity"));
-                    obj.put("contact_person_name", rset.getString("contact_person_name"));
-                    obj.put("contact_person_address", rset.getString("contact_person_address"));
-                    obj.put("contact_person_mobile_no", rset.getString("contact_person_mobile_no"));
+                    obj.put("tubewell_bore_data_id", rset.getString("tubewell_bore_data_id") == null? "" : rset.getString("tubewell_bore_data_id"));
+                    obj.put("tube_well_detail_id", rset.getString("tube_well_detail_id") == null? "" : rset.getString("tube_well_detail_id"));
+                    obj.put("ivrs_no", rset.getString("ivrs_no") == null? "" : rset.getString("ivrs_no"));
+                    obj.put("depth", rset.getString("depth") == null? "" : rset.getString("depth"));
+                    obj.put("bore_diameter", rset.getString("bore_diameter") == null? "" : rset.getString("bore_diameter"));
+                    obj.put("bore_casing_type_Id", rset.getString("bore_casing_type_Id") == null? "" : rset.getString("bore_casing_type_Id"));
+                    obj.put("motore_capacity", rset.getString("motore_capacity") == null? "" : rset.getString("motore_capacity"));
+                    obj.put("motor_type_id", rset.getString("motor_type_id") == null? "" : rset.getString("motor_type_id"));
+                    obj.put("suction_diameter", rset.getString("suction_diameter") == null? "" : rset.getString("suction_diameter"));
+                    obj.put("delivery_diameter", rset.getString("delivery_diameter") == null? "" : rset.getString("delivery_diameter"));
+                    obj.put("discharge_capacity", rset.getString("discharge_capacity") == null? "" : rset.getString("discharge_capacity"));
+                    obj.put("contact_person_name", rset.getString("contact_person_name") == null? "" : rset.getString("contact_person_name"));
+                    obj.put("contact_person_address", rset.getString("contact_person_address") == null? "" :  rset.getString("contact_person_address"));
+                    obj.put("contact_person_mobile_no", rset.getString("contact_person_mobile_no")== null? "" : rset.getString("contact_person_mobile_no"));
 
-                    obj.put("operated_by", rset.getString("operated_by"));
-                    obj.put("type_of_use_id", rset.getString("type_of_use_id"));
-                    obj.put("operator_name", rset.getString("operator_name"));
-                    obj.put("operator_mobile_no", rset.getString("operator_mobile_no"));
+                    obj.put("operated_by", rset.getString("operated_by") == null? "" : rset.getString("operated_by"));
+                    obj.put("type_of_use_id", rset.getString("type_of_use_id") == null? "" : rset.getString("type_of_use_id"));
+                    obj.put("operator_name", rset.getString("operator_name") == null? "" : rset.getString("operator_name"));
+                    obj.put("operator_mobile_no", rset.getString("operator_mobile_no") == null? "" : rset.getString("operator_mobile_no"));
 
-                    obj.put("date_of_installation", rset.getString("date_of_installation"));
-                    obj.put("ward_id", rset.getString("ward_id"));
-                    obj.put("created_date", rset.getString("created_date"));
+                    obj.put("date_of_installation", rset.getString("date_of_installation") == null? "" : rset.getString("date_of_installation"));
+                    obj.put("ward_id", rset.getString("ward_id") == null? "" : rset.getString("ward_id"));
+                    obj.put("created_date", rset.getString("created_date") == null? "" : rset.getString("created_date"));
 
-                    rowData.add(obj);
+                    rowData.put(obj);
                 }
         } catch (Exception e) {
             System.out.println("SurveyModel showData() Error: " + e);
@@ -1948,7 +1974,8 @@ public class MeterSurveyWebServicesModel {
         String meter_id = null;
 
 
-        String query = "select type_of_use_id,type_of_use_name "
+        String query = "select IFNULL(type_of_use_id, '') type_of_use_id,"
+                + " IFNULL(type_of_use_name, '') type_of_use_name "
                        +" from type_of_use ";
         try {
             java.sql.PreparedStatement pstmt = null;
@@ -1959,7 +1986,7 @@ public class MeterSurveyWebServicesModel {
                     JSONObject obj = new JSONObject();
                     obj.put("type_of_use_id", rset.getString("type_of_use_id"));
                     obj.put("type_of_use_name", rset.getString("type_of_use_name"));
-                    rowData.add(obj);
+                    rowData.put(obj);
                 }
         } catch (Exception e) {
             System.out.println("SurveyModel showData() Error: " + e);
@@ -1974,7 +2001,8 @@ public class MeterSurveyWebServicesModel {
         String meter_id = null;
 
 
-        String query = "select bore_casing_type_id,bore_casing_type_name "
+        String query = "select IFNULL(bore_casing_type_id, '') bore_casing_type_id,"
+                + " IFNULL(bore_casing_type_name, '') bore_casing_type_name "
                        +" from bore_casing_type ";
         try {
             java.sql.PreparedStatement pstmt = null;
@@ -1985,7 +2013,7 @@ public class MeterSurveyWebServicesModel {
                     JSONObject obj = new JSONObject();
                     obj.put("bore_casing_type_id", rset.getString("bore_casing_type_id"));
                     obj.put("bore_casing_type_name", rset.getString("bore_casing_type_name"));
-                    rowData.add(obj);
+                    rowData.put(obj);
                 }
         } catch (Exception e) {
             System.out.println("SurveyModel showData() Error: " + e);
@@ -1996,7 +2024,8 @@ public class MeterSurveyWebServicesModel {
         JSONArray rowData = new JSONArray();
         List<String> list = new ArrayList<String>();
         String meter_id = null;
-        String query = " select motor_type_id,motor_type_name "
+        String query = " select  IFNULL(motor_type_id, '') motor_type_id,"
+                + "  IFNULL(motor_type_name, '') motor_type_name "
                       +" from motor_type ";
         try {
             java.sql.PreparedStatement pstmt = null;
@@ -2007,7 +2036,7 @@ public class MeterSurveyWebServicesModel {
                     JSONObject obj = new JSONObject();
                     obj.put("motor_type_id", rset.getString("motor_type_id"));
                     obj.put("motor_type_name", rset.getString("motor_type_name"));
-                    rowData.add(obj);
+                    rowData.put(obj);
                 }
         } catch (Exception e) {
             System.out.println("SurveyModel showData() Error: " + e);
@@ -2019,7 +2048,8 @@ public class MeterSurveyWebServicesModel {
         JSONArray rowData = new JSONArray();
         List<String> list = new ArrayList<String>();
         String meter_id = null;
-        String query = " select type_of_image_id,image_type "
+        String query = " select IFNULL(type_of_image_id, '') type_of_image_id,"
+                + " IFNULL(image_type, '') image_type "
                       +" from type_of_image ";
         try {
             java.sql.PreparedStatement pstmt = null;
@@ -2030,7 +2060,7 @@ public class MeterSurveyWebServicesModel {
                     JSONObject obj = new JSONObject();
                     obj.put("type_id", rset.getString("type_of_image_id"));
                     obj.put("type_name", rset.getString("image_type"));
-                    rowData.add(obj);
+                    rowData.put(obj);
                 }
         } catch (Exception e) {
             System.out.println("SurveyModel getImageType( Error: " + e);
@@ -2055,7 +2085,7 @@ public class MeterSurveyWebServicesModel {
                     obj.put("ward_no", rset.getString("ward_no"));
                     obj.put("ward_id", rset.getString("ward_id"));
                     obj.put("zone_id", rset.getString("zone_id"));
-                    rowData.add(obj);
+                    rowData.put(obj);
                 }
         } catch (Exception e) {
             System.out.println("SurveyModel showData() Error: " + e);
@@ -2090,4 +2120,88 @@ public class MeterSurveyWebServicesModel {
         }
         return rowAffected;
     }
+    
+    
+     
+     public String getDestinationPath(String image_uploaded_for) {
+        String destination_path = "";
+        String query = " SELECT destination_path FROM image_destination where image_uploaded_for_id=13";
+
+        try {
+            ResultSet rs = connection.prepareStatement(query).executeQuery();
+            if (rs.next()) {
+                destination_path = rs.getString("destination_path");
+            }
+        } catch (Exception ex) {
+            System.out.println("ERROR: " + ex);
+        }
+        return destination_path;
+    }
+     
+       public int insertRecordPrimary(JSONObject json1, String image_of_meter_no,String image_of_meter_reading) {
+            int roweffected =0;
+           try{
+               
+                String type_of_survey = "";
+                String currentTime = "";
+                String meter_reading = "";
+                String meter_no = "";
+                String imagePath = "";
+                String location = "";
+                double longitude = 0;
+                double latitude = 0;
+                double altitude = 0;
+                String accuracy ="";
+                meter_reading = json1.get("meter_reading").toString();
+                meter_no = json1.get("meter_no").toString();
+                meter_no = json1.get("meter_no").toString();
+                currentTime = json1.get("currentTime").toString();
+                type_of_survey = json1.get("type_of_survey").toString();
+                
+                
+                try{
+                    latitude = Double.parseDouble(json1.get("lattitude").toString());
+                    longitude = Double.parseDouble(json1.get("longitude").toString());
+                    altitude = Double.parseDouble(json1.get("altitude").toString());
+                    accuracy = json1.get("accuracy").toString();
+                }catch(Exception e)
+                {
+                    System.out.println("Exception"+e);
+                }
+                
+                String query = "insert into primary_survey(type_of_survey, meter_no, meter_reading, "
+                        + " image_of_meter_no, image_of_meter_reading, latitude, longitude, altitude, accuracy"
+                        + " )" + " VALUES('" +type_of_survey+"','"+ meter_no+"','"+ meter_reading+"','"+ image_of_meter_no+"','"+ image_of_meter_reading+"',"+ latitude+","+ longitude+","+ altitude+",'"+ accuracy + "')";
+                try {
+                    PreparedStatement psmt = connection.prepareStatement(query);
+                    
+                    roweffected= psmt.executeUpdate();
+                } catch (Exception e) {
+                    System.out.println("DataSendModel Error: " + e);
+                }
+                
+                
+               
+                
+            }catch(JSONException ex)
+            {
+             Logger.getLogger(MeterSurveyWebServicesModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+         return roweffected;
+    }
+         public int getNoOfRows() {
+        int noOfRows = 0;
+        try {
+            ResultSet rset = connection.prepareStatement("select count(*) from primary_survey ").executeQuery();
+            rset.next();
+            noOfRows = Integer.parseInt(rset.getString(1));
+        } catch (Exception e) {
+            System.out.println("TableViewModel getNoOfRows() Error: " + e);
+        }
+        return noOfRows;
+    }
+
+   
 }
+
+

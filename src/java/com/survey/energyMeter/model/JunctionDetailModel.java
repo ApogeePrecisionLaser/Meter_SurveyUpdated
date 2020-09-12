@@ -5,7 +5,7 @@
 package com.survey.energyMeter.model;
 
 import com.survey.energyMeter.tableClasses.JunctionBean;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import com.survey.energyMeter.tableClasses.HealthStatusMapBean;
 import com.survey.energyMeter.tableClasses.PhaseBean;
 import java.sql.Connection;

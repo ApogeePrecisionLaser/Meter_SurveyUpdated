@@ -45,8 +45,12 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import org.apache.commons.io.FilenameUtils;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
+//import org.json.JSONArray;
+//import org.json.JSONObject;
+//import org.json.simple.JSONArray;
+//import org.json.simple.JSONObject;
 
 /**
  *
@@ -2593,13 +2597,42 @@ public class NewSwitchingPointSurveyModel {
 
 
 
-        String query2="select switching_point_detail_id,pole_no_s,area_id,meter_no_s,ph, "
-        +" fuse_id1,fuse_id2,fuse_id3,contacter_type,mccb_id1,mccb_id2,mccb_id3,fuse_quantity, "
-        +" contacter_capacity,mccb_quantity,twd.longitude,twd.lattitude, "
-        +" twd.ivrs_no,measured_load,pole_id,type_of_premsis,fuse1,fuse2,fuse3,mccb1,mccb2,mccb3, "
-        +" auto_switch_type_id,main_switch_type_id,main_switch_rating,enclosure_type_id, "
-        +" mccb,fuse,contacter,twd.meter_id,m.meter_name_auto, "
-        +" twd.created_date,is_working "
+        String query2="select  switching_point_detail_id,"
+                + "  pole_no_s,"
+                + "  area_id,"
+                + "  meter_no_s,"
+                + "  ph, "
+        +"  fuse_id1, fuse_id2,"
+                + "  fuse_id3,"
+                + "  contacter_type,"
+                + "  mccb_id1,"
+                + "  mccb_id2,"
+                + "  mccb_id3,"
+                + "  fuse_quantity, "
+        +"  contacter_capacity,"
+                + "  mccb_quantity,"
+                + "  twd.longitude,"
+                + "  twd.lattitude, "
+        +" twd.ivrs_no,"
+                + "  measured_load,"
+                + " pole_id,type_of_premsis,"
+                + "  fuse1,"
+                + " fuse2,"
+                + " fuse3,"
+                + " mccb1,"
+                + " mccb2,"
+                + " mccb3, "
+        +" auto_switch_type_id,"
+                + " main_switch_type_id,"
+                + " main_switch_rating,"
+                + " enclosure_type_id, "
+        +" mccb,"
+                + " fuse,"
+                + " contacter,"
+                + " twd.meter_id,"
+                + " m.meter_name_auto, "
+        +" twd.created_date,"
+                + " is_working "
         +" from switching_point_detail as twd "
         +" LEFT JOIN(contacter as sr) ON sr.contacter_id=twd.contacter_id "
 
@@ -2612,42 +2645,42 @@ public class NewSwitchingPointSurveyModel {
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
                 JSONObject obj = new JSONObject();
-                    obj.put("switching_point_detail_id", rset.getString("switching_point_detail_id"));//
-                    obj.put("pole_no_s", rset.getString("pole_no_s"));//
-                    obj.put("area_id", rset.getString("area_id"));//
-                    obj.put("meter_no", rset.getString("meter_no_s"));
-                    obj.put("phase", rset.getString("ph"));//
-                    obj.put("fuse1_type", getFuseTYpe(rset.getInt("fuse_id1")));//
-                    obj.put("fuse2_type", getFuseTYpe(rset.getInt("fuse_id2")));//
-                    obj.put("fuse3_type", getFuseTYpe(rset.getInt("fuse_id3")));//
-                    obj.put("contacter_type", rset.getString("contacter_type"));//
-                    obj.put("mccb1_type", getMccbType(rset.getInt("mccb_id1")));//
-                    obj.put("mccb2_type", getMccbType(rset.getInt("mccb_id2")));//
-                    obj.put("mccb3_type", getMccbType(rset.getInt("mccb_id3")));//
-                    obj.put("fuse_quantity", getMccbType(rset.getInt("fuse_quantity")));//
-                    obj.put("contacter_capacity", rset.getString("contacter_capacity"));//
-                    obj.put("mccb_quantity", rset.getString("mccb_quantity"));//
+                    obj.put("switching_point_detail_id", rset.getString("switching_point_detail_id") == null? "" : rset.getString("switching_point_detail_id"));//
+                    obj.put("pole_no_s", rset.getString("pole_no_s") == null? "" : rset.getString("pole_no_s"));//
+                    obj.put("area_id", rset.getString("area_id") == null? "" : rset.getString("area_id"));//
+                    obj.put("meter_no", rset.getString("meter_no_s") == null? "" : rset.getString("meter_no_s"));
+                    obj.put("phase", rset.getString("ph") == null? "" : rset.getString("ph"));//
+                    obj.put("fuse1_type", getFuseTYpe(rset.getInt("fuse_id1")) == null? "" : getFuseTYpe(rset.getInt("fuse_id1")));//
+                    obj.put("fuse2_type", getFuseTYpe(rset.getInt("fuse_id2")) == null? "" : getFuseTYpe(rset.getInt("fuse_id2")));//
+                    obj.put("fuse3_type", getFuseTYpe(rset.getInt("fuse_id3")) == null? "" : getFuseTYpe(rset.getInt("fuse_id3")));//
+                    obj.put("contacter_type", rset.getString("contacter_type") == null? "" : rset.getString("contacter_type") );//
+                    obj.put("mccb1_type", getMccbType(rset.getInt("mccb_id1")) == null? "" : getMccbType(rset.getInt("mccb_id1")));//
+                    obj.put("mccb2_type", getMccbType(rset.getInt("mccb_id2")) == null? "" : getMccbType(rset.getInt("mccb_id2")));//
+                    obj.put("mccb3_type", getMccbType(rset.getInt("mccb_id3")) == null? "" : getMccbType(rset.getInt("mccb_id3")));//
+                    obj.put("fuse_quantity", getMccbType(rset.getInt("fuse_quantity")) == null? "" : getMccbType(rset.getInt("fuse_quantity")));//
+                    obj.put("contacter_capacity", rset.getString("contacter_capacity") == null? "" : rset.getString("contacter_capacity"));//
+                    obj.put("mccb_quantity", rset.getString("mccb_quantity") == null? "" : rset.getString("mccb_quantity"));//
                     //obj.put("tube_well_name", rset.getString("tube_well_name"));//
                     //obj.put("no_of_users", rset.getString("no_of_users"));//
-                    obj.put("lattitude", rset.getString("lattitude"));//
-                    obj.put("longitude", rset.getString("longitude"));//
-                    obj.put("ivrs_no", rset.getString("ivrs_no"));//
-                    obj.put("measured_load", rset.getString("measured_load"));//
-                    obj.put("pole_id", rset.getString("pole_id"));//
-                    obj.put("type_of_premsis", rset.getString("type_of_premsis"));//
-                    obj.put("fuse1", rset.getString("fuse1"));//
-                    obj.put("fuse2", rset.getString("fuse2"));//
-                    obj.put("fuse3", rset.getString("fuse3"));//
-                    obj.put("mccb1", rset.getString("mccb1"));//
-                    obj.put("mccb2", rset.getString("mccb2"));//
-                    obj.put("mccb3", rset.getString("mccb3"));//
+                    obj.put("lattitude", rset.getString("lattitude") == null? "" : rset.getString("lattitude"));//
+                    obj.put("longitude", rset.getString("longitude") == null? "" :  rset.getString("longitude"));//
+                    obj.put("ivrs_no", rset.getString("ivrs_no") == null? "" : rset.getString("ivrs_no") );//
+                    obj.put("measured_load", rset.getString("measured_load") == null? "" : rset.getString("measured_load"));//
+                    obj.put("pole_id", rset.getString("pole_id") == null? "" : rset.getString("pole_id"));//
+                    obj.put("type_of_premsis", rset.getString("type_of_premsis") == null? "" : rset.getString("type_of_premsis"));//
+                    obj.put("fuse1", rset.getString("fuse1") == null? "" : rset.getString("fuse1"));//
+                    obj.put("fuse2", rset.getString("fuse2") == null? "" : rset.getString("fuse2"));//
+                    obj.put("fuse3", rset.getString("fuse3") == null? "" : rset.getString("fuse3"));//
+                    obj.put("mccb1", rset.getString("mccb1") == null? "" : rset.getString("mccb1"));//
+                    obj.put("mccb2", rset.getString("mccb2") == null? "" : rset.getString("mccb2"));//
+                    obj.put("mccb3", rset.getString("mccb3") == null? "" : rset.getString("mccb3"));//
                  
-                    obj.put("auto_switch", getSwitchType(rset.getInt("auto_switch_type_id")));//
-                    obj.put("main_switch", getSwitchType(rset.getInt("main_switch_type_id")));///////////////////////////////////
-                    obj.put("main_switch_rating", rset.getString("main_switch_rating"));//
-                    obj.put("enclosure", getEnclosureType(rset.getInt("enclosure_type_id")));////////////////////////////////
-                    obj.put("mccb_status", rset.getString("mccb"));//
-                    obj.put("fuse_status", rset.getString("fuse"));//
+                    obj.put("auto_switch", getSwitchType(rset.getInt("auto_switch_type_id")) == null? "" : getSwitchType(rset.getInt("auto_switch_type_id")));//
+                    obj.put("main_switch", getSwitchType(rset.getInt("main_switch_type_id")) == null? "" : getSwitchType(rset.getInt("main_switch_type_id")));///////////////////////////////////
+                    obj.put("main_switch_rating", rset.getString("main_switch_rating") == null? "" : rset.getString("main_switch_rating"));//
+                    obj.put("enclosure", getEnclosureType(rset.getInt("enclosure_type_id")) == null? "" : getEnclosureType(rset.getInt("enclosure_type_id")));////////////////////////////////
+                    obj.put("mccb_status", rset.getString("mccb") == null? "" : rset.getString("mccb"));//
+                    obj.put("fuse_status", rset.getString("fuse") == null? "" : rset.getString("fuse"));//
                    // obj.put("starter_status", rset.getString("starter"));//
 //                    obj.put("meter_id", rset.getString("meter_id"));//
 //                    obj.put("b_phase", rset.getString("b_phase"));//
@@ -2656,13 +2689,13 @@ public class NewSwitchingPointSurveyModel {
                   obj.put("survey_type", "switching_point");//
                      obj.put("meter_status", "");
                      //obj.put("starter_status", "Y");
-                     obj.put("meter_name_auto", rset.getString("meter_name_auto"));//
-                     obj.put("survey_date", rset.getString("created_date"));//
-                     obj.put("is_working", rset.getString("is_working"));//
+                     obj.put("meter_name_auto", rset.getString("meter_name_auto") == null? "" : rset.getString("meter_name_auto"));//
+                     obj.put("survey_date", rset.getString("created_date") == null? "" : rset.getString("created_date"));//
+                     obj.put("is_working", rset.getString("is_working") == null? "" : rset.getString("is_working"));//
 
 
 
-                    rowData.add(obj);
+                    rowData.put(obj);
 
 
                 //list.add(surveyType);
@@ -2741,58 +2774,58 @@ public class NewSwitchingPointSurveyModel {
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
                 JSONObject obj = new JSONObject();
-                    obj.put("tube_well_detail_id", rset.getString("tube_well_detail_id"));//
-                    obj.put("pole_no_s", rset.getString("pole_no_s"));//
-                    obj.put("area_id", rset.getString("area_id"));//
-                    obj.put("meter_no", rset.getString("meter_no_s"));
-                    obj.put("phase", rset.getString("ph"));//
-                    obj.put("fuse1_type", getFuseTYpe(rset.getInt("fuse_id1")));//
-                    obj.put("fuse2_type", getFuseTYpe(rset.getInt("fuse_id2")));//
-                    obj.put("fuse3_type", getFuseTYpe(rset.getInt("fuse_id3")));//
-                    obj.put("starter_type", rset.getString("starter_type"));//
-                    obj.put("mccb1_type", getMccbType(rset.getInt("mccb_id1")));//
-                    obj.put("mccb2_type", getMccbType(rset.getInt("mccb_id2")));//
-                    obj.put("mccb3_type", getMccbType(rset.getInt("mccb_id3")));//
-                    obj.put("fuse_quantity", getMccbType(rset.getInt("fuse_quantity")));//
-                    obj.put("starter_capacity", rset.getString("starter_capacity"));//
-                    obj.put("mccb_quantity", rset.getString("mccb_quantity"));//
-                    obj.put("tube_well_name", rset.getString("tube_well_name"));//
-                    obj.put("no_of_users", rset.getString("no_of_users"));//
-                    obj.put("lattitude", rset.getString("lattitude"));//
-                    obj.put("longitude", rset.getString("longitude"));//
-                    obj.put("ivrs_no", rset.getString("ivrs_no"));//
-                    obj.put("measured_load", rset.getString("measured_load"));//
-                    obj.put("pole_id", rset.getString("pole_id"));//
-                    obj.put("type_of_premsis", rset.getString("type_of_premsis"));//
-                    obj.put("fuse1", rset.getString("fuse1"));//
-                    obj.put("fuse2", rset.getString("fuse2"));//
-                    obj.put("fuse3", rset.getString("fuse3"));//
-                    obj.put("mccb1", rset.getString("mccb1"));//
-                    obj.put("mccb2", rset.getString("mccb2"));//
-                    obj.put("mccb3", rset.getString("mccb3"));//
-                    obj.put("starter_make", rset.getString("starter_make"));//
-                    obj.put("auto_switch", getSwitchType(rset.getInt("auto_switch_type_id")));//
-                    obj.put("main_switch", getSwitchType(rset.getInt("main_switch_type_id")));///////////////////////////////////
-                    obj.put("main_switch_rating", rset.getString("main_switch_rating"));//
-                    obj.put("enclosure", getEnclosureType(rset.getInt("enclosure_type_id")));////////////////////////////////
-                    obj.put("mccb_status", rset.getString("mccb"));//
-                    obj.put("fuse_status", rset.getString("fuse"));//
-                    obj.put("starter_status", rset.getString("starter"));//
-                    obj.put("meter_id", rset.getString("meter_id"));//
-                    obj.put("b_phase", rset.getString("b_phase"));//
-                    obj.put("r_phase", rset.getString("r_phase"));//
-                    obj.put("y_phase", rset.getString("y_phase"));//
+                    obj.put("tube_well_detail_id", rset.getString("tube_well_detail_id") == null? "" : rset.getString("tube_well_detail_id"));//
+                    obj.put("pole_no_s", rset.getString("pole_no_s") == null? "" : rset.getString("pole_no_s"));//
+                    obj.put("area_id", rset.getString("area_id") == null? "" : rset.getString("area_id"));//
+                    obj.put("meter_no", rset.getString("meter_no_s") == null? "" : rset.getString("meter_no_s"));
+                    obj.put("phase", rset.getString("ph") == null? "" : rset.getString("ph") );//
+                    obj.put("fuse1_type", getFuseTYpe(rset.getInt("fuse_id1")) == null? "" : getFuseTYpe(rset.getInt("fuse_id1")));//
+                    obj.put("fuse2_type", getFuseTYpe(rset.getInt("fuse_id2")) == null? "" : getFuseTYpe(rset.getInt("fuse_id2")));//
+                    obj.put("fuse3_type", getFuseTYpe(rset.getInt("fuse_id3")) == null? "" : getFuseTYpe(rset.getInt("fuse_id3")));//
+                    obj.put("starter_type", rset.getString("starter_type") == null? "" : rset.getString("starter_type"));//
+                    obj.put("mccb1_type", getMccbType(rset.getInt("mccb_id1")) == null? "" : getMccbType(rset.getInt("mccb_id1")));//
+                    obj.put("mccb2_type", getMccbType(rset.getInt("mccb_id2")) == null? "" : getMccbType(rset.getInt("mccb_id2")));//
+                    obj.put("mccb3_type", getMccbType(rset.getInt("mccb_id3")) == null? "" : getMccbType(rset.getInt("mccb_id3")));//
+                    obj.put("fuse_quantity", getMccbType(rset.getInt("fuse_quantity")) == null? "" : getMccbType(rset.getInt("fuse_quantity")));//
+                    obj.put("starter_capacity", rset.getString("starter_capacity") == null? "" : rset.getString("starter_capacity"));//
+                    obj.put("mccb_quantity", rset.getString("mccb_quantity") == null? "" : rset.getString("mccb_quantity"));//
+                    obj.put("tube_well_name", rset.getString("tube_well_name") == null? "" : rset.getString("tube_well_name"));//
+                    obj.put("no_of_users", rset.getString("no_of_users") == null? "" : rset.getString("no_of_users"));//
+                    obj.put("lattitude", rset.getString("lattitude") == null? "" : rset.getString("lattitude"));//
+                    obj.put("longitude", rset.getString("longitude") == null? "" : rset.getString("longitude"));//
+                    obj.put("ivrs_no", rset.getString("ivrs_no") == null? "" : rset.getString("ivrs_no"));//
+                    obj.put("measured_load", rset.getString("measured_load") == null? "" : rset.getString("measured_load"));//
+                    obj.put("pole_id", rset.getString("pole_id") == null? "" : rset.getString("pole_id"));//
+                    obj.put("type_of_premsis", rset.getString("type_of_premsis") == null? "" : rset.getString("type_of_premsis"));//
+                    obj.put("fuse1", rset.getString("fuse1") == null? "" : rset.getString("fuse1"));//
+                    obj.put("fuse2", rset.getString("fuse2") == null? "" : rset.getString("fuse2"));//
+                    obj.put("fuse3", rset.getString("fuse3") == null? "" : rset.getString("fuse3"));//
+                    obj.put("mccb1", rset.getString("mccb1") == null? "" : rset.getString("mccb1"));//
+                    obj.put("mccb2", rset.getString("mccb2") == null? "" : rset.getString("mccb2"));//
+                    obj.put("mccb3", rset.getString("mccb3") == null? "" : rset.getString("mccb3"));//
+                    obj.put("starter_make", rset.getString("starter_make") == null? "" : rset.getString("starter_make"));//
+                    obj.put("auto_switch", getSwitchType(rset.getInt("auto_switch_type_id")) == null? "" : getSwitchType(rset.getInt("auto_switch_type_id")));//
+                    obj.put("main_switch", getSwitchType(rset.getInt("main_switch_type_id")) == null? "" : getSwitchType(rset.getInt("main_switch_type_id")));///////////////////////////////////
+                    obj.put("main_switch_rating", rset.getString("main_switch_rating") == null? "" : rset.getString("main_switch_rating"));//
+                    obj.put("enclosure", getEnclosureType(rset.getInt("enclosure_type_id")) == null? "" : getEnclosureType(rset.getInt("enclosure_type_id")));////////////////////////////////
+                    obj.put("mccb_status", rset.getString("mccb") == null? "" : rset.getString("mccb"));//
+                    obj.put("fuse_status", rset.getString("fuse") == null? "" : rset.getString("fuse"));//
+                    obj.put("starter_status", rset.getString("starter") == null? "" : rset.getString("starter"));//
+                    obj.put("meter_id", rset.getString("meter_id") == null? "" : rset.getString("meter_id"));//
+                    obj.put("b_phase", rset.getString("b_phase") == null? "" : rset.getString("b_phase"));//
+                    obj.put("r_phase", rset.getString("r_phase") == null? "" : rset.getString("r_phase"));//
+                    obj.put("y_phase", rset.getString("y_phase") == null? "" : rset.getString("y_phase"));//
                     obj.put("survey_type", "tube_well");//
                      obj.put("meter_status", "");
                      //obj.put("starter_status", "Y");
-                     obj.put("meter_name_auto", rset.getString("meter_name_auto"));//
-                     obj.put("survey_date", rset.getString("created_date"));//
-                     obj.put("is_working", rset.getString("is_working"));//
+                     obj.put("meter_name_auto", rset.getString("meter_name_auto") == null? "" : rset.getString("meter_name_auto"));//
+                     obj.put("survey_date", rset.getString("created_date") == null? "" : rset.getString("created_date"));//
+                     obj.put("is_working", rset.getString("is_working") == null? "" : rset.getString("is_working"));//
 
 
 
 
-                    rowData.add(obj);
+                    rowData.put(obj);
 
 
                 //list.add(surveyType);

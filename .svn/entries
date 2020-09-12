@@ -12,7 +12,7 @@ file://192.168.1.6/e/new_repository
 Navitus1
 has-props
 has-prop-mods
-
+svn:special svn:externals svn:needs-lock
 
 
 
@@ -26,14 +26,39 @@ has-prop-mods
 
 bb2a1e29-86ca-ef48-b096-f23b4a743b66
 
-test
-dir
-
-nbproject
-dir
-
-src
-dir
+build.xml
+file
+
+
+
+
+2015-12-09T06:32:49.757922Z
+14257c76d4fb346d7a7b101511c0db4f
+2015-10-21T08:55:48.432122Z
+7
+Ritesh
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3505
 
 catalog.xml
 file
@@ -69,40 +94,15 @@ Ritesh
 
 215
 
-web
+nbproject
 dir
 
-build.xml
-file
-
-
-
-
-2015-12-09T06:32:49.757922Z
-14257c76d4fb346d7a7b101511c0db4f
-2015-10-21T08:55:48.432122Z
-7
-Ritesh
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-3505
+src
+dir
+
+test
+dir
+
+web
+dir
 

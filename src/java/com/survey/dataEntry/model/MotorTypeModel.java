@@ -5,10 +5,11 @@
 
 package com.survey.dataEntry.model;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
+
 import com.survey.tableClasses.MotorTypeBean;
+import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,7 +82,7 @@ public byte[] generateMapReport(String jrxmlFilePath, List<MotorTypeBean> listAl
         String query = "UPDATE motor_type SET motor_type_name=?, remark=? WHERE motor_type_id=? ";
         int rowsAffected = 0;
         try {
-            PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
+            PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, motorTypeBean.getMotorTypeName());
             pstmt.setString(2, motorTypeBean.getRemark());
             pstmt.setInt(3, motorTypeBean.getMotorTypeId());
@@ -131,7 +132,7 @@ public byte[] generateMapReport(String jrxmlFilePath, List<MotorTypeBean> listAl
                 + " ORDER BY motor_type_name ";
         int noOfRows = 0;
         try {
-            PreparedStatement stmt = (PreparedStatement) connection.prepareStatement(query);
+            PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, searchMotorTypeName);
             ResultSet rs = stmt.executeQuery();
             rs.next();
@@ -152,7 +153,7 @@ public byte[] generateMapReport(String jrxmlFilePath, List<MotorTypeBean> listAl
                 + " ORDER BY motor_type_name "
                 + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
         try {
-            PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
+            PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, searchMotorTypeName);
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {
@@ -177,7 +178,7 @@ public byte[] generateMapReport(String jrxmlFilePath, List<MotorTypeBean> listAl
                 + " ORDER BY fuse_type ";
                 //+ " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
         try {
-            PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
+            PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, searchMotorTypeName);
             ResultSet rset = pstmt.executeQuery();
             while (rset.next()) {

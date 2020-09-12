@@ -6,7 +6,7 @@
 package com.survey.dataEntry.model;
 
 
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
+
 import com.survey.tableClasses.LogErrorBean;
 import java.sql.Connection;
 import java.sql.DriverManager;

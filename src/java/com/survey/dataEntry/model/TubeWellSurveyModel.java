@@ -2031,14 +2031,14 @@ public class TubeWellSurveyModel {
                 + " AND IF('" + searchFileNo + "' = '',  s.survey_file_no LIKE '%%', s.survey_file_no=? )"
                 + " AND IF('" + searchPageNo + "' = '',  s.survey_page_no LIKE '%%', s.survey_page_no=? )"
                 + " AND IF('" + searchIvrsNo + "' = '',  t.service_conn_no LIKE '%%' OR t.service_conn_no IS null, t.service_conn_no=? )"
-                + " AND IF('" + searchByDate + "' = '',  s.survey_date LIKE '%%', s.survey_date >= '"+searchByDate+"' )"
+//                + " AND IF('" + searchByDate + "' = '',  s.survey_date LIKE '%%', s.survey_date = '"+searchByDate+"' )"
                 //+ " AND IF('" + meter_name_auto + "' = '' OR '" + meter_name_auto + "' = 'null',  t.meter_name_auto LIKE '%%', t.meter_name_auto = '"+meter_name_auto+"' )"
                 + " AND IF('" + meter_name_auto + "' = '',  t.meter_name_auto LIKE '%%' OR t.meter_name_auto IS null, t.meter_name_auto = '"+meter_name_auto+"' )"
                 + " AND IF('" + survey_id+ "' = '',  s.survey_id LIKE '%%', s.survey_id = '"+survey_id+"' )"
                 + " AND IF('" + searchMeterFunctional+ "' = '',  t.meter_functional LIKE '%%', t.meter_functional = '"+searchMeterFunctional+"' )"
                 + " AND IF('" + searchFeeder + "' = '',  f.feeder_name LIKE '%%', f.feeder_name= '"+searchFeeder+"' )"
                  + " AND IF('" + searchTypeOfConnection + "' = '',  top.type_of_premsis LIKE '%%', top.type_of_premsis= '"+searchTypeOfConnection+"' )"
-                 + " AND IF('" + searchToDate + "' = '',  s.survey_date LIKE '%%', s.survey_date <= '"+searchToDate+"' )"
+//                 + " AND IF('" + searchToDate + "' = '',  s.survey_date LIKE '%%', s.survey_date <= '"+searchToDate+"' )"
                 + "  order by tube_well_survey_id desc"
                 + addLimit;
 
@@ -2978,7 +2978,7 @@ public class TubeWellSurveyModel {
         try {
             System.out.println("hii");
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/meter_survey", "jpss_2", "jpss_1277");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/meter_survey2", "root", "root");
         } catch (Exception e) {
             System.out.println("ReadMailModel setConnection() Error: " + e);
         }

@@ -4,7 +4,7 @@
  */
 package com.survey.dataEntry.model;
 
-import com.mysql.jdbc.Connection;
+import java.sql.Connection;
 import com.survey.tableClasses.TubeWellDetailBean;
 import com.survey.tableClasses.TubeWellSurveyBean;
 import java.sql.DriverManager;
@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperRunManager;
@@ -1703,11 +1705,11 @@ public class TubeWellDetailModel {
 
         } catch (Exception e) {
 
-            System.out.println("exception occured during inserting in switching point detail :  " + e);
             try {
+                System.out.println("exception occured during inserting in switching point detail :  " + e);
                 connection.rollback();
-            } catch (SQLException sqlE) {
-                System.out.println("SQL Exception Occured while inserting data in Switching point detail:" + sqlE);
+            } catch (SQLException ex) {
+                Logger.getLogger(TubeWellDetailModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (rowsAffected > 0) {
@@ -1951,8 +1953,8 @@ public class TubeWellDetailModel {
         } finally {
             try {
                 connection.setAutoCommit(true);
-            } catch (SQLException sq) {
-                System.out.println("Error while updating record...." + sq);
+            } catch (SQLException ex) {
+                Logger.getLogger(TubeWellDetailModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
@@ -2333,16 +2335,15 @@ public class TubeWellDetailModel {
         } catch (Exception e) {
             try {
                 connection.rollback();
-            } catch (SQLException sqlE) {
-                System.out.println("SQL exception while revising record........." + e);
+            } catch (SQLException ex) {
+                Logger.getLogger(TubeWellDetailModel.class.getName()).log(Level.SEVERE, null, ex);
             }
             System.out.println("error while updating record........." + e);
         } finally {
             try {
                 connection.setAutoCommit(true);
-
-            } catch (SQLException exp) {
-                System.out.println("SQL exception while revising record........." + exp);
+            } catch (SQLException ex) {
+                Logger.getLogger(TubeWellDetailModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (rowsAffected > 0) {
@@ -2976,15 +2977,15 @@ public class TubeWellDetailModel {
         } catch (Exception e) {
             try {
                 connection.rollback();
-            } catch (SQLException q) {
-                System.out.println("Error inside CANCEL Switching point detail:" + q);
+                System.out.println("Error: " + e);
+            } catch (SQLException ex) {
+                Logger.getLogger(TubeWellDetailModel.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println("Error: " + e);
         } finally {
             try {
                 connection.setAutoCommit(true);
-            } catch (SQLException q) {
-                System.out.println("Error inside CANCEL Switching point detail:" + q);
+            } catch (SQLException ex) {
+                Logger.getLogger(TubeWellDetailModel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         if (rowsAffected < 0) {

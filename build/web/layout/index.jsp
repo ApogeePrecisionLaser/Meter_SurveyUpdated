@@ -39,11 +39,7 @@
                                     <h3>  Welcome</h3>
                                 </td>
                             </tr>
-                              <tr>
-                                <td align="center">
-                                    <input type="button" onclick="" value="Populate Tables">
-                                </td>
-                            </tr>
+                            
                         </table>
                     </DIV>
                 </td>

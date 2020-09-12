@@ -5,8 +5,8 @@
 
 package com.survey.dataEntry.model;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import com.survey.tableClasses.TypeOfUseBean;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -81,7 +81,7 @@ public byte[] generateMapReport(String jrxmlFilePath, List<TypeOfUseBean> listAl
         String query = "UPDATE type_of_use SET type_of_use_name=?, remark=? WHERE type_of_use_id=? ";
         int rowsAffected = 0;
         try {
-            PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
+            PreparedStatement pstmt =  connection.prepareStatement(query);
             pstmt.setString(1, typeOfUseBean.getTypeOfUseName());
             pstmt.setString(2, typeOfUseBean.getRemark());
             pstmt.setInt(3, typeOfUseBean.getTypeOfUseiD());
@@ -130,7 +130,7 @@ public byte[] generateMapReport(String jrxmlFilePath, List<TypeOfUseBean> listAl
                 + " ORDER BY type_of_use_name ";
         int noOfRows = 0;
         try {
-            PreparedStatement stmt = (PreparedStatement) connection.prepareStatement(query);
+            PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setString(1, searchTypeOfUse);
             ResultSet rs = stmt.executeQuery();
             rs.next();

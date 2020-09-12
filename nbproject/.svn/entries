@@ -11,8 +11,8 @@ file://192.168.1.6/e/new_repository
 64
 Administrator
 has-props
-
-
+has-prop-mods
+svn:special svn:externals svn:needs-lock
 
 
 
@@ -25,76 +25,6 @@ has-props
 
 
 bb2a1e29-86ca-ef48-b096-f23b4a743b66
-
-project.properties
-file
-
-
-
-
-
-f42f257b47d5649fc4b61c7ea8f0c133
-2016-01-01T07:51:38.447019Z
-64
-Administrator
-
-project.xml
-file
-
-
-
-
-
-cffe4d23b4af9fcd2a03907de3aa163e
-2016-01-01T07:51:38.447019Z
-64
-Administrator
-
-genfiles.properties
-file
-
-
-
-
-
-95b5f40d5f41749251f3ae025438ad5c
-2016-01-01T07:51:38.447019Z
-64
-Administrator
-
-rest-build.xml
-file
-
-
-
-
-2016-01-01T07:52:08.411186Z
-b0436579e4107e8a173100e019dcde56
-2016-01-01T07:51:38.447019Z
-64
-Administrator
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-2751
 
 ant-deploy.xml
 file
@@ -136,9 +66,124 @@ file
 
 
 
-
+2020-09-09T16:44:51.421000Z
 f5574b4460235e2a2746af837079b2d3
 2016-01-01T07:51:38.447019Z
 64
 Administrator
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+55772
+
+build-impl.xml~
+file
+
+
+
+add
+
+f5574b4460235e2a2746af837079b2d3
+
+
+
+
+
+
+
+
+
+
+
+copied
+file://192.168.1.6/e/new_repository/meter_survey/nbproject/build-impl.xml
+185
+
+genfiles.properties
+file
+
+
+
+
+
+95b5f40d5f41749251f3ae025438ad5c
+2016-01-01T07:51:38.447019Z
+64
+Administrator
+
+project.properties
+file
+
+
+
+
+
+f42f257b47d5649fc4b61c7ea8f0c133
+2016-01-01T07:51:38.447019Z
+64
+Administrator
+
+project.xml
+file
+
+
+
+
+
+cffe4d23b4af9fcd2a03907de3aa163e
+2016-01-01T07:51:38.447019Z
+64
+Administrator
+
+rest-build.xml
+file
+
+
+
+
+2016-01-01T07:52:08.411186Z
+b0436579e4107e8a173100e019dcde56
+2016-01-01T07:51:38.447019Z
+64
+Administrator
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+2751
 

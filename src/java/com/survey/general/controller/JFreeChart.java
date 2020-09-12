@@ -5,14 +5,16 @@
 package com.survey.general.controller;
 
 import com.itextpdf.text.Document;
+//import com.itextpdf.text.pdf.DefaultFontMapper;
+//import com.itextpdf.text.pdf.FontMapper;
 
-import com.itextpdf.text.pdf.DefaultFontMapper;
-import com.itextpdf.text.pdf.FontMapper;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.lowagie.text.Table;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.DefaultFontMapper;
+import com.lowagie.text.pdf.FontMapper;
 import com.survey.general.model.JFreeChartModel;
 import com.survey.dbcon.DBConnection;
 import java.awt.Graphics2D;
@@ -108,7 +110,7 @@ public class JFreeChart extends HttpServlet {
             document.open();
             PdfContentByte contentByte = writer.getDirectContent();
             PdfTemplate template = contentByte.createTemplate(width, height);
-            Graphics2D graphics2d = template.createGraphics(width, height, (FontMapper) new DefaultFontMapper());
+            Graphics2D graphics2d = template.createGraphics(width, height, (com.itextpdf.text.pdf.FontMapper) (FontMapper) new DefaultFontMapper());
             Rectangle2D rectangle2d = new Rectangle2D.Double(0, 0, width,
                     height);
 

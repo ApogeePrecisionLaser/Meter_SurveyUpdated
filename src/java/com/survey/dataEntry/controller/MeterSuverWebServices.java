@@ -12,12 +12,17 @@ import com.survey.energyMeter.model.EnergyMeterWebServiceModel;
 import com.survey.tableClasses.SurveyBean;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -30,10 +35,15 @@ import javax.ws.rs.core.MediaType;
 
 //import org.json.JSONObject;
 import javax.ws.rs.core.Response;
+//import org.json.JSONArray;
+//import org.json.JSONException;
+//import org.json.JSONObject;
+//import org.json.simple.JSONArray;
+//import org.json.simple.JSONObject;
 
-import org.json.simple.JSONArray;
-
-import org.json.simple.JSONObject;
+import org.codehaus.jettison.json.*;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
 import sun.misc.BASE64Decoder;
 
 /**
@@ -42,13 +52,14 @@ import sun.misc.BASE64Decoder;
  */
 @Path("/")
 public class MeterSuverWebServices {
-    
+
     @Context
     ServletContext servletContext;
 
     FuseTypeController cont = new FuseTypeController();
     MeterSurveyWebServicesModel wsSurveyModel = null;
     TubeWellSurveyModel tubeWellSurveyModel = new TubeWellSurveyModel();
+
     @Context
 // private WebServiceContext context;
     //ServletContext servletContext;// =    (ServletContext) context.getMessageContext().get(MessageContext.SERVLET_CONTEXT);
@@ -99,7 +110,6 @@ public class MeterSuverWebServices {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-
         String[] json_data = result.split(",");
         for (int i = 0; i <= json_data.length - 1; i++) {
             String[] json_result = new String[2];
@@ -114,7 +124,6 @@ public class MeterSuverWebServices {
                     json_result[1] = null;
                     inputJsonObj.put(json_result[0].trim(), json_result[1].trim());
                 }
-
 
             } catch (Exception e) {
 
@@ -438,7 +447,7 @@ public class MeterSuverWebServices {
             surveyBean.setMain_switch_rating(null);
         }
         try {
-            surveyBean.setNo_of_phase(Integer.parseInt(inputJsonObj.get("phase").toString().replace("]","")));
+            surveyBean.setNo_of_phase(Integer.parseInt(inputJsonObj.get("phase").toString().replace("]", "")));
         } catch (Exception e) {
             surveyBean.setNo_of_phase(0);
         }
@@ -493,7 +502,6 @@ public class MeterSuverWebServices {
 //        } catch (Exception e) {
 //            System.out.println("Image exception::"+e);
 //        }
-
         try {
             surveyBean.setSurvey_pole_no(inputJsonObj.get("pole_no").toString());
         } catch (Exception e) {
@@ -552,7 +560,7 @@ public class MeterSuverWebServices {
         } catch (Exception e) {
             System.out.println("Exception occurs: " + e);
         }
-           surveyBean.setY_phase(inputJsonObj.get("y_phase").toString());
+        surveyBean.setY_phase(inputJsonObj.get("y_phase").toString());
         String input = (String) inputJsonObj.get("survey_by");
         String output = "The input you sent is :" + input;
         String age = (String) inputJsonObj.get("pole_no");
@@ -600,15 +608,15 @@ public class MeterSuverWebServices {
                 flag = wsSurveyModel.validationCheck(Integer.parseInt(pole_id_rev.split("_")[0]), Integer.parseInt(pole_id_rev.split("_")[1]), surveyBean.getSurvey_type());
             }
             String insertFlag = "";
-            try{
+            try {
                 insertFlag = inputJsonObj.get("flag").toString();
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 insertFlag = "";
             }
             if (flag && !insertFlag.equals("1")) {
 
                 // test for store multiple images
-                int survey_id1=wsSurveyModel.insertRecord(surveyBean, list);
+                int survey_id1 = wsSurveyModel.insertRecord(surveyBean, list);
 //                System.out.println("survey id is:::" + survey_id1);
 //                org.json.JSONObject jsn = new org.json.JSONObject(inputJsonObj.toString());
 //                org.json.JSONArray jsonArraay = jsn.getJSONArray("image");
@@ -639,9 +647,8 @@ public class MeterSuverWebServices {
 //                }else {
 //                    //    response=Response.
 //                }
-                    response="success";
-                }
-                else {
+                    response = "success";
+                } else {
                     //    response=Response.
                 }
 
@@ -657,24 +664,24 @@ public class MeterSuverWebServices {
     @Consumes(MediaType.APPLICATION_JSON)
     public JSONObject surveyLast5Records(String dataString) {
         JSONObject obj = new JSONObject();
-        try{
-        String sArray[] = dataString.split(",");
-        int survey_id=Integer.parseInt(sArray[0]);
-        String ivrs_no=sArray[1];
-        String survey_date=sArray[2];
-        wsSurveyModel = new MeterSurveyWebServicesModel();
-        wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
-        wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
-        wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
-        wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
-        wsSurveyModel.setConnection();
-        //JSONObject obj = new JSONObject();
-        JSONArray json = null;
+        try {
+            String sArray[] = dataString.split(",");
+            int survey_id = Integer.parseInt(sArray[0]);
+            String ivrs_no = sArray[1];
+            String survey_date = sArray[2];
+            wsSurveyModel = new MeterSurveyWebServicesModel();
+            wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
+            wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
+            wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
+            wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
+            wsSurveyModel.setConnection();
+            //JSONObject obj = new JSONObject();
+            JSONArray json = null;
 
-         json = wsSurveyModel.surveyRecordOfSelectedDateTime(survey_id,ivrs_no,survey_date);
-         obj.put("selectedSurveyRecords", json);
-        }catch(Exception e){
-            System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getWardData()..."+e);
+            json = wsSurveyModel.surveyRecordOfSelectedDateTime(survey_id, ivrs_no, survey_date);
+            obj.put("selectedSurveyRecords", json);
+        } catch (Exception e) {
+            System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getWardData()..." + e);
         }
         wsSurveyModel.closeConnection();
 
@@ -685,7 +692,7 @@ public class MeterSuverWebServices {
     @Path("/last5SurveyDateTime")
     @Produces(MediaType.APPLICATION_JSON)//http://192.168.1.15:8084/meter_survey/api/service/hello
     @Consumes(MediaType.APPLICATION_JSON)
-    public JSONObject last5SurveyDateTime(String ivrs_no ) {
+    public JSONObject last5SurveyDateTime(String ivrs_no) {
         wsSurveyModel = new MeterSurveyWebServicesModel();
         wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
         wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
@@ -694,17 +701,16 @@ public class MeterSuverWebServices {
         wsSurveyModel.setConnection();
         JSONObject obj = new JSONObject();
         JSONArray json = null;
-        try{
-         json = wsSurveyModel.last5SurveyDateTime(ivrs_no);
-         obj.put("last5SurveyDateTime", json);
-        }catch(Exception e){
-            System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getWardData()..."+e);
+        try {
+            json = wsSurveyModel.last5SurveyDateTime(ivrs_no);
+            obj.put("last5SurveyDateTime", json);
+        } catch (Exception e) {
+            System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getWardData()..." + e);
         }
         wsSurveyModel.closeConnection();
 
         return obj;
     }
-
 
     @POST
     @Path("/getImageTypeAndCount")
@@ -712,20 +718,20 @@ public class MeterSuverWebServices {
     @Consumes(MediaType.APPLICATION_JSON)
     public JSONObject getImageCount(String survey_id) {
         JSONObject obj = new JSONObject();
-        try{
+        try {
 
-        wsSurveyModel = new MeterSurveyWebServicesModel();
-        wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
-        wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
-        wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
-        wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
-        wsSurveyModel.setConnection();
-        //JSONObject obj = new JSONObject();
-        JSONArray json = null;
-         json = wsSurveyModel.imageCount(survey_id);
-         obj.put("selectedSurveyRecords", json);
-        }catch(Exception e){
-            System.out.println("Error in MeterSurveyWebServices 'getImageTypeAndCount' url calling imageCount()..."+e);
+            wsSurveyModel = new MeterSurveyWebServicesModel();
+            wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
+            wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
+            wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
+            wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
+            wsSurveyModel.setConnection();
+            //JSONObject obj = new JSONObject();
+            JSONArray json = null;
+            json = wsSurveyModel.imageCount(survey_id);
+            obj.put("selectedSurveyRecords", json);
+        } catch (Exception e) {
+            System.out.println("Error in MeterSurveyWebServices 'getImageTypeAndCount' url calling imageCount()..." + e);
         }
         wsSurveyModel.closeConnection();
 
@@ -736,7 +742,7 @@ public class MeterSuverWebServices {
     @Path("/sendAttachment")
     @Produces(MediaType.MULTIPART_FORM_DATA)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response sendMsgAttachment(String  json) {
+    public Response sendMsgAttachment(String json) {
         //messageViewModel msgModel = new messageViewModel();
         wsSurveyModel = new MeterSurveyWebServicesModel();
         wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
@@ -748,19 +754,18 @@ public class MeterSuverWebServices {
         try {
 
             String s[] = json.split(",");
-            String image_name=s[0];
-            String survey_id=s[1];
-            String image_type_id=s[2];
-            String survey_type=wsSurveyModel.getSurveyType(survey_id);
+            String image_name = s[0];
+            String survey_id = s[1];
+            String image_type_id = s[2];
+            String survey_type = wsSurveyModel.getSurveyType(survey_id);
 
-
-            if(survey_type.equals("tubewell_type_survey")){
-                survey_type="tube_well";
-            }else{
-                survey_type="switching_point";
+            if (survey_type.equals("tubewell_type_survey")) {
+                survey_type = "tube_well";
+            } else {
+                survey_type = "switching_point";
             }
 
-            String image_path = wsSurveyModel.getAttachmentPath(image_name, survey_id,image_type_id,survey_type);
+            String image_path = wsSurveyModel.getAttachmentPath(image_name, survey_id, image_type_id, survey_type);
             File file = new File(image_path);
             responseBuilder = Response.ok((Object) file);
             responseBuilder.header("Content-Disposition", "attachment; filename=\" " + image_name + "\"");
@@ -773,9 +778,7 @@ public class MeterSuverWebServices {
         return responseBuilder.build();
     }
 
-
     // for insert image record
-
     @POST
     @Path("/helloImage")
     @Produces(MediaType.APPLICATION_JSON)//http://192.168.1.15:8084/meter_survey/api/service/hello
@@ -783,57 +786,58 @@ public class MeterSuverWebServices {
 
     public String sayPlainTextHelloForImage(JSONObject inputJsonObj) throws Exception {
 
-                wsSurveyModel = new MeterSurveyWebServicesModel();
-                wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
+        wsSurveyModel = new MeterSurveyWebServicesModel();
+        wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
         wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
         wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
         wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
         wsSurveyModel.setConnection();
-                int survey_id1 = 0;
-                String response = null;
-                String service_no=inputJsonObj.get("service_no").toString();
-                String survey_type=inputJsonObj.get("survey_type").toString();
-                String survey_date=inputJsonObj.get("survey_date").toString();
-                survey_id1=wsSurveyModel.getSurveyIdForImage(service_no,survey_type,survey_date);
-                System.out.println("survey:"+survey_id1);
-                org.json.JSONObject jsn = new org.json.JSONObject(inputJsonObj.toString());
-                org.json.JSONArray jsonArraay = jsn.getJSONArray("image");
-                try{
-                int size = jsonArraay.length();
-                int survey_gen_image_map_id=0;
-                for (int i = 0; i < size; i++) {
+        int survey_id1 = 0;
+        String response = null;
+        String service_no = inputJsonObj.get("service_no").toString();
+        String survey_type = inputJsonObj.get("survey_type").toString();
+        String survey_date = inputJsonObj.get("survey_date").toString();
+        survey_id1 = wsSurveyModel.getSurveyIdForImage(service_no, survey_type, survey_date);
+        System.out.println("survey:" + survey_id1);
+        org.json.JSONObject jsn = new org.json.JSONObject(inputJsonObj.toString());
+        org.json.JSONArray jsonArraay = jsn.getJSONArray("image");
+        try {
+            int size = jsonArraay.length();
+            int survey_gen_image_map_id = 0;
+            for (int i = 0; i < size; i++) {
                 org.json.JSONObject jsonObject = jsonArraay.getJSONObject(i);
                 byte[] fileAsBytes = new BASE64Decoder().decodeBuffer(jsonObject.getString("byte_arr"));
                 String fileName = jsonObject.getString("imgname");
                 String image_type = jsonObject.getString("type");
-                int image_type_id=wsSurveyModel.getImage_type_id(image_type);
-                try{
-                String path = "C:/ssadvt_repository/meter_survey/survey_image/tube_well/survey_id_"+survey_id1;
-                
-                wsSurveyModel.makeDirectory(path);
-                
-                String file = path + "/" + fileName;
-                FileOutputStream outputStream = new FileOutputStream(file);
-                outputStream.write(fileAsBytes);
-                outputStream.close();
-                int  gen_image_detail_id = wsSurveyModel.insertImageRecord(fileName,image_type_id);
-                survey_gen_image_map_id=wsSurveyModel.insertSurveyImageMapRecord(survey_id1,gen_image_detail_id);
-                // drive d=new drive();
-                //  d.drive(fileName,file,affect,affected+"");
-                }catch(Exception ex){
-                System.out.println("Exception in file image insert:"+ex);
+                int image_type_id = wsSurveyModel.getImage_type_id(image_type);
+                try {
+                    String path = "C:/ssadvt_repository/meter_survey/survey_image/tube_well/survey_id_" + survey_id1;
+
+                    wsSurveyModel.makeDirectory(path);
+
+                    String file = path + "/" + fileName;
+                    FileOutputStream outputStream = new FileOutputStream(file);
+                    outputStream.write(fileAsBytes);
+                    outputStream.close();
+                    int gen_image_detail_id = wsSurveyModel.insertImageRecord(fileName, image_type_id);
+                    survey_gen_image_map_id = wsSurveyModel.insertSurveyImageMapRecord(survey_id1, gen_image_detail_id);
+                    // drive d=new drive();
+                    //  d.drive(fileName,file,affect,affected+"");
+                } catch (Exception ex) {
+                    System.out.println("Exception in file image insert:" + ex);
                 }
-              
+
                 if (survey_gen_image_map_id > 0) {
                     //response = Response.ok(inputJsonObj, MediaType.APPLICATION_JSON).build();
                     response = "success";
-                }else {
-                       // response="image";
+                } else {
+                    // response="image";
                 }
-             }  }catch(Exception e){
-                        System.out.println("Exception in image insertion web service:"+e);
-                        }
-                wsSurveyModel.closeConnection();
+            }
+        } catch (Exception e) {
+            System.out.println("Exception in image insertion web service:" + e);
+        }
+        wsSurveyModel.closeConnection();
 
         return response;
     }
@@ -846,50 +850,49 @@ public class MeterSuverWebServices {
 
     public String sayPlainTextHelloForPDF(JSONObject inputJsonObj) throws Exception {
 
-                wsSurveyModel = new MeterSurveyWebServicesModel();
-                wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
+        wsSurveyModel = new MeterSurveyWebServicesModel();
+        wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
         wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
         wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
         wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
         wsSurveyModel.setConnection();
-                String response = null;
-                try{
-                int survey_id1 = 0;
-                String service_no=inputJsonObj.get("service_no").toString();
-                String survey_type=inputJsonObj.get("survey_type").toString();
-                String survey_date=inputJsonObj.get("survey_date").toString();
-                survey_id1=wsSurveyModel.getSurveyIdForImage(service_no,survey_type,survey_date);
-                org.json.JSONObject jsn = new org.json.JSONObject(inputJsonObj.toString());
-                org.json.JSONArray jsonArraay = jsn.getJSONArray("image");
-                int size = jsonArraay.length();
-                int survey_gen_image_map_id=0;
-                for (int i = 0; i < size; i++) {
+        String response = null;
+        try {
+            int survey_id1 = 0;
+            String service_no = inputJsonObj.get("service_no").toString();
+            String survey_type = inputJsonObj.get("survey_type").toString();
+            String survey_date = inputJsonObj.get("survey_date").toString();
+            survey_id1 = wsSurveyModel.getSurveyIdForImage(service_no, survey_type, survey_date);
+            org.json.JSONObject jsn = new org.json.JSONObject(inputJsonObj.toString());
+            org.json.JSONArray jsonArraay = jsn.getJSONArray("image");
+            int size = jsonArraay.length();
+            int survey_gen_image_map_id = 0;
+            for (int i = 0; i < size; i++) {
                 org.json.JSONObject jsonObject = jsonArraay.getJSONObject(i);
                 byte[] fileAsBytes = new BASE64Decoder().decodeBuffer(jsonObject.getString("byte_arr"));
                 String fileName = jsonObject.getString("imgname");
-                String path = "C:/ssadvt_repository/meter_survey/survey_image/tube_well/survey_id_"+survey_id1;
+                String path = "C:/ssadvt_repository/meter_survey/survey_image/tube_well/survey_id_" + survey_id1;
                 makeDirectory(path);
                 String file = path + "/" + fileName;
                 FileOutputStream outputStream = new FileOutputStream(file);
                 outputStream.write(fileAsBytes);
                 outputStream.close();
-                int  gen_image_detail_id = wsSurveyModel.insertPDFRecord(fileName);
-                survey_gen_image_map_id=wsSurveyModel.insertSurveyImageMapRecord(survey_id1,gen_image_detail_id);
+                int gen_image_detail_id = wsSurveyModel.insertPDFRecord(fileName);
+                survey_gen_image_map_id = wsSurveyModel.insertSurveyImageMapRecord(survey_id1, gen_image_detail_id);
                 // drive d=new drive();
                 //  d.drive(fileName,file,affect,affected+"");
                 if (survey_gen_image_map_id > 0) {
                     //response = Response.ok(inputJsonObj, MediaType.APPLICATION_JSON).build();
                     response = "success";
-                }else {
-                       // response="image";
+                } else {
+                    // response="image";
                 }
 
-             }
-        }
-            catch(Exception e){
-
             }
-                wsSurveyModel.closeConnection();
+        } catch (Exception e) {
+
+        }
+        wsSurveyModel.closeConnection();
         return response;
     }
 
@@ -906,101 +909,104 @@ public class MeterSuverWebServices {
     @Path("/requestData")
     @Produces(MediaType.APPLICATION_JSON)//http://192.168.1.15:8084/meter_survey/api/service/hello
     @Consumes(MediaType.APPLICATION_JSON)
-    public JSONObject showData(String imei ) {
-        System.out.println("imei number -"+imei);
-        System.out.println("Access showData in MeterSurveyWebServices " + new Date());
+    public JSONObject showData(String imei) {
         JSONObject obj = new JSONObject();
-        wsSurveyModel = new MeterSurveyWebServicesModel();
-        //wsSurveyModel.setConnection();
-        wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
-        wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
-        wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
-        wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
-        wsSurveyModel.setConnection();
-        //String imei = "";
-        JSONArray json = null;
-        try{
-        if(imei != null && !imei.isEmpty())
-            json = wsSurveyModel.showData(imei);/// meters table data
-        else
-            json = wsSurveyModel.showData("");
-        obj.put("Data", json);
-        }catch(Exception e){
-            System.out.println("requestData showData().."+e);
-        }
-         try{
-             //json=null;
-        json = wsSurveyModel.getTubeWellBoreData();
-         obj.put("tubewell_bore_data", json);
-        }catch(Exception e){
-            System.out.println(" requestData getTubeWellBoreData().."+e);
-        }
-         try{
-         json = wsSurveyModel.getTypeOfUseData();
-         obj.put("type_of_use", json);
-        }catch(Exception e){
-            System.out.println("requestData getTypeOfUseData().."+e);
-        }
-         try{
-         json = wsSurveyModel.getBoreCasingTypeData();
-         obj.put("bore_casing_type", json);
-        }catch(Exception e){
-            System.out.println("requestData getBoreCasingTypeData()..."+e);
-        }
-         try{
-         json = wsSurveyModel.getMotorTypeData();
-         obj.put("motor_type", json);
-         }catch(Exception e){
-            System.out.println("requestData getBoreCasingTypeData()..."+e);
-        }
+        try {
+            System.out.println("imei number -" + imei);
+            System.out.println("Access showData in MeterSurveyWebServices " + new Date());
+
+            wsSurveyModel = new MeterSurveyWebServicesModel();
+            //wsSurveyModel.setConnection();
+            wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
+            wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
+            wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
+            wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
+            wsSurveyModel.setConnection();
+            //String imei = "";
+            JSONArray json = null;
+            try {
+                if (imei != null && !imei.isEmpty()) {
+                    json = wsSurveyModel.showData(imei);/// meters table data
+                } else {
+                    json = wsSurveyModel.showData("");
+                }
+                obj.put("Data", json);
+            } catch (Exception e) {
+                System.out.println("requestData showData().." + e);
+            }
+            try {
+                //json=null;
+                json = wsSurveyModel.getTubeWellBoreData();
+                obj.put("tubewell_bore_data", json);
+            } catch (Exception e) {
+                System.out.println(" requestData getTubeWellBoreData().." + e);
+            }
+            try {
+                json = wsSurveyModel.getTypeOfUseData();
+                obj.put("type_of_use", json);
+            } catch (Exception e) {
+                System.out.println("requestData getTypeOfUseData().." + e);
+            }
+            try {
+                json = wsSurveyModel.getBoreCasingTypeData();
+                obj.put("bore_casing_type", json);
+            } catch (Exception e) {
+                System.out.println("requestData getBoreCasingTypeData()..." + e);
+            }
+            try {
+                json = wsSurveyModel.getMotorTypeData();
+                obj.put("motor_type", json);
+            } catch (Exception e) {
+                System.out.println("requestData getBoreCasingTypeData()..." + e);
+            }
 
 //         json = wsSurveyModel.getWardData();
 //         obj.put("ward_data", json);
-          try{
-         json = wsSurveyModel.getImageType();
-         obj.put("img_type", json);
-        }catch(Exception e){
-            System.out.println("requestData getImageType()..."+e);
+            try {
+                json = wsSurveyModel.getImageType();
+                obj.put("img_type", json);
+            } catch (Exception e) {
+                System.out.println("requestData getImageType()..." + e);
+            }
+
+            try {
+                json = wsSurveyModel.getZone_m_data();
+                obj.put("zone_m", json);
+            } catch (Exception e) {
+                System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
+            }
+
+            try {
+                json = wsSurveyModel.getWard_m_data();
+                obj.put("ward_m", json);
+            } catch (Exception e) {
+                System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
+            }
+
+            try {
+                json = wsSurveyModel.getArea_data();
+                obj.put("area", json);
+            } catch (Exception e) {
+                System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
+            }
+
+            NewSwitchingPointSurveyModel nsp = new NewSwitchingPointSurveyModel();
+            nsp.setConnection(wsSurveyModel.getConnection());
+            json = nsp.showSwitchingJsonData();
+            obj.put("SwitchingPointData", json);
+
+            json = nsp.showJsonData();
+//showSwitchingJsonData
+            obj.put("SurveyData", json);
+
+            wsSurveyModel.closeConnection();
+            nsp.closeConnection();
+
+            System.out.println("Data Retrived : " + new Date() + " " + json);
+
+        } catch (Exception ex) {
+            Logger.getLogger(MeterSuverWebServices.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-         try{
-         json = wsSurveyModel.getZone_m_data();
-         obj.put("zone_m", json);
-        }catch(Exception e){
-            System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..."+e);
-        }
-
-        try{
-         json = wsSurveyModel.getWard_m_data();
-         obj.put("ward_m", json);
-        }catch(Exception e){
-            System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..."+e);
-        }
-
-        try{
-         json = wsSurveyModel.getArea_data();
-         obj.put("area", json);
-        }catch(Exception e){
-            System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..."+e);
-        }
-
-
-
-        NewSwitchingPointSurveyModel nsp = new NewSwitchingPointSurveyModel();
-        nsp.setConnection(wsSurveyModel.getConnection());
-         json = nsp.showSwitchingJsonData();
-          obj.put("SwitchingPointData", json);
-        
-        
-        json = nsp.showJsonData();
-        //showSwitchingJsonData
-        obj.put("SurveyData", json);
-      
-        wsSurveyModel.closeConnection();
-        nsp.closeConnection();
-        
-       
-        System.out.println("Data Retrived : "+ new Date() + " " + json);
         return obj;
     }
 
@@ -1009,23 +1015,28 @@ public class MeterSuverWebServices {
     @Produces(MediaType.APPLICATION_JSON)//http://192.168.1.15:8084/meter_survey/api/service/hello
     @Consumes(MediaType.APPLICATION_JSON)
     public String surveyCordinates(JSONObject inputJsonObj) {
-        System.out.println("Access surveyCordinates in MeterSurveyWebServices ");
-        String latitude = inputJsonObj.get("latitude").toString();
-        String longitude = inputJsonObj.get("longitude").toString();
-        String imei = inputJsonObj.get("deviceid").toString();
-        String type = inputJsonObj.get("type").toString();
-        String mobile_no = inputJsonObj.get("phoneno").toString();
-        JSONObject obj = new JSONObject();
-        wsSurveyModel = new MeterSurveyWebServicesModel();
-        wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
-        wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
-        wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
-        wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
-        wsSurveyModel.setConnection();
-        int status = wsSurveyModel.insertSurveyCordinates(latitude, longitude, imei, type, mobile_no);
-        obj.put("Data", status);
-        System.out.println("Data Retrived : " + inputJsonObj + " " + status);
-        wsSurveyModel.closeConnection();
+        try {
+            System.out.println("Access surveyCordinates in MeterSurveyWebServices ");
+            String latitude = inputJsonObj.get("latitude").toString();
+            String longitude = inputJsonObj.get("longitude").toString();
+            String imei = inputJsonObj.get("deviceid").toString();
+            String type = inputJsonObj.get("type").toString();
+            String mobile_no = inputJsonObj.get("phoneno").toString();
+            JSONObject obj = new JSONObject();
+            wsSurveyModel = new MeterSurveyWebServicesModel();
+            wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
+            wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
+            wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
+            wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
+            wsSurveyModel.setConnection();
+            int status = wsSurveyModel.insertSurveyCordinates(latitude, longitude, imei, type, mobile_no);
+            obj.put("Data", status);
+            System.out.println("Data Retrived : " + inputJsonObj + " " + status);
+            wsSurveyModel.closeConnection();
+
+        } catch (Exception ex) {
+            Logger.getLogger(MeterSuverWebServices.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return "OK";
     }
 
@@ -1033,80 +1044,80 @@ public class MeterSuverWebServices {
     @Path("/energyMeterData")
     @Produces(MediaType.MULTIPART_FORM_DATA)//http://192.168.1.15:8084/meter_survey/api/service/hello
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public byte[] insertEnergyMeterData(@Context HttpServletRequest requestContext,byte[] receivedBytes) {
-        HttpSession session  = requestContext.getSession();
+    public byte[] insertEnergyMeterData(@Context HttpServletRequest requestContext, byte[] receivedBytes) {
+        HttpSession session = requestContext.getSession();
         byte[] response = null;
         String result = "Sorry!! something went wrong. ";
-        System.out.println("data at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()) + ": "+ requestContext.getRemoteAddr());
+        System.out.println("data at " + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime()) + ": " + requestContext.getRemoteAddr());
         for (int i = 0; i < receivedBytes.length; i++) {
             System.out.print(" " + receivedBytes[i]);
         }
-        String changeCommand = session.getAttribute("sp14") == null?"":session.getAttribute("sp14").toString();
+        String changeCommand = session.getAttribute("sp14") == null ? "" : session.getAttribute("sp14").toString();
         servletContext.getInitParameter("driverClass");
         System.out.println("");
         EnergyMeterWebServiceModel wsEnergyMeterModel = new EnergyMeterWebServiceModel();
-        if (receivedBytes != null && receivedBytes.length!=0)  {
+        if (receivedBytes != null && receivedBytes.length != 0) {
             try {
                 wsEnergyMeterModel.setConnection(DBConnection.getConnectionForUtf(servletContext));
                 wsEnergyMeterModel.setContext(servletContext);
                 wsEnergyMeterModel.setSession(session);
                 String responseVal = null;
-                if (receivedBytes.length == 35)
-                    responseVal = wsEnergyMeterModel.junctionRefreshFunctionOne(receivedBytes,5,false);
-                else if (receivedBytes.length == 17)
-                    responseVal = wsEnergyMeterModel.junctionRefreshFunctionNine(receivedBytes,5,false);
-                else
-                    responseVal = wsEnergyMeterModel.junctionRefreshFunction(receivedBytes,5,false);
+                if (receivedBytes.length == 35) {
+                    responseVal = wsEnergyMeterModel.junctionRefreshFunctionOne(receivedBytes, 5, false);
+                } else if (receivedBytes.length == 17) {
+                    responseVal = wsEnergyMeterModel.junctionRefreshFunctionNine(receivedBytes, 5, false);
+                } else {
+                    responseVal = wsEnergyMeterModel.junctionRefreshFunction(receivedBytes, 5, false);
+                }
                 if (responseVal != null && !responseVal.isEmpty()) {
-                   response =  wsEnergyMeterModel.sendResponse(responseVal);
-                   if(response != null && response.length > 0){
-                       result = "Successful!!";
-                   }
+                    response = wsEnergyMeterModel.sendResponse(responseVal);
+                    if (response != null && response.length > 0) {
+                        result = "Successful!!";
+                    }
                 }
             } catch (Exception ex) {
-                System.out.println("Exception in insertEnergyMeterData"+ ex);
-            }finally{
+                System.out.println("Exception in insertEnergyMeterData" + ex);
+            } finally {
                 wsEnergyMeterModel.closeConnection();
             }
         }
 
         //////////////////////////////////////////////////////////////////
-        try{
-        for(int i=0;i<response.length;i++){
-            if(response[i] == 0){
-                response[i]=(byte)255;
+        try {
+            for (int i = 0; i < response.length; i++) {
+                if (response[i] == 0) {
+                    response[i] = (byte) 255;
+                }
             }
+        } catch (Exception e) {
+            System.out.println("Error while replacing 0 with 255  " + e);
         }
-            }catch(Exception e){
-                System.out.println("Error while replacing 0 with 255  "+e);
-            }
         ///////////////////////////////////////////////////////////////////////
-
 
         System.out.println("result : " + result);
         return response;
     }
-    
+
     @POST
     @Path("/get_all_tubewellData")
     @Produces(MediaType.APPLICATION_JSON)//http://45.114.142.35:8080/Smart_Meter_survey/resources/SmartMeterSurvey/test
     @Consumes(MediaType.APPLICATION_JSON)
     public JSONObject tubewellRecords(String test) {
-        JSONObject obj1 = new JSONObject();    
+        JSONObject obj1 = new JSONObject();
         JSONArray arrayObj = new JSONArray();
         EnergyMeterWebServiceModel wsEnergyMeterModel = new EnergyMeterWebServiceModel();
-        try{
-        wsEnergyMeterModel.setConnection(DBConnection.getConnectionForUtf(servletContext));
-                wsEnergyMeterModel.setContext(servletContext);
-                //wsEnergyMeterModel.setSession(session);       
-                arrayObj = wsEnergyMeterModel.getAllTubewellData();           
-            obj1.put("Data", arrayObj);                             
-        }catch(Exception e){                     
+        try {
+            wsEnergyMeterModel.setConnection(DBConnection.getConnectionForUtf(servletContext));
+            wsEnergyMeterModel.setContext(servletContext);
+            //wsEnergyMeterModel.setSession(session);       
+            arrayObj = wsEnergyMeterModel.getAllTubewellData();
+            obj1.put("Data", arrayObj);
+        } catch (Exception e) {
         }
         //System.out.println("request come from jabalpur"+ test);
         return obj1;
     }
-    
+
     @POST
     @Path("/get_tubewellDataInformation")
     @Produces(MediaType.APPLICATION_JSON)//http://45.114.142.35:8080/Smart_Meter_survey/resources/SmartMeterSurvey/test
@@ -1115,31 +1126,195 @@ public class MeterSuverWebServices {
         String latlon[] = test.split(",");
         String lat = latlon[0];
         String lon = latlon[1];
-        JSONObject obj1 = new JSONObject();    
+        JSONObject obj1 = new JSONObject();
         JSONArray arrayObj = new JSONArray();
         EnergyMeterWebServiceModel wsEnergyMeterModel = new EnergyMeterWebServiceModel();
-        try{
-        wsEnergyMeterModel.setConnection(DBConnection.getConnectionForUtf(servletContext));
-                wsEnergyMeterModel.setContext(servletContext);
-                //wsEnergyMeterModel.setSession(session);       
-                arrayObj = wsEnergyMeterModel.getAllTubewellDataInfo(lat,lon);           
-            obj1.put("Data", arrayObj);                             
-        }catch(Exception e){                     
+        try {
+            wsEnergyMeterModel.setConnection(DBConnection.getConnectionForUtf(servletContext));
+            wsEnergyMeterModel.setContext(servletContext);
+            //wsEnergyMeterModel.setSession(session);       
+            arrayObj = wsEnergyMeterModel.getAllTubewellDataInfo(lat, lon);
+            obj1.put("Data", arrayObj);
+        } catch (Exception e) {
         }
         //System.out.println("request come from jabalpur"+ test);
         return obj1;
     }
 
-    
-    
-    
+    // primary meter survey data get
+    @POST
+    @Path("/primary_survey_data")
+    @Produces(MediaType.APPLICATION_JSON)//http://192.168.1.15:8084/meter_survey/api/service/hello
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String primarySurveyData(JSONObject json) throws Exception {
+        String responseCheck = "";
+          String destination_path = "";
+        try {
+            wsSurveyModel = new MeterSurveyWebServicesModel();
+            wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
+            wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
+            wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
+            wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
+            wsSurveyModel.setConnection();
+
+            // JSONObject json = new JSONObject(inputJsonObj);
+            JSONObject json1 = new JSONObject();
+            JSONObject json2 = new JSONObject();
+//        JSONObject json3 = new JSONObject();
+//        JSONObject json4 = new JSONObject();
+//        JSONObject json5 = new JSONObject();
+
+//image part start
+            int no_of_rows = 0;
+            int dataBase = 0;
+            String Year = "";
+            String Month = "";
+            String day = "";
+
+            String imagePathMeterNo = "";
+            String image_of_meter_reading = "";
+            json1 = json.getJSONObject("text");
+            json2 = json.getJSONObject("image");
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            LocalDateTime now = LocalDateTime.now();
+            System.out.println(dtf.format(now));
+
+            String date_check = dtf.format(now);
+
+            String date[] = date_check.split("/");
+            day = date[2];
+            Month = date[1];
+            Year = date[0];
+            OutputStream out = null;
+            no_of_rows = wsSurveyModel.getNoOfRows();
+            no_of_rows = no_of_rows + 1;
+            List<File> fileList = new ArrayList<File>();
+
+            try {
+
+                //int size = Integer.parseInt(json2.get("imgnamemeternumber").toString());
+                int size = 1;
+              
+                String fileNameArray[] = new String[size];
+
+                String fileName = "";
+                for (int i = 1; i <= size; i++) {
+
+//                    String getBackEncodedString = json2.get("byte_arrmeternumberimage" + i).toString();
+                    String getBackEncodedString = json2.get("byte_arrmeternumberimage").toString();
+                    byte[] imageAsBytes = new BASE64Decoder().decodeBuffer(getBackEncodedString);
+//                    fileName = (json2.get("imgnamemeternumber" + i).toString());
+                    fileName = (json2.get("imgnamemeternumber").toString());
+                    fileNameArray[i - 1] = fileName;
+                    if (fileName.isEmpty()) {
+                        fileName = "out.jpg";
+                    }
+
+                    destination_path = wsSurveyModel.getDestinationPath("DetailList");
+                    if(destination_path==null || destination_path=="" ){
+                                 destination_path="C:\\ssadvt_repository\\meter_survey\\survey_image";
+                    }
+                    fileNameArray[i - 1] = fileName;
+                     destination_path         =  "C:\\ssadvt_repository\\meter_survey\\survey_image";
+                    imagePathMeterNo = destination_path + "/primary_survey_images/imagePathMeterNo/" + Year + "/" + Month + "/" + day + "/" + no_of_rows;
+
+                    wsSurveyModel.makeDirectory(imagePathMeterNo);
+                    String file = imagePathMeterNo + "/" + fileName;
+                    fileList.add(new File(file));
+                    out = new FileOutputStream(file);
+                    out.write(imageAsBytes);
+                    out.close();
+
+//                dataSendModel.insertImageRecord(fileName);
+                    System.out.println("image insert ");
+
+                }
+
+            } catch (Exception e) {
+                System.out.println("Exception" + e);
+            }
+            try {
+                wsSurveyModel.setConnection();
+            } catch (Exception ex) {
+                System.out.println("ERROR: in trafficSignalData : " + ex);
+            }
+
+////image
+            OutputStream out1 = null;
+            no_of_rows = wsSurveyModel.getNoOfRows();
+            no_of_rows = no_of_rows + 1;
+            List<File> fileList1 = new ArrayList<File>();
+
+            try {
+
+                // int size = Integer.parseInt(json2.get("imgnamemeterreading").toString());
+                int size = 1;
+              
+                String fileNameArray[] = new String[size];
+
+                String fileName = "";
+                for (int i = 1; i <= size; i++) {
+
+//                    String getBackEncodedString = json2.get("byte_arrmeterreadingimage" + i).toString();
+                    String getBackEncodedString = json2.get("byte_arrmeterreadingimage").toString();
+                    byte[] imageAsBytes = new BASE64Decoder().decodeBuffer(getBackEncodedString);
+//                    fileName = (json2.get("imgnamemeterreading" + i).toString());
+                    fileName = (json2.get("imgnamemeterreading").toString());
+                    fileNameArray[i - 1] = fileName;
+                    if (fileName.isEmpty()) {
+                        fileName = "out.jpg";
+                    }
+
+//                    destination_path = wsSurveyModel.getDestinationPath("DetailList");
+                    fileNameArray[i - 1] = fileName;
+                                   destination_path         =  "C:\\ssadvt_repository\\meter_survey\\survey_image";
+                    image_of_meter_reading = destination_path + "/primary_survey_images/image_of_meter_reading/" + Year + "/" + Month + "/" + day + "/" + no_of_rows;
+
+                    wsSurveyModel.makeDirectory(image_of_meter_reading);
+                    String file = image_of_meter_reading + "/" + fileName;
+                    fileList.add(new File(file));
+                    out = new FileOutputStream(file);
+                    out.write(imageAsBytes);
+                    out.close();
+
+//                dataSendModel.insertImageRecord(fileName);
+                    System.out.println("image insert ");
+
+                }
+
+            } catch (Exception e) {
+                System.out.println("Exception" + e);
+            }
+            try {
+                wsSurveyModel.setConnection();
+            } catch (Exception ex) {
+                System.out.println("ERROR: in trafficSignalData : " + ex);
+            }
+
+///image end
+            dataBase = wsSurveyModel.insertRecordPrimary(json1, imagePathMeterNo, image_of_meter_reading);
+
+            if (dataBase > 0) {
+                responseCheck = "success";
+
+            } else {
+                responseCheck = "Data success fail";
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Exception in web service Controller: " + ex);
+        }
+        return responseCheck;
+    }
+
+    // primary meter survey data get end
     @POST
     @Path("/test")
     @Produces(MediaType.TEXT_PLAIN)//http://45.114.142.35:8080/Smart_Meter_survey/resources/SmartMeterSurvey/test
     @Consumes(MediaType.TEXT_PLAIN)
     public String d(String test) {
 
-        System.out.println("request come from jabalpur"+ test);
+        System.out.println("request come from jabalpur" + test);
 
         return "success";
     }

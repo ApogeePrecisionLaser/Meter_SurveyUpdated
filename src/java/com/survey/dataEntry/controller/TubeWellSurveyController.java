@@ -4,7 +4,7 @@
  */
 package com.survey.dataEntry.controller;
 
-import com.survey.dataEntry.model.TubeWellSurveyModel;
+
 import com.survey.dataEntry.model.TubeWellSurveyModel;
 import com.survey.tableClasses.TubeWellSurveyBean;
 import com.survey.util.GetDate;
@@ -562,15 +562,18 @@ public class TubeWellSurveyController extends HttpServlet {
 
                     for(int i=0;i<imageName.length;i++)
                    {
+                       String imageDestination = "";
                         File f = new File(destination + "\\tube_well\\" +"survey_id_"+survey_id+"\\"+ imageName[i]);
                         if(f.exists())
                         {
-                            list1.add(destination + "\\tube_well\\" +"survey_id_"+survey_id+"\\"+ imageName[i]);
+                            imageDestination = destination + "\\tube_well\\" +"survey_id_"+survey_id+"\\"+ imageName[i];                            
                         }
                         else
                         {
-                            list1.add(destination + "//" + "no_image.png");
+                            imageDestination = destination + "//" + "no_image.png";                            
                         }
+                        imageDestination = imageDestination.replace("\\", "$");
+                        list1.add(imageDestination);
                     }
                 }
                 request.setAttribute("imageList", list1);

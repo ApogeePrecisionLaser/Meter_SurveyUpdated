@@ -11,14 +11,14 @@
     </context-param>
     <context-param>
         <param-name>db_username</param-name>
-<!--                <param-value>root</param-value>-->
-        <param-value>jpss_2</param-value>
+        <param-value>root</param-value>
+        <!--        <param-value>jpss_2</param-value>-->
     </context-param>
     <context-param>
         <description>	</description>
         <param-name>db_password</param-name>
-<!--                <param-value>root</param-value>-->
-        <param-value>jpss_1277</param-value>
+        <param-value>root</param-value>
+        <!--        <param-value>jpss_1277</param-value>-->
     </context-param>
     <!--    <context-param>
         <param-name>ssadvtRepositoryPath</param-name>
@@ -38,6 +38,10 @@
     <servlet>
         <servlet-name>PopulateTables</servlet-name>
         <servlet-class>com.survey.dataEntry.controller.PopulateTables</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PrimarySurveyController</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.PrimarySurveyController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>misCont</servlet-name>
@@ -213,7 +217,7 @@
         <url-pattern>/cityTypeCont</url-pattern>
     </servlet-mapping>
     <!--end of City Type Controller -->
-    <servlet>
+    <!--    <servlet>
         <servlet-name>servlet Adapter</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
@@ -229,8 +233,27 @@
         <servlet-name>MeterSuverWebServices</servlet-name>
         <servlet-class>com.survey.dataEntry.controller.MeterSuverWebServices</servlet-class>
         <load-on-startup>1</load-on-startup>
+    </servlet>-->
+    <!--    web services-->
+    <servlet>
+        <servlet-name>ServletAdaptor</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>com.sun.jersey.config.property.packages</param-name>
+            <param-value>com.survey.dataEntry.controller</param-value>
+        </init-param>
     </servlet>
-<!--    <servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletAdaptor</servlet-name>
+        <url-pattern>/api/*</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>MeterSuverWebServices</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.MeterSuverWebServices</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <!--    end-->
+    <!--    <servlet-mapping>
         <servlet-name>webServiceCont</servlet-name>
         <url-pattern>/webServiceCont</url-pattern>
     </servlet-mapping>-->
@@ -506,6 +529,14 @@
         <url-pattern>/mountingTypeCont</url-pattern>
     </servlet-mapping>
     <!--end of Mounting Type Controller -->
+      <servlet>
+        <servlet-name>primary_survey</servlet-name>
+        <jsp-file>/view/dataEntry/primary_survey.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>primary_survey</servlet-name>
+        <url-pattern>/primary_survey</url-pattern>
+    </servlet-mapping>
     <!--Start of Pole Type Controller -->
     <servlet>
         <servlet-name>Pole_Type_View</servlet-name>
@@ -524,6 +555,7 @@
         <url-pattern>/poleTypeCont</url-pattern>
     </servlet-mapping>
     <!--end of Pole Type Controller -->
+    
     <!--Start of Road Use Type Controller -->
     <servlet>
         <servlet-name>RoadUse_Type_View</servlet-name>
@@ -879,6 +911,10 @@
     <servlet-mapping>
         <servlet-name>PopulateTables</servlet-name>
         <url-pattern>/PopulateTables</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PrimarySurveyController</servlet-name>
+        <url-pattern>/PrimarySurveyController</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>/layout/index.jsp</welcome-file>
@@ -1511,11 +1547,31 @@
         <url-pattern>/ImagesView</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>MultipleImagesurvey</servlet-name>
+        <jsp-file>/view/dataEntry/MultipleImagesurvey.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MultipleImagesurvey</servlet-name>
+        <url-pattern>/MultipleImagesurvey</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>dataEntry jFreeChart</servlet-name>
         <servlet-class>com.survey.general.controller.JFreeChart</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>dataEntry jFreeChart</servlet-name>
         <url-pattern>/chartCont.do</url-pattern>
+    </servlet-mapping>
+    
+    
+    
+     <servlet>
+        <servlet-name>MultipleImagesurvey_reading</servlet-name>
+        <jsp-file>/view/dataEntry/MultipleImagesurvey_reading.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MultipleImagesurvey_reading</servlet-name>
+        <url-pattern>/MultipleImagesurvey_reading</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -44,6 +44,7 @@
                                 <li><a href="switchingPointSurvey">Switching Point Detail</a></li>
                                 <li><a href="switchingPointMap.do">Switching Point Map</a></li>
                                 <%--   <li><a href="switchingSurveyCont">Switching Point Survey</a></li>  --%>
+                                 
                             </ul>
                         </li>
                         <li><a id="mpeb1" href="#">Pole Detail</a>
@@ -180,6 +181,7 @@
                         <li><a href="enclosuretypeCont.do">Enclosure Type</a></li>
                         <li><a href="switchingtypeCont.do">Switching Type</a></li>
                          <li><a href="ShowMeterDataCont.do">Meter Details</a></li>
+                         <li><a href="PrimarySurveyController">Primary Survey</a></li>
                     </ul>
 
                 </li>

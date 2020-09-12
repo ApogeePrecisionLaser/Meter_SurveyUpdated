@@ -4,7 +4,7 @@
  */
 package com.survey.energyMeter.model;
 
-import com.mysql.jdbc.PreparedStatement;
+import java.sql.PreparedStatement;
 import com.survey.energyMeter.tableClasses.HealthStatusMapBean;
 import com.survey.energyMeter.tableClasses.PhaseBean;
 import java.math.BigInteger;

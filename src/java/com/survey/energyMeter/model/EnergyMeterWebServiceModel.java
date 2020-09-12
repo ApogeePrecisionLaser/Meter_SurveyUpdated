@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 package com.survey.energyMeter.model;
-
+import java.sql.PreparedStatement;
 import com.survey.energyMeter.tableClasses.EnergyMeterStatus;
 import com.survey.energyMeter.tableClasses.PhaseBean;
 import com.survey.util.GetDate;
@@ -22,8 +22,12 @@ import java.util.Map;
 import java.util.HashMap;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONObject;
+//import org.json.JSONArray;
+//import org.json.JSONObject;
+//import org.json.simple.JSONArray;
+//import org.json.simple.JSONObject;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
@@ -1548,9 +1552,8 @@ public class EnergyMeterWebServiceModel {
                  +" where t.tube_well_survey_id=s.survey_id  and sr.starter_id=t.starter_id and sm.starter_make_id=t.starter_make_id "
                  + " and t.active='Y' and s.status='Y'";
         try {
-            
-            com.mysql.jdbc.PreparedStatement pst = (com.mysql.jdbc.PreparedStatement) connection.prepareStatement(query);
-            ResultSet rset = pst.executeQuery();
+     
+           ResultSet rset = connection.prepareStatement(query).executeQuery();
 
             while (rset.next()) {
                 JSONObject jsonObj = new JSONObject();
@@ -1565,7 +1568,7 @@ public class EnergyMeterWebServiceModel {
                // jsonObj.put("common_name",rset.getString("tube_well_name"));
                 jsonObj.put("latitude",rset.getString("lattitude"));
                 jsonObj.put("longitude",rset.getString("longitude"));                             
-                arrayObj.add(jsonObj);   
+                arrayObj.put(jsonObj);   
                 }
             }
 
@@ -1597,8 +1600,8 @@ public class EnergyMeterWebServiceModel {
 
 try {
             
-            com.mysql.jdbc.PreparedStatement pst = (com.mysql.jdbc.PreparedStatement) connection.prepareStatement(query);
-            ResultSet rset = pst.executeQuery();
+          
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
 
             while (rset.next()) {
                 JSONObject jsonObj = new JSONObject();            
@@ -1607,7 +1610,7 @@ try {
                 jsonObj.put("third",rset.getString("mobile_no"));                             
                // jsonObj.put("fourth"," ");                             
                 //jsonObj.put("fifth"," ");                             
-                arrayObj.add(jsonObj);                
+                arrayObj.put(jsonObj);                
             }
 
         } catch (Exception e) {

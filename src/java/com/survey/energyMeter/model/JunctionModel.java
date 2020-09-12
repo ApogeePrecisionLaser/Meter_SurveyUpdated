@@ -5,7 +5,7 @@
 package com.survey.energyMeter.model;
 
 import com.survey.energyMeter.tableClasses.JunctionBean;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -386,13 +386,11 @@ public class JunctionModel {
 
             rowsAffected = pstmt1.executeUpdate();
 
-        } catch (MySQLIntegrityConstraintViolationException e) {
+        } catch (Exception e) {
             System.out.println("Error: Record inserting: " + e);
             message = "Record is allready exist......";
             msgBgColor = COLOR_ERROR;
             return rowsAffected;
-        } catch (Exception e) {
-            System.out.println("Error: Record inserting: " + e);
         }
         if (rowsAffected > 0) {
             message = "Record saved successfully......";

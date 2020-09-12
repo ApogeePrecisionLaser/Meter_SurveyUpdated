@@ -4,7 +4,7 @@
  */
 package com.survey.dataEntry.model;
 
-import com.mysql.jdbc.Connection;
+import java.sql.Connection;
 import com.survey.tableClasses.MISTypeBean;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

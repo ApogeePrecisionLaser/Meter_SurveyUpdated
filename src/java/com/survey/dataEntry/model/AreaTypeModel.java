@@ -5,7 +5,7 @@
 
 package com.survey.dataEntry.model;
 
-import com.mysql.jdbc.Connection;
+import java.sql.Connection;
 import com.survey.tableClasses.AreaTypeBean;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -85,7 +85,7 @@ public class AreaTypeModel {
                        +" where wm.active='Active' ";
                         
         try {
-            pstmt = (PreparedStatement) connection.prepareStatement(query);
+            pstmt =  connection.prepareStatement(query);
            
             ResultSet rset = pstmt.executeQuery();
             int count = 0;
@@ -151,7 +151,7 @@ public List<String> getSearchAreaName(String q) {
                     +" and wm.active='Active' group by ward_no_m ";
 
         try {
-            java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
+            PreparedStatement pstmt = connection.prepareStatement(query);
 
             ResultSet rset = pstmt.executeQuery();
             int count = 0;
@@ -178,7 +178,7 @@ public List<String> getSearchAreaName(String q) {
         int ward_id_m = 0;
         String query = " SELECT ward_id_m FROM ward_m WHERE ward_no_m = ? GROUP BY ward_id_m ";
         try {
-            java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
+           PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, ward_no);
             ResultSet rset = pstmt.executeQuery();
             rset.next();    // move cursor from BOR to valid record.
@@ -207,7 +207,7 @@ public List<String> getSearchAreaName(String q) {
         String query = " INSERT INTO area(area_name, remark, ward_id_m ) VALUES(?, ?, ?) ";
         int rowsAffected = 0;
         try {
-            java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
+          PreparedStatement pstmt = connection.prepareStatement(query);
 
             pstmt.setString(1, bean.getArea_name());
             pstmt.setString(2, bean.getRemark());
@@ -237,7 +237,7 @@ public List<String> getSearchAreaName(String q) {
                     + " AND IF ( '" + ward_no + "'  = '' , w.ward_no_m like '%%' , w.ward_no_m = ? ) "
                     + " AND IF ( '" + area_name + "'  = '' , a.area_name like '%%' , a.area_name = ? ) "
                     + " ORDER BY a.area_name ";
-            java.sql.PreparedStatement pst = connection.prepareStatement(query);
+           PreparedStatement pst = connection.prepareStatement(query);
             
             pst.setString(1, ward_no);
             pst.setString(2, area_name);
@@ -261,7 +261,7 @@ public List<String> getSearchAreaName(String q) {
                        +" AND  if( '" + area_name + "'  = '' , a.area_name like '%%' , a.area_name = ? )"
                        +" LIMIT " + lowerLimit + "," + noOfRowsToDisplay;
         try {
-            java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
+          PreparedStatement pstmt = connection.prepareStatement(query);
             
             pstmt.setString(1, ward_no);
             pstmt.setString(2, area_name);
@@ -294,7 +294,7 @@ public List<String> getSearchAreaName(String q) {
                 + " AND  if( '" + area_name + "'  = '' , a.area_name like '%%' , a.area_name = ? )";
               //  + " LIMIT " + lowerLimit + "," + noOfRowsToDisplay;
         try {
-            java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
+           PreparedStatement pstmt = connection.prepareStatement(query);
            
             pstmt.setString(1, ward_no);
             pstmt.setString(2, area_name);

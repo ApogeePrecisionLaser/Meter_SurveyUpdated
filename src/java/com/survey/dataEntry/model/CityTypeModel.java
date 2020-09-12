@@ -5,8 +5,8 @@
 
 package com.survey.dataEntry.model;
 
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import com.survey.tableClasses.CityTypeBean;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
