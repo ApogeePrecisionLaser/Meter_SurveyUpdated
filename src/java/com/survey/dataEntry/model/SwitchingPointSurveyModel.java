@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -79,10 +80,10 @@ public class SwitchingPointSurveyModel {
     public List<String> getZoneSearch(String q) {
         List<String> list = new ArrayList<String>();
         //String query = " SELECT zone FROM switching_point_detail GROUP BY zone ORDER BY zone ";
-        String query=" SELECT z.zone FROM switching_point_detail as t"
-                       +" left join feeder as fe on fe.feeder_id=t.feeder_id"
-                       +"left join zone as z on fe.zone_id=z.zone_id"
-                       + "GROUP BY zone ORDER BY zone";
+        String query = " SELECT z.zone FROM switching_point_detail as t"
+                + " left join feeder as fe on fe.feeder_id=t.feeder_id"
+                + "left join zone as z on fe.zone_id=z.zone_id"
+                + "GROUP BY zone ORDER BY zone";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -354,7 +355,6 @@ public class SwitchingPointSurveyModel {
                 + " AND IF( ? = '', s.service_conn_no LIKE '%%', p.pole_no =? ) "
                 + " AND IF( ? = '', s.service_conn_no LIKE '%%', s.service_conn_no =? ) order by s.switching_point_name ";
 
-
 //        String query = " SELECT s.switching_point_detail_id, s.switching_point_name, s.feeder ,s.pole_no_s, s.gps_code_s, s.is_working,"
 //                + "  s.active, s.remark,"
 //                //+ " s.controller_model, s.mobile_no, s.sim_no, s.imei_no, s.panel_file_no, s.panel_transferred_status, "
@@ -445,7 +445,7 @@ public class SwitchingPointSurveyModel {
                 //             surveyType.setIs_working(rset.getString("is_working"));
                 surveyType.setSource_wattage(rset.getString("source_wattage"));
                 surveyType.setIsworking(rset.getString("Isworking"));   // number & type of bulbs working / not working
-   /*             surveyType.setFuse(rset.getString("fuse"));
+                /*             surveyType.setFuse(rset.getString("fuse"));
                 surveyType.setFuse_type(rset.getString("fuse_type"));
                 surveyType.setFuse_quantity(rset.getString("fuse_quantity"));
                 surveyType.setContacter(rset.getString("contacter"));
@@ -480,7 +480,7 @@ public class SwitchingPointSurveyModel {
         Connection c;
         HashMap mymap = new HashMap();
         try {
-            
+
             JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(listAll);
             JasperReport compiledReport = JasperCompileManager.compileReport(jrxmlFilePath);
             reportInbytes = JasperRunManager.runReportToPdf(compiledReport, null, beanColDataSource);
@@ -870,7 +870,8 @@ public class SwitchingPointSurveyModel {
         }
         return list;
     }
- public List<String> getEnclosureType(String q) {
+
+    public List<String> getEnclosureType(String q) {
         List<String> list = new ArrayList<String>();
         String query = " SELECT enclosure_type FROM enclosure_type "
                 + "  GROUP BY enclosure_type ORDER BY enclosure_type ";
@@ -974,7 +975,7 @@ public class SwitchingPointSurveyModel {
         return pole_type_id;
     }
 
-      public List<String> searchPoleNo(String q) {
+    public List<String> searchPoleNo(String q) {
         List<String> list = new ArrayList<String>();
         String query = " Select pole_no_s from switching_point_detail "
                 + " where active= 'Y' GROUP BY pole_no_s ";
@@ -1020,7 +1021,7 @@ public class SwitchingPointSurveyModel {
     public int getEnclosureTypeId(String switch_type) {
 
         int enclosure_type_id = 0;
-        String query = " SELECT enclosure_type_id FROM enclosure_type WHERE enclosure_type='"+switch_type+"'"
+        String query = " SELECT enclosure_type_id FROM enclosure_type WHERE enclosure_type='" + switch_type + "'"
                 + "group by enclosure_type_id";
         try {
             java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
@@ -1291,19 +1292,20 @@ public class SwitchingPointSurveyModel {
         }
         return i > 0 ? false : true;
     }
-    private String getMeterNameAuto(String ivrs_no)
-    {
-        String query = "select meter_name_auto from switching_point_detail where active = 'Y' AND ivrs_no ='" +ivrs_no+ "' ";
-        String meter_name_auto="";
+
+    private String getMeterNameAuto(String ivrs_no) {
+        String query = "select meter_name_auto from switching_point_detail where active = 'Y' AND ivrs_no ='" + ivrs_no + "' ";
+        String meter_name_auto = "";
         try {
             ResultSet rs = connection.prepareStatement(query).executeQuery();
-            if (rs.next())
-            {
-                meter_name_auto=rs.getString("meter_name_auto");
+            if (rs.next()) {
+                meter_name_auto = rs.getString("meter_name_auto");
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         return meter_name_auto;
     }
+
     public int insertRecord(SwitchingPointSurveyBean surveyTypeBean) {
         /*  String query1 = "INSERT INTO switching_point_detail (switching_point_name, pole_no_s, gps_code_s, pole_id, area_id, road_id, is_working, "
         + " traffic_type_id, created_by, remark, meter_no_s, ph, "
@@ -1311,7 +1313,7 @@ public class SwitchingPointSurveyModel {
         + " contacter_id, mccb_id, timer, timer_id, "
         + " fuse_quantity, contacter_quantity, mccb_quantity, timer_quantity ) "
         + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? ) "; */
-        /*     String query = "INSERT INTO switching_point_detail ("
+ /*     String query = "INSERT INTO switching_point_detail ("
         + "switching_point_name, pole_no_s, GPS_code_s, area_id, road_id, is_working, traffic_type_id, "
         + " created_by, remark, meter_no_s, ph, control_mechanism_id, fuse, "
         + " contacter, mccb, fuse_id, contacter_id, mccb_id, timer, timer_id, fuse_quantity, "
@@ -1319,7 +1321,7 @@ public class SwitchingPointSurveyModel {
         + " longitude, lattitude, service_conn_no, ivrs_no, measured_load, feeder_id, pole_id)"
         + " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ,? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";  */
 
-        /*String query1 = "INSERT INTO switching_point_detail ("
+ /*String query1 = "INSERT INTO switching_point_detail ("
                 + "switching_point_name, pole_no_s, GPS_code_s, area_id, road_id, is_working, traffic_type_id, "
                 + " created_by, remark, meter_no_s, ph, control_mechanism_id, fuse, "
                 + " contacter, mccb, fuse_quantity, "
@@ -1339,7 +1341,7 @@ public class SwitchingPointSurveyModel {
         + " no_of_poles, longitude, lattitude, measured_load, is_working, "
         + " created_by, remark )"
         + " VALUES (?, ?, ?, ? , ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? , ? ,?, ?, ?, ?)";  */
-        String query1="INSERT INTO switching_point_detail ("
+        String query1 = "INSERT INTO switching_point_detail ("
                 + "switching_point_name, pole_no_s, GPS_code_s, area_id, road_id, is_working, traffic_type_id, "
                 + " created_by, remark, meter_no_s, ph, control_mechanism_id, fuse, "
                 + " contacter, mccb, fuse_quantity, "
@@ -1355,7 +1357,6 @@ public class SwitchingPointSurveyModel {
         String query2 = "INSERT INTO switching_point_light_type_mapping (switching_point_detail_id,light_type_id , no_of_working , no_of_not_working, total_fittings,switching_rev_no)"
                 + " VALUES (?, ?, ?, ?, ?,?)";
 
-       
         String query3 = "INSERT INTO pole "
                 + " (created_by, pole_no, switching_point_detail_id, switching_rev_no, isSwitchingPoint, area_id, road_id, road_rev_no, traffic_type_id) "
                 + " VALUES "
@@ -1365,7 +1366,7 @@ public class SwitchingPointSurveyModel {
         java.sql.Date s_date = null;
         ResultSet rs = null;
         int switching_point_detail_id = 0;
-        int switching_rev_no=0;
+        int switching_rev_no = 0;
         int pole_id = 0;
         int survey_id = getSurveyId();
         int rowsAffected = 0;
@@ -1374,9 +1375,9 @@ public class SwitchingPointSurveyModel {
         java.sql.PreparedStatement pstmt = null;
         try {
             connection.setAutoCommit(false);
-            pstmt = connection.prepareStatement(query1);
+            pstmt = connection.prepareStatement(query1,Statement.RETURN_GENERATED_KEYS);
 //            pstmt.setInt(1, survey_id + 1);
-           /* pstmt.setString(1, surveyTypeBean.getSwitching_point_name());
+            /* pstmt.setString(1, surveyTypeBean.getSwitching_point_name());
             pstmt.setString(2, surveyTypeBean.getPole_no_s());
             pstmt.setString(3, surveyTypeBean.getGps_code_s());
             if (surveyTypeBean.getIsCheckedTrue().equals("Y")) {
@@ -1429,23 +1430,20 @@ public class SwitchingPointSurveyModel {
             pstmt.setString(44, surveyTypeBean.getMain_switch_reading());
             pstmt.setInt(45, surveyTypeBean.getEnclosure_type_id());*/
 
-            /*       if (surveyTypeBean.getPole_type_id() != 0) {
+ /*       if (surveyTypeBean.getPole_type_id() != 0) {
             pstmt.setInt(32, surveyTypeBean.getPole_type_id());   // its POLE ID
             }  */
 
-            /*pstmt.setString(33, surveyTypeBean.getController_model());
+ /*pstmt.setString(33, surveyTypeBean.getController_model());
             pstmt.setString(34, surveyTypeBean.getMobile_no());
             pstmt.setString(35, surveyTypeBean.getSim_no());
             pstmt.setString(36, surveyTypeBean.getImei_no());
             pstmt.setString(37, surveyTypeBean.getPanel_file_no());
              */
-
-
             pstmt.setString(1, surveyTypeBean.getSwitching_point_name());
             pstmt.setString(2, surveyTypeBean.getPole_no_s());
             pstmt.setString(3, surveyTypeBean.getGps_code_s());
-            if (surveyTypeBean.getIsCheckedTrue().equals("Y"))
-            {
+            if (surveyTypeBean.getIsCheckedTrue().equals("Y")) {
                 pstmt.setNull(4, java.sql.Types.INTEGER);
                 pstmt.setNull(5, java.sql.Types.INTEGER);
                 pstmt.setNull(7, java.sql.Types.INTEGER);
@@ -1463,8 +1461,34 @@ public class SwitchingPointSurveyModel {
             pstmt.setInt(11, surveyTypeBean.getPhase());
             pstmt.setInt(12, surveyTypeBean.getControl_mechanism_id());
             pstmt.setString(13, surveyTypeBean.getFuse());
+            if ("Y".equals(surveyTypeBean.getFuse())) {
+                pstmt.setInt(33, surveyTypeBean.getFuse_id1());
+                pstmt.setInt(34, surveyTypeBean.getFuse_id2());
+                pstmt.setInt(35, surveyTypeBean.getFuse_id3());
+            } else {
+                pstmt.setNull(33, java.sql.Types.INTEGER);
+                pstmt.setNull(34, java.sql.Types.INTEGER);
+                pstmt.setNull(35, java.sql.Types.INTEGER);
+            }
             pstmt.setString(14, surveyTypeBean.getContacter());
+            if ("Y".equals(surveyTypeBean.getContacter())) {
+                pstmt.setInt(39, surveyTypeBean.getContacter_id());
+
+            } else {
+                pstmt.setNull(39, java.sql.Types.INTEGER);
+
+            }
             pstmt.setString(15, surveyTypeBean.getMccb());
+            if ("Y".equals(surveyTypeBean.getMccb())) {
+                pstmt.setInt(36, surveyTypeBean.getMccb_id1());
+                pstmt.setInt(37, surveyTypeBean.getMccb_id2());
+                pstmt.setInt(38, surveyTypeBean.getMccb_id3());
+
+            } else {
+                pstmt.setNull(36, java.sql.Types.INTEGER);
+                pstmt.setNull(37, java.sql.Types.INTEGER);
+                pstmt.setNull(38, java.sql.Types.INTEGER);
+            }
             pstmt.setString(16, surveyTypeBean.getFuse_quantity());
             pstmt.setString(17, surveyTypeBean.getMccb_quantity());
             pstmt.setInt(18, surveyTypeBean.getNo_of_poles());
@@ -1481,13 +1505,7 @@ public class SwitchingPointSurveyModel {
             pstmt.setString(30, surveyTypeBean.getMccb1());
             pstmt.setString(31, surveyTypeBean.getMccb2());
             pstmt.setString(32, surveyTypeBean.getMccb3());
-            pstmt.setInt(33, surveyTypeBean.getFuse_id1());
-            pstmt.setInt(34, surveyTypeBean.getFuse_id2());
-            pstmt.setInt(35, surveyTypeBean.getFuse_id3());
-            pstmt.setInt(36, surveyTypeBean.getMccb_id1());
-            pstmt.setInt(37, surveyTypeBean.getMccb_id2());
-            pstmt.setInt(38, surveyTypeBean.getMccb_id3());
-            pstmt.setInt(39, surveyTypeBean.getContacter_id());
+
             pstmt.setString(40, surveyTypeBean.getContacter_capacity());
             pstmt.setString(41, surveyTypeBean.getContacter_make());
             pstmt.setInt(42, surveyTypeBean.getAuto_switch_type_id());
@@ -1495,9 +1513,9 @@ public class SwitchingPointSurveyModel {
             pstmt.setString(44, surveyTypeBean.getMain_switch_reading());
             pstmt.setInt(45, surveyTypeBean.getEnclosure_type_id());
             pstmt.setInt(46, surveyTypeBean.getSwitching_rev_no());
-            switching_rev_no=surveyTypeBean.getSwitching_rev_no();
-            pstmt.setInt(47,surveyTypeBean.getSwitching_point_detail_id());
-            pstmt.setString(48,getMeterNameAuto(surveyTypeBean.getIvrs_no()));
+            switching_rev_no = surveyTypeBean.getSwitching_rev_no();
+            pstmt.setInt(47, surveyTypeBean.getSwitching_point_detail_id());
+            pstmt.setString(48, getMeterNameAuto(surveyTypeBean.getIvrs_no()));
             /*pstmt.setInt(1, surveyTypeBean.getSwitching_point_detail_id());
 
             pstmt.setString(2, surveyTypeBean.getPole_no_s());
@@ -1550,14 +1568,14 @@ public class SwitchingPointSurveyModel {
             } else {
             pstmt.setNull(32, java.sql.Types.INTEGER);
             }   */
-            /*
+ /*
             pstmt.setInt(31, surveyTypeBean.getNo_of_poles());
             pstmt.setString(32, surveyTypeBean.getService_conn_no());
             pstmt.setString(33, surveyTypeBean.getIvrs_no());
             pstmt.setString(34, surveyTypeBean.getSwitching_point_name());
 
              */
-            /*pstmt.setString(35, surveyTypeBean.getController_model());
+ /*pstmt.setString(35, surveyTypeBean.getController_model());
             pstmt.setString(36, surveyTypeBean.getMobile_no());
             pstmt.setString(37, surveyTypeBean.getSim_no());
             pstmt.setString(38, surveyTypeBean.getImei_no());
@@ -1576,8 +1594,10 @@ public class SwitchingPointSurveyModel {
                 String working[] = surveyTypeBean.getWorking();
                 String n_working[] = surveyTypeBean.getN_working();
                 String quantity[] = surveyTypeBean.getQuantity();
+               
+                if(light_type_idArr!=null){
                 for (int i = 0; i < light_type_idArr.length; i++) {
-
+                     if (light_type_idArr[i] > 0) {
                     if (light_type_idArr[i] != 0) {
                         pstmt.setInt(1, switching_point_detail_id);
                         pstmt.setInt(2, light_type_idArr[i]);
@@ -1586,10 +1606,15 @@ public class SwitchingPointSurveyModel {
                         pstmt.setInt(5, Integer.parseInt(quantity[i].trim()));
                         pstmt.setInt(6, switching_rev_no);
                         rowsAffected = pstmt.executeUpdate();
-                    } else {
-
+                    }
+                     }else {
+                         System.out.println("no light type arr");
                         break;
                     }
+                }
+                }else{
+                
+                  rowsAffected=1;
                 }
                 if (rowsAffected > 0) {
                     if (!surveyTypeBean.getPole_no().equals("NoPoleEntry")) {
@@ -1642,8 +1667,7 @@ public class SwitchingPointSurveyModel {
                 System.out.println("SQL Exception Occured while inserting data in Switching point detail:" + sqlE);
             }
         }
-        if (rowsAffected > 0)
-        {
+        if (rowsAffected > 0) {
             message = "Record saved successfully.";
             msgBgColor = COLOR_OK;
         } else {
@@ -1702,7 +1726,6 @@ public class SwitchingPointSurveyModel {
 
     public int updateRecord(SwitchingPointSurveyBean surveyTypeBean) {
         int rowsAffected = 0;
-
 
         String updateSPD = "UPDATE switching_point_detail SET pole_no_s=?, gps_code_s=?, area_id=?, road_id=?, is_working=?, "
                 + " traffic_type_id=? , created_by=? , remark=? , meter_no_s=? , ph=?, control_mechanism_id=? , fuse=? , contacter=? , mccb=?  "
@@ -1828,7 +1851,7 @@ public class SwitchingPointSurveyModel {
                         pole_count = rs.getInt("count(*)");
                     }
                     if (pole_count == 0) {
-                        pstmt.close();                        
+                        pstmt.close();
                         if (!surveyTypeBean.getPole_no().equals("NoPoleEntry")) {    // if formerly switching point was on wall but not it has been mounted on pole
                             rowsAffected = 0;
                             pstmt = connection.prepareStatement(insertPole1);
@@ -1985,12 +2008,12 @@ public class SwitchingPointSurveyModel {
             } else {
             pstmt.setNull(32, java.sql.Types.INTEGER);
             }   */
-           /* pstmt.setInt(31, surveyTypeBean.getNo_of_poles());
+ /* pstmt.setInt(31, surveyTypeBean.getNo_of_poles());
             pstmt.setString(32, surveyTypeBean.getService_conn_no());
             pstmt.setString(33, surveyTypeBean.getIvrs_no());
             pstmt.setString(34, surveyTypeBean.getSwitching_point_name());*/
 
-            /*pstmt.setString(35, surveyTypeBean.getController_model());
+ /*pstmt.setString(35, surveyTypeBean.getController_model());
             pstmt.setString(36, surveyTypeBean.getMobile_no());
             pstmt.setString(37, surveyTypeBean.getSim_no());
             pstmt.setString(38, surveyTypeBean.getImei_no());
@@ -1999,8 +2022,7 @@ public class SwitchingPointSurveyModel {
             pstmt.setString(1, surveyTypeBean.getSwitching_point_name());
             pstmt.setString(2, surveyTypeBean.getPole_no_s());
             pstmt.setString(3, surveyTypeBean.getGps_code_s());
-            if (surveyTypeBean.getIsCheckedTrue().equals("Y"))
-            {
+            if (surveyTypeBean.getIsCheckedTrue().equals("Y")) {
                 pstmt.setNull(4, java.sql.Types.INTEGER);
                 pstmt.setNull(5, java.sql.Types.INTEGER);
                 pstmt.setNull(7, java.sql.Types.INTEGER);
@@ -2049,8 +2071,8 @@ public class SwitchingPointSurveyModel {
             pstmt.setInt(43, surveyTypeBean.getMain_switch_type_id());
             pstmt.setString(44, surveyTypeBean.getMain_switch_reading());
             pstmt.setInt(45, surveyTypeBean.getEnclosure_type_id());
-            pstmt.setInt(46, surveyTypeBean.getSwitching_rev_no()+1);
-            pstmt.setInt(47,surveyTypeBean.getSwitching_point_detail_id());
+            pstmt.setInt(46, surveyTypeBean.getSwitching_rev_no() + 1);
+            pstmt.setInt(47, surveyTypeBean.getSwitching_point_detail_id());
             rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
                 pstmt.close();
@@ -2104,7 +2126,7 @@ public class SwitchingPointSurveyModel {
                         if (flag == loop) {
                             pstmt.close();
                             //rowsAffected = 0;
-                            int localcount=0;
+                            int localcount = 0;
                             pstmt = connection.prepareStatement(query6);
                             pstmt.setInt(1, surveyTypeBean.getSwitching_point_detail_id());
                             pstmt.setInt(2, surveyTypeBean.getSwitching_rev_no());
@@ -2206,7 +2228,7 @@ public class SwitchingPointSurveyModel {
         return count > 0 ? false : true;
     }
 
-    public int getNoOfRows(String searchPoleNoSwitch, String searchPoleType, String searchPoleNo, String searchAreaName, String searchRoadName, String service_conn_no_Search, String switching_pt_name_search, String zone,String service_conn_no,String meter_name_auto) {
+    public int getNoOfRows(String searchPoleNoSwitch, String searchPoleType, String searchPoleNo, String searchAreaName, String searchRoadName, String service_conn_no_Search, String switching_pt_name_search, String zone, String service_conn_no, String meter_name_auto) {
         /*  String query = "SELECT count(*) "
         + "FROM switching_point_detail s,pole p, pole_type pt, area a, road r, traffic_type t, mounting_type m, "
         + "control_mechanism c,"
@@ -2252,7 +2274,7 @@ public class SwitchingPointSurveyModel {
 //          //      + " AND IF('" + searchAreaName + "' = '', a.area_name LIKE '%%', a.area_name =? ) "
 //           //     + " AND IF('" + searchRoadName + "' = '', m.mounting_type LIKE '%%', m.mounting_type =? ) "
 //                + " order by s.pole_no_s ";
-   /*     String query = " SELECT count(*)"
+        /*     String query = " SELECT count(*)"
         + " FROM switching_point_detail s,pole p, pole_type pt, area a, road r, traffic_type t, mounting_type m,"
         + " control_mechanism c,"
         + " fuse f, contacter ct, timer tm, mccb mcb, road_category rc, road_use ru"
@@ -2332,42 +2354,41 @@ public class SwitchingPointSurveyModel {
                 + " AND IF( ? = '', s.service_conn_no LIKE '%%', s.zone =? )  "
                 + " order by s.switching_point_name  ";
 
-*/                  String add="";
-                    if(service_conn_no_Search.isEmpty())
-                        add=service_conn_no;
-                    else
-                    {
-                    add=service_conn_no_Search;
-                    }
-        String query="select count(*) from switching_point_detail as t "
-                    +"left join fuse as f on t.fuse_id1=f.fuse_id "
-                    +"left join fuse as f1 on t.fuse_id2=f1.fuse_id "
-                    +"left join fuse as f2 on t.fuse_id3=f2.fuse_id "
-                    +"left join mccb as m on t.mccb_id1=m.mccb_id "
-                    +"left join mccb as m1 on t.mccb_id1=m1.mccb_id "
-                    +"left join mccb as m2 on t.mccb_id1=m2.mccb_id "
-                    +"left join pole as p on p.pole_id=t.pole_id "
-                    +"left join switch_type as s on t.auto_switch_type_id=s.switch_type_id "
-                    +"left join switch_type as s1 on t.main_switch_type_id=s1.switch_type_id "
-                    +"left join enclosure_type as e on e.enclosure_type_id=t.enclosure_type_id "
-                    +"left join area as a on t.area_id=a.area_id "
-                    +"left join type_of_premises as pt on pt.type_of_premises_id=t.type_of_premises_id "
-                    +"left join road as r on r.road_id=t.road_id "
-                    +"left join traffic_type as tt on tt.traffic_type_id=t.traffic_type_id "
-                    +"left join feeder as fe on fe.feeder_id=t.feeder_id "
-                    +"left join road_category as rc on rc.category_id=r.category_id "
-                    +"left join road_use as ru on ru.road_use_id=r.road_use_id "
-                    +"left join zone as z on fe.zone_id=z.zone_id "
-                    +"left join division as d on d.division_id = z.division_id AND d.active='Y' "
-                    +"left join ward as w on w.ward_id = a.ward_id "
-                    +"left join city as cy on cy.city_id = w.city_id "
-                    +"where t.active='Y' "
-                    +"AND IF( '"+meter_name_auto+"' = '', t.meter_name_auto LIKE '%%', t.meter_name_auto ='"+meter_name_auto+"' )"
-                    +" AND IF( '"+add+"' = '', t.service_conn_no LIKE '%%', t.service_conn_no ='"+add+"' )"
-                    +" AND IF( '"+searchPoleNo+"' = '', t.pole_no_s LIKE '%%', t.pole_no_s ='"+searchPoleNo+"' )"
-                    +" AND IF( '"+switching_pt_name_search+"' = '', t.switching_point_name LIKE '%%', t.switching_point_name ='"+switching_pt_name_search+"' )"
-                    +" AND IF( '"+zone+"' = '', z.zone LIKE '%%', z.zone ='"+zone+"' )"
-                    +"order by t.switching_point_detail_id";
+         */ String add = "";
+        if (service_conn_no_Search.isEmpty()) {
+            add = service_conn_no;
+        } else {
+            add = service_conn_no_Search;
+        }
+        String query = "select count(*) from switching_point_detail as t "
+                + "left join fuse as f on t.fuse_id1=f.fuse_id "
+                + "left join fuse as f1 on t.fuse_id2=f1.fuse_id "
+                + "left join fuse as f2 on t.fuse_id3=f2.fuse_id "
+                + "left join mccb as m on t.mccb_id1=m.mccb_id "
+                + "left join mccb as m1 on t.mccb_id1=m1.mccb_id "
+                + "left join mccb as m2 on t.mccb_id1=m2.mccb_id "
+                + "left join pole as p on p.pole_id=t.pole_id "
+                + "left join switch_type as s on t.auto_switch_type_id=s.switch_type_id "
+                + "left join switch_type as s1 on t.main_switch_type_id=s1.switch_type_id "
+                + "left join enclosure_type as e on e.enclosure_type_id=t.enclosure_type_id "
+                + "left join area as a on t.area_id=a.area_id "
+                + "left join type_of_premises as pt on pt.type_of_premises_id=t.type_of_premises_id "
+                + "left join road as r on r.road_id=t.road_id "
+                + "left join traffic_type as tt on tt.traffic_type_id=t.traffic_type_id "
+                + "left join feeder as fe on fe.feeder_id=t.feeder_id "
+                + "left join road_category as rc on rc.category_id=r.category_id "
+                + "left join road_use as ru on ru.road_use_id=r.road_use_id "
+                + "left join zone as z on fe.zone_id=z.zone_id "
+                + "left join division as d on d.division_id = z.division_id AND d.active='Y' "
+                + "left join ward as w on w.ward_id = a.ward_id "
+                + "left join city as cy on cy.city_id = w.city_id "
+                + "where t.active='Y' "
+                + "AND IF( '" + meter_name_auto + "' = '', t.meter_name_auto LIKE '%%', t.meter_name_auto ='" + meter_name_auto + "' )"
+                + " AND IF( '" + add + "' = '', t.service_conn_no LIKE '%%', t.service_conn_no ='" + add + "' )"
+                + " AND IF( '" + searchPoleNo + "' = '', t.pole_no_s LIKE '%%', t.pole_no_s ='" + searchPoleNo + "' )"
+                + " AND IF( '" + switching_pt_name_search + "' = '', t.switching_point_name LIKE '%%', t.switching_point_name ='" + switching_pt_name_search + "' )"
+                + " AND IF( '" + zone + "' = '', z.zone LIKE '%%', z.zone ='" + zone + "' )"
+                + "order by t.switching_point_detail_id";
         int noOfRows = 0;
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
@@ -2381,7 +2402,7 @@ public class SwitchingPointSurveyModel {
         return noOfRows;
     }
 
-    public List<SwitchingPointSurveyBean> showData(int lowerLimit, int noOfRowsToDisplay, String searchPoleNoSwitch, String searchPoleType, String searchPoleNo, String searchAreaName, String searchRoadName, String service_conn_no_Search, String searchSwitchingPtName, String zone,String service_conn_no,String meter_name_auto) {
+    public List<SwitchingPointSurveyBean> showData(int lowerLimit, int noOfRowsToDisplay, String searchPoleNoSwitch, String searchPoleType, String searchPoleNo, String searchAreaName, String searchRoadName, String service_conn_no_Search, String searchSwitchingPtName, String zone, String service_conn_no, String meter_name_auto) {
         List<SwitchingPointSurveyBean> list = new ArrayList<SwitchingPointSurveyBean>();
 
         /*   String query = " SELECT s.switching_point_detail_id, s.pole_no_s, s.gps_code_s, s.is_working, s.active, s.remark, DATE_FORMAT(s.created_date,'%d-%m-%Y') AS created_date, "
@@ -2467,7 +2488,7 @@ public class SwitchingPointSurveyModel {
 //           //     + " AND IF('" + searchRoadName + "' = '', m.mounting_type LIKE '%%', m.mounting_type =? ) "
 //                + " order by s.pole_no_s "
 //                 + " LIMIT " + lowerLimit + "," + noOfRowsToDisplay;
-     /*   String query = " SELECT s.measured_load ,s.city, s.longitude, s.lattitude ,s.switching_point_detail_id, s.switching_point_name, s.feeder ,s.pole_no_s, s.gps_code_s, s.is_working,"
+        /*   String query = " SELECT s.measured_load ,s.city, s.longitude, s.lattitude ,s.switching_point_detail_id, s.switching_point_name, s.feeder ,s.pole_no_s, s.gps_code_s, s.is_working,"
         + "  s.active, s.remark, s.service_conn_no, s.ivrs_no, "
         + " DATE_FORMAT(s.created_date,'%d-%m-%Y') AS created_date,"
         + " s.switching_rev_no, s.meter_no_s, s.ph,s.created_by, p.pole_no,p.pole_span,p.pole_height,p.gps_code,"
@@ -2516,7 +2537,7 @@ public class SwitchingPointSurveyModel {
         + " AND IF('" + service_conn_no_Search + "' = '', s.service_conn_no LIKE '%%', s.service_conn_no =? ) "
         + " order by s.pole_no_s "
         + " LIMIT " + lowerLimit + "," + noOfRowsToDisplay;  */
-        /*String query = "SELECT d.division_name, z.zone, s.measured_load ,cty.city_name,w.ward_no, s.longitude, s.lattitude ,"
+ /*String query = "SELECT d.division_name, z.zone, s.measured_load ,cty.city_name,w.ward_no, s.longitude, s.lattitude ,"
                 + " s.switching_point_detail_id, s.switching_point_name, fd.feeder_name , "
                 + " s.pole_no_s, s.gps_code_s, s.is_working,  s.active, s.remark, s.service_conn_no, s.ivrs_no, "
                 + " DATE_FORMAT(s.created_date,'%d-%m-%Y') AS created_date, s.switching_rev_no, s.meter_no_s, s.ph,s.created_by, "
@@ -2598,7 +2619,7 @@ public class SwitchingPointSurveyModel {
         + " AND IF('' = '', m.mounting_type LIKE '%%', m.mounting_type =? ) "
          */
 
-        /*try {
+ /*try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, zone);
             pstmt.setString(2, zone);
@@ -2686,58 +2707,57 @@ public class SwitchingPointSurveyModel {
         } catch (Exception e) {
             System.out.println("Error in Show data of switching point detail is : " + e);
         }*/
-        String add="";
-                    if(service_conn_no_Search.isEmpty())
-                        add=service_conn_no;
-                    else
-                    {
-                    add=service_conn_no_Search;
-                    }
-         String query = "select z.zone,d.division_name,w.ward_no,cy.city_name, f.fuse_type as fuse_type1,f1.fuse_type as "
-   +" fuse_type2,f2.fuse_type as fuse_type3,s.switch_type as auto_switch_type,s1.switch_type as main_switch_type,t.switching_point_detail_id ,"
-  +"  t.pole_no_s, t.GPS_code_s, a.area_name,  tt.traffic_type, t.active,t.switching_rev_no, t.meter_no_s, ph,p.pole_no "
-   +" ,m.mccb_type as mccb_type1, fuse_quantity, mccb_quantity, meter_no_s,t.created_date,t.created_by,t.remark, "
-   +" t.longitude,t.lattitude, t.service_conn_no,t.ivrs_no,measured_load,  isOnPole,t.pole_id,fe.feeder_name, pt.type_of_premsis, fuse1,"
-  +"  t.fuse2, t.fuse3,t.mccb1, t.mccb2, t.mccb3,  m1.mccb_type  as mccb_type2, m2.mccb_type as  mccb_type3, t.main_switch_rating,t.no_of_poles,"
- +"   e.enclosure_type, t.mccb, t.fuse,rc.category_name,ru.road_use, t.is_working, r.road_name,t.switching_point_name,t.contacter,t.contacter_capacity,"
-  + "  (SELECT GROUP_CONCAT(CAST((concat(spltm.switching_point_light_type_id,'-',spltm.light_type_id)) AS CHAR CHARACTER SET utf8) SEPARATOR '__') "
-  + " FROM switching_point_light_type_mapping AS spltm,light_type lt,light_source_type AS l,wattage AS w "
-  + " WHERE spltm.light_type_id=lt.light_type_id AND t.switching_point_detail_id = spltm.switching_point_detail_id "
-    + " AND t.switching_rev_no = spltm.switching_rev_no  AND lt.wattage_id=w.wattage_id AND lt.source_id=l.source_type_id)AS map_id ,"
-    + "(SELECT GROUP_CONCAT(CAST((concat(l.source_type,'-',w.wattage_value,',',spltm.total_fittings)) AS CHAR CHARACTER SET utf8) SEPARATOR '__') "
-    + "FROM switching_point_light_type_mapping AS spltm,light_type lt,light_source_type AS l,wattage AS w"
-     +" WHERE spltm.light_type_id=lt.light_type_id AND t.switching_point_detail_id = spltm.switching_point_detail_id AND t.switching_rev_no = spltm.switching_rev_no"
-    + " AND lt.wattage_id=w.wattage_id AND lt.source_id=l.source_type_id)AS source_wattage "
-  +"  from switching_point_detail as t "
-  +"left join fuse as f on t.fuse_id1=f.fuse_id "
-  +"left join fuse as f1 on t.fuse_id2=f1.fuse_id "
-  +"left join fuse as f2 on t.fuse_id3=f2.fuse_id "
-  +"left join mccb as m on t.mccb_id1=m.mccb_id "
-  +"left join mccb as m1 on t.mccb_id1=m1.mccb_id "
-  +"left join mccb as m2 on t.mccb_id1=m2.mccb_id "
-  +"left join pole as p on p.pole_id=t.pole_id "
-  +"left join switch_type as s on t.auto_switch_type_id=s.switch_type_id "
-  +"left join switch_type as s1 on t.main_switch_type_id=s1.switch_type_id "
-  +"left join enclosure_type as e on e.enclosure_type_id=t.enclosure_type_id "
-  +"left join area as a on t.area_id=a.area_id "
-  +"left join type_of_premises as pt on pt.type_of_premises_id=t.type_of_premises_id "
-  +"left join road as r on r.road_id=t.road_id "
-  +"left join traffic_type as tt on tt.traffic_type_id=t.traffic_type_id "
-  +"left join feeder as fe on fe.feeder_id=t.feeder_id "
-  +"left join road_category as rc on rc.category_id=r.category_id "
-  +"left join road_use as ru on ru.road_use_id=r.road_use_id "
-  +"left join zone as z on fe.zone_id=z.zone_id "
-  +"left join division as d on d.division_id = z.division_id AND d.active='Y' "
-  +"left join ward as w on w.ward_id = a.ward_id "
-  +" left join city as cy on cy.city_id = w.city_id "
-  +" where t.active='Y' "
-  +"AND IF( '"+meter_name_auto+"' = '', t.meter_name_auto LIKE '%%', t.meter_name_auto ='"+meter_name_auto+"' ) "
-  +"AND IF( '"+add+"' = '', t.service_conn_no LIKE '%%', t.service_conn_no ='"+add+"' ) "
-  +" AND IF( '"+searchPoleNo+"' = '', t.pole_no_s LIKE '%%', t.pole_no_s ='"+searchPoleNo+"' ) "
-  +"AND IF( '"+searchSwitchingPtName+"' = '', t.switching_point_name LIKE '%%', t.switching_point_name ='"+searchSwitchingPtName+"' ) "
-  +"AND IF( '"+zone+"' = '', z.zone LIKE '%%', z.zone ='"+zone+"' ) "
-  +"order by t.switching_point_detail_id ";
-   
+        String add = "";
+        if (service_conn_no_Search.isEmpty()) {
+            add = service_conn_no;
+        } else {
+            add = service_conn_no_Search;
+        }
+        String query = "select z.zone,d.division_name,w.ward_no,cy.city_name, f.fuse_type as fuse_type1,f1.fuse_type as "
+                + " fuse_type2,f2.fuse_type as fuse_type3,s.switch_type as auto_switch_type,s1.switch_type as main_switch_type,t.switching_point_detail_id ,"
+                + "  t.pole_no_s, t.GPS_code_s, a.area_name,  tt.traffic_type, t.active,t.switching_rev_no, t.meter_no_s, ph,p.pole_no "
+                + " ,m.mccb_type as mccb_type1, fuse_quantity, mccb_quantity, meter_no_s,t.created_date,t.created_by,t.remark, "
+                + " t.longitude,t.lattitude, t.service_conn_no,t.ivrs_no,measured_load,  isOnPole,t.pole_id,fe.feeder_name, pt.type_of_premsis, fuse1,"
+                + "  t.fuse2, t.fuse3,t.mccb1, t.mccb2, t.mccb3,  m1.mccb_type  as mccb_type2, m2.mccb_type as  mccb_type3, t.main_switch_rating,t.no_of_poles,"
+                + "   e.enclosure_type, t.mccb, t.fuse,rc.category_name,ru.road_use, t.is_working, r.road_name,t.switching_point_name,t.contacter,t.contacter_capacity,"
+                + "  (SELECT GROUP_CONCAT(CAST((concat(spltm.switching_point_light_type_id,'-',spltm.light_type_id)) AS CHAR CHARACTER SET utf8) SEPARATOR '__') "
+                + " FROM switching_point_light_type_mapping AS spltm,light_type lt,light_source_type AS l,wattage AS w "
+                + " WHERE spltm.light_type_id=lt.light_type_id AND t.switching_point_detail_id = spltm.switching_point_detail_id "
+                + " AND t.switching_rev_no = spltm.switching_rev_no  AND lt.wattage_id=w.wattage_id AND lt.source_id=l.source_type_id)AS map_id ,"
+                + "(SELECT GROUP_CONCAT(CAST((concat(l.source_type,'-',w.wattage_value,',',spltm.total_fittings)) AS CHAR CHARACTER SET utf8) SEPARATOR '__') "
+                + "FROM switching_point_light_type_mapping AS spltm,light_type lt,light_source_type AS l,wattage AS w"
+                + " WHERE spltm.light_type_id=lt.light_type_id AND t.switching_point_detail_id = spltm.switching_point_detail_id AND t.switching_rev_no = spltm.switching_rev_no"
+                + " AND lt.wattage_id=w.wattage_id AND lt.source_id=l.source_type_id)AS source_wattage "
+                + "  from switching_point_detail as t "
+                + "left join fuse as f on t.fuse_id1=f.fuse_id "
+                + "left join fuse as f1 on t.fuse_id2=f1.fuse_id "
+                + "left join fuse as f2 on t.fuse_id3=f2.fuse_id "
+                + "left join mccb as m on t.mccb_id1=m.mccb_id "
+                + "left join mccb as m1 on t.mccb_id1=m1.mccb_id "
+                + "left join mccb as m2 on t.mccb_id1=m2.mccb_id "
+                + "left join pole as p on p.pole_id=t.pole_id "
+                + "left join switch_type as s on t.auto_switch_type_id=s.switch_type_id "
+                + "left join switch_type as s1 on t.main_switch_type_id=s1.switch_type_id "
+                + "left join enclosure_type as e on e.enclosure_type_id=t.enclosure_type_id "
+                + "left join area as a on t.area_id=a.area_id "
+                + "left join type_of_premises as pt on pt.type_of_premises_id=t.type_of_premises_id "
+                + "left join road as r on r.road_id=t.road_id "
+                + "left join traffic_type as tt on tt.traffic_type_id=t.traffic_type_id "
+                + "left join feeder as fe on fe.feeder_id=t.feeder_id "
+                + "left join road_category as rc on rc.category_id=r.category_id "
+                + "left join road_use as ru on ru.road_use_id=r.road_use_id "
+                + "left join zone as z on fe.zone_id=z.zone_id "
+                + "left join division as d on d.division_id = z.division_id AND d.active='Y' "
+                + "left join ward as w on w.ward_id = a.ward_id "
+                + " left join city as cy on cy.city_id = w.city_id "
+                + " where t.active='Y' "
+                + "AND IF( '" + meter_name_auto + "' = '', t.meter_name_auto LIKE '%%', t.meter_name_auto ='" + meter_name_auto + "' ) "
+                + "AND IF( '" + add + "' = '', t.service_conn_no LIKE '%%', t.service_conn_no ='" + add + "' ) "
+                + " AND IF( '" + searchPoleNo + "' = '', t.pole_no_s LIKE '%%', t.pole_no_s ='" + searchPoleNo + "' ) "
+                + "AND IF( '" + searchSwitchingPtName + "' = '', t.switching_point_name LIKE '%%', t.switching_point_name ='" + searchSwitchingPtName + "' ) "
+                + "AND IF( '" + zone + "' = '', z.zone LIKE '%%', z.zone ='" + zone + "' ) "
+                + "order by t.switching_point_detail_id ";
+
         int rowsAffected = -1;
         try {
             connection.setAutoCommit(false);
@@ -2758,7 +2778,7 @@ public class SwitchingPointSurveyModel {
                 surveyType.setRoad_name(rset.getString("road_name"));
                 surveyType.setTraffic_type(rset.getString("traffic_type"));
                 //      surveyType.setPole_type(rset.getString("pole_type"));
-               // surveyType.setPole_span(rset.getString("pole_span"));
+                // surveyType.setPole_span(rset.getString("pole_span"));
                 ///surveyType.setPole_height(rset.getString("pole_height"));
                 //surveyType.setMounting_height(rset.getString("mounting_height"));
                 surveyType.setCreated_date(rset.getString("created_date"));
@@ -2768,10 +2788,10 @@ public class SwitchingPointSurveyModel {
                 surveyType.setActive(rset.getString("active"));
                 //surveyType.setPole_no(rset.getString("pole_no"));
                 //surveyType.setGps_code(rset.getString("gps_code"));
-                
+
                 surveyType.setIs_working(rset.getString("is_working"));
                 surveyType.setSource_wattage(rset.getString("source_wattage"));
-                
+
                 surveyType.setFuse(rset.getString("fuse"));
                 surveyType.setFuse_type(rset.getString("fuse_type1"));
                 surveyType.setFuse_type1(rset.getString("fuse_type2"));
@@ -2815,7 +2835,9 @@ public class SwitchingPointSurveyModel {
                  */
                 list.add(surveyType);
             }
-        }catch(Exception e){e.printStackTrace();}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return list;
     }
 
@@ -2947,7 +2969,6 @@ public class SwitchingPointSurveyModel {
 //        }
 //        return rowData;
 //    }
-
     public int cancelRecord(int switching_point_detail_id, int switching_rev_no) {
 
         String query1 = "UPDATE switching_point_detail SET active='N' WHERE switching_point_detail_id = " + switching_point_detail_id
@@ -3059,6 +3080,5 @@ public class SwitchingPointSurveyModel {
     public void setMsgBgColorr(String msgBgColorr) {
         this.msgBgColorr = msgBgColorr;
     }
-
 
 }

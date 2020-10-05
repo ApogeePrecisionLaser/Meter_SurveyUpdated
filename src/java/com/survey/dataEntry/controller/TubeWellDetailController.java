@@ -322,9 +322,11 @@ public class TubeWellDetailController extends HttpServlet {
             tubeWellTypeBean.setControl_mechanism_id(tubeWellSurveyTypeModel.getControlId(request.getParameter("control_mechanism_type").trim()));
             tubeWellTypeBean.setTraffic_type_id(tubeWellSurveyTypeModel.getTrafficId(request.getParameter("traffic_type").trim()));
 
-            String road_id_rev_no = tubeWellSurveyTypeModel.getRoadId_Rev(request.getParameter("road_name").trim(), road_category, road_use);
+            String road_id_rev_no="";
+            road_id_rev_no = tubeWellSurveyTypeModel.getRoadId_Rev(request.getParameter("road_name").trim(), road_category, road_use);
 
-            if (!road_id_rev_no.isEmpty() || road_id_rev_no != null) {
+//            if (!road_id_rev_no.isEmpty() || road_id_rev_no != null || !(road_id_rev_no.equals(""))) {
+  if (!road_id_rev_no.isEmpty() ||  !(road_id_rev_no.equals(""))) {
                 tubeWellTypeBean.setRoad_id(Integer.parseInt(road_id_rev_no.split("_")[0]));
                 tubeWellTypeBean.setRoad_rev_no(Integer.parseInt(road_id_rev_no.split("_")[1]));
             }

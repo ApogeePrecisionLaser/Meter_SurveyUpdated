@@ -1486,6 +1486,9 @@ public class MeterSurveyWebServicesModel {
         if(survey_type.equals("Tube Well")){
         //query = "SELECT tube_well_survey_id FROM tube_well_survey WHERE service_conn_no = '"+ service_no +"' AND final_revision='VALID'";
         query = "select tube_well_survey_id from tube_well_survey as tw,survey as s where s.survey_date='"+ survey_date +"' and s.survey_id=tw.tube_well_survey_id and tw.service_conn_no ='"+ service_no +"'  order by tube_well_survey_id desc limit 1";
+        }else if(survey_type.equals("Switching Point")){
+        //query = "SELECT tube_well_survey_id FROM tube_well_survey WHERE service_conn_no = '"+ service_no +"' AND final_revision='VALID'";
+        query = "select switching_point_survey_id from switching_point_survey as tw,survey as s where s.survey_date='"+ survey_date +"' and s.survey_id=tw.switching_point_survey_id and tw.service_conn_no ='"+ service_no +"'  order by switching_point_survey_id desc limit 1";
         }else{
         query = "SELECT survey_id FROM survey WHERE service_no = '"+ service_no +"' AND final_revision='VALID'";
         }
@@ -2138,40 +2141,80 @@ public class MeterSurveyWebServicesModel {
         return destination_path;
     }
      
-       public int insertRecordPrimary(JSONObject json1, String image_of_meter_no,String image_of_meter_reading) {
+       public int insertRecordPrimary(JSONObject json1, String imagefirstpolePath,String imagelastpolePath) {
             int roweffected =0;
            try{
                
-                String type_of_survey = "";
-                String currentTime = "";
-                String meter_reading = "";
+                String ivrs_no = "";
                 String meter_no = "";
-                String imagePath = "";
-                String location = "";
-                double longitude = 0;
-                double latitude = 0;
-                double altitude = 0;
-                String accuracy ="";
-                meter_reading = json1.get("meter_reading").toString();
+                String circuitno = "";
+                String accuracyfirstpole = "";
+                String accuracylastpole = "";
+                String parent = "";
+                double longitudefirstpole = 0;
+                double latitudefirstpole = 0;
+                double altitudefirstpole = 0;
+                double longitudelastpole = 0;
+                double latitudelastpole = 0;
+                double altitudelastpole = 0;
+                String is_child ="";
+                String time ="";
+                int swicthing_point_detail_id=0;
+                ivrs_no = json1.get("ivrs_no").toString();
                 meter_no = json1.get("meter_no").toString();
-                meter_no = json1.get("meter_no").toString();
-                currentTime = json1.get("currentTime").toString();
-                type_of_survey = json1.get("type_of_survey").toString();
+                circuitno = json1.get("circuitno").toString();
+                time = json1.get("survey_time").toString();
+               
                 
                 
                 try{
-                    latitude = Double.parseDouble(json1.get("lattitude").toString());
-                    longitude = Double.parseDouble(json1.get("longitude").toString());
-                    altitude = Double.parseDouble(json1.get("altitude").toString());
-                    accuracy = json1.get("accuracy").toString();
+                    longitudefirstpole = Double.parseDouble(json1.get("longitudefirstpole").toString());
+                    latitudefirstpole = Double.parseDouble(json1.get("latitudefirstpole").toString());
+                    altitudefirstpole = Double.parseDouble(json1.get("altitudefirstpole").toString());
+                    longitudelastpole = Double.parseDouble(json1.get("longitudelastpole").toString());
+                    latitudelastpole = Double.parseDouble(json1.get("latitudelastpole").toString());
+                    altitudelastpole = Double.parseDouble(json1.get("altitudelastpole").toString());
+                    accuracyfirstpole = json1.get("accuracyfirstpole").toString();
+                 accuracylastpole = json1.get("accuracylastpole").toString();
+                  swicthing_point_detail_id = Integer.parseInt(json1.get("spdt_id").toString());
                 }catch(Exception e)
                 {
+                    swicthing_point_detail_id=1;
                     System.out.println("Exception"+e);
                 }
+                String circuit_name="";
+                int first_pole_id=0;
+                first_pole_id=1;
                 
-                String query = "insert into primary_survey(type_of_survey, meter_no, meter_reading, "
-                        + " image_of_meter_no, image_of_meter_reading, latitude, longitude, altitude, accuracy"
-                        + " )" + " VALUES('" +type_of_survey+"','"+ meter_no+"','"+ meter_reading+"','"+ image_of_meter_no+"','"+ image_of_meter_reading+"',"+ latitude+","+ longitude+","+ altitude+",'"+ accuracy + "')";
+                int last_pole_id=0;
+                last_pole_id=1;
+                int cable_type_id=0;
+                cable_type_id=1;
+                int parent_id=0;
+                parent_id=getparentid(meter_no);
+                
+                String query = "insert into circuit(circuit_name, irvs_no, circuitno, "
+                        + " switching_point_detail_id, first_pole_id, last_pole_id, cable_type_id, parent_id, "
+                        + " time, is_child, imageoffirstpole, imageoflastpole, "
+                        + " lattitudefirstpole, longitudefirstpole, altitudefirstpole, accuracyfirstpole, lattitudelasttpole, "
+                        + " longitudelasttpole, altitudelastpole, accuracylasttpole"
+                        + " )" + " VALUES('" +meter_no+"','"+ ivrs_no+"','"+ circuitno+"',"
+                        + swicthing_point_detail_id+","+ first_pole_id+","+ last_pole_id+","+ cable_type_id+","
+                        + parent_id + ",'"+ time+"','"+ is_child+"','"+ imagefirstpolePath + "',"
+                        + " '"+ imagelastpolePath+"',"+ latitudefirstpole+","+ longitudefirstpole+","+ altitudefirstpole+","
+                        + " '"+ accuracyfirstpole+"',"+ latitudelastpole+","+ longitudelastpole+","+ altitudelastpole+","
+                        + "'"+ accuracylastpole+"')";
+//String query = "insert into circuit(circuit_name, irvs_no, circuitno, "
+//                        + " switching_point_detail_id, parent_id, "
+//                        + " time, is_child, imageoffirstpole, imageoflastpole, "
+//                        + " lattitudefirstpole, longitudefirstpole, altitudefirstpole, accuracyfirstpole, lattitudelasttpole, "
+//                        + " longitudelasttpole, altitudelastpole, accuracylasttpole"
+//                        + " )" + " VALUES('" +meter_no+"','"+ ivrs_no+"','"+ circuitno+"',"
+//                        + swicthing_point_detail_id+","
+//                        + parent_id + ",'"+ time+"','"+ is_child+"','"+ imagefirstpolePath + "',"
+//                        + " '"+ imagelastpolePath+"',"+ latitudefirstpole+","+ longitudefirstpole+","+ altitudefirstpole+","
+//                        + " '"+ accuracyfirstpole+"',"+ latitudelastpole+","+ longitudelastpole+","+ altitudelastpole+","
+//                        + "'"+ accuracylastpole+"')";
                 try {
                     PreparedStatement psmt = connection.prepareStatement(query);
                     
@@ -2200,7 +2243,39 @@ public class MeterSurveyWebServicesModel {
         }
         return noOfRows;
     }
-
+             public int getNoOfRowsCircuit() {
+        int noOfRows = 0;
+        try {
+            ResultSet rset = connection.prepareStatement("select count(*) from circuit ").executeQuery();
+            rset.next();
+            noOfRows = Integer.parseInt(rset.getString(1));
+        } catch (Exception e) {
+            System.out.println("TableViewModel getNoOfRows() Error: " + e);
+        }
+        return noOfRows;
+    }
+             public int getparentid(String meter_no) {
+        int circuit_id = 0;
+        try {
+            ResultSet rset = connection.prepareStatement("select id from circuit where circuit_name= "+meter_no).executeQuery();
+            rset.next();
+            circuit_id = Integer.parseInt(rset.getString(1));
+        } catch (Exception e) {
+            System.out.println("TableViewModel getNoOfRows() Error: " + e);
+        }
+        return circuit_id;
+    }
+    public int getNoOfRowsCricuit() {
+        int noOfRows = 0;
+        try {
+            ResultSet rset = connection.prepareStatement("select count(*) from circuit ").executeQuery();
+            rset.next();
+            noOfRows = Integer.parseInt(rset.getString(1));
+        } catch (Exception e) {
+            System.out.println("TableViewModel getNoOfRows() Error: " + e);
+        }
+        return noOfRows;
+    }
    
 }
 

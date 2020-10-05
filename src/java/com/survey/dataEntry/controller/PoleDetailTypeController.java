@@ -40,7 +40,7 @@ public class PoleDetailTypeController extends HttpServlet {
         poleTypeModel.setDb_password(ctx.getInitParameter("db_password"));
         poleTypeModel.setConnection();
         String task = request.getParameter("task");
-        String mountingType = "", feeder_name = "";
+        String mountingType = "", feeder_name = "",switching_point_name="";
 
         try {
             //----- This is only for Vendor key Person JQuery
@@ -56,7 +56,15 @@ public class PoleDetailTypeController extends HttpServlet {
                         feeder_name = request.getParameter("action2");
                     }
                     list = poleTypeModel.getSwitchingPointName(q, feeder_name);
-                } else if (JQstring.equals("getMountingType")) {
+                } 
+                 else if (JQstring.equals("getCircuitName")) {
+                    if (request.getParameter("action2") != null && !request.getParameter("action2").isEmpty()) {
+                        switching_point_name = request.getParameter("action2");
+                    }
+                    list = poleTypeModel.getCircuitName(q, switching_point_name);
+                }
+                
+                else if (JQstring.equals("getMountingType")) {
                     if (request.getParameter("action2") != null && !request.getParameter("action2").isEmpty()) {
                         mountingType = request.getParameter("action2");
                     }
@@ -243,8 +251,10 @@ public class PoleDetailTypeController extends HttpServlet {
                 pole_id = 0;
                 pole_rev_no = 0;
                 poleTypeBean.setIs_switch_point("No");
+                 poleTypeBean.setIs_circuit("No");
             } else {
                 poleTypeBean.setIs_switch_point(request.getParameter("pole_is_switch_point"));
+                 poleTypeBean.setIs_circuit(request.getParameter("pole_is_circuit"));
             }
             String road_category = request.getParameter("road_category").trim();
             String road_use = request.getParameter("road_use").trim();
@@ -270,9 +280,12 @@ public class PoleDetailTypeController extends HttpServlet {
             //     poleTypeBean.setLight_type_id(poleTypeModel.getSourceWattageId(request.getParameter("source_wattage")));
             int feeder_id = poleTypeModel.getFeederId(request.getParameter("feeder_name").trim());
             String switching_id_rev_no = poleTypeModel.getSwitchingPointDetailId(request.getParameter("switching_point_name").trim(), feeder_id);
+      
             poleTypeBean.setSwitch_point_detail_id(Integer.parseInt(switching_id_rev_no.split("_")[0]));
             poleTypeBean.setSwitching_rev_no(Integer.parseInt(switching_id_rev_no.split("_")[1]));
-
+       int circuit_id_rev_no = poleTypeModel.getCircuitDetailId(request.getParameter("circuit_name").trim(), feeder_id,Integer.parseInt(switching_id_rev_no.split("_")[0]));
+           
+               poleTypeBean.setCircuit_id(circuit_id_rev_no);
             poleTypeBean.setPole_no(request.getParameter("pole_no"));
             poleTypeBean.setPole_no_client(request.getParameter("pole_no_client"));
             poleTypeBean.setGps_code(request.getParameter("gps_code"));

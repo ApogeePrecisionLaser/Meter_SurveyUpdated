@@ -2033,14 +2033,14 @@ public class NewSwitchingPointSurveyModel {
         + " sps.active, sps.remark, sps.tube_well_survey_rev_no, sps.created_by, sps.survey_rev_no"
         + " FROM survey s , tube_well_survey sps where s.tube_well_detail_id IS NOT NULL"
         + " And s.survey_id = sps.survey_id AND s.survey_rev_no = sps.survey_rev_no";  */  //s.survey_meter_no,
-        query = "SELECT f.feeder_name,top.type_of_premsis,t.meter_name_auto,s.general_image_details_id,s.image_name,switching_point_survey_id,s.survey_id,t.switching_point_survey_rev_no,s.survey_rev_no, "
+        query = "SELECT f.feeder_name,top.type_of_premsis,t.meter_name_auto,sim.gen_image_detail_id,s.image_name,switching_point_survey_id,s.survey_id,t.switching_point_survey_rev_no,s.survey_rev_no, "
                 + " meter_no,t.created_by,t.active, meter_functional,r_phase, y_phase, b_phase, power, fuse_functional, contacter_functional, "
                 + " mccb_functional,   switching_point_survey_rev_no, reason_id, no_of_phase, fuse1, fuse2, "
                 + " fuse3,t.fuse_id1, t.fuse_id2, t.fuse_id3, mccb1, mccb2, mccb3,t.mccb_id1, t.mccb_id2, t.mccb_id3, "
                 + " contacter_capacity, if(t.contacter_id is null,null,sr.contacter_type) as contacter_type ,meter_phase, "
                 + " meter_reading, if(t.contacter_make_id is null,null,sm.contacter_make) as contacter_make, "
                 + " auto_switch_type_id, main_switch_type_id, main_switch_rating, enclosure_type_id ,survey_file_no, "
-                + " DATE_FORMAT(survey_date, '%d-%m-%Y') AS survey_date, survey_page_no, mobile_no, pole_no, pole_rev_no, survey_type, status, image_name, "
+                + " survey_date, survey_page_no, mobile_no, pole_no, pole_rev_no, survey_type, status, image_name, "
                 + " s.lattitude, s.longitude, image_date_time,  data_entry_type_id, video_name, survey_pole_no, "
                 + " t.meter_name_auto, t.service_conn_no, t.previous_reading, t.consume_unit, t.amount "
                 + " FROM switching_point_survey as t "
@@ -2049,24 +2049,25 @@ public class NewSwitchingPointSurveyModel {
                 +" left join feeder as f ON f.feeder_id=m.feeder_id "
                 +" left join (premises_tariff_map as ptm, type_of_premises as top) ON m.premises_tariff_map_id=ptm.premises_tariff_map_id "
                 +" AND top.type_of_premises_id=ptm.type_of_premises_id "
-                + " ,survey as s "//,contacter as sr,contacter_make as sm "
+                + " ,survey as s Left JOIN survey_gen_image_map sim ON sim.survey_id = s.survey_id "//,contacter as sr,contacter_make as sm "
                 + " where t.switching_point_survey_id=s.survey_id  "
                 //+ " and sr.contacter_id=t.contacter_id "
                 //+ " and sm.contacter_make_id=t.contacter_make_id
                 + " and t.active='Y' and s.status='Y' "
+                
                 + " AND IF('" + pole_no + "' = '',  s.pole_no LIKE '%%', s.pole_no=? )"
                 + " AND IF('" + searchFileNo + "' = '',  s.survey_file_no LIKE '%%', s.survey_file_no=? )"
                 + " AND IF('" + searchPageNo + "' = '',  s.survey_page_no LIKE '%%', s.survey_page_no=? )"
                 + " AND IF('" + searchIvrsNo + "' = '',  t.service_conn_no LIKE '%%' OR t.service_conn_no IS null, t.service_conn_no=? )"
-                + " AND IF('" + searchByDate + "' = '',  s.survey_date LIKE '%%', s.survey_date >= '"+searchByDate+"' )"
+               // + " AND IF('" + searchByDate + "' = '',  s.survey_date LIKE '%%', s.survey_date >= '"+searchByDate+"' )"
                 //+ " AND IF('" + meter_name_auto + "' = '' OR '" + meter_name_auto + "' = 'null',  t.meter_name_auto LIKE '%%', t.meter_name_auto = '"+meter_name_auto+"' )"
                 + " AND IF('" + meter_name_auto + "' = '',  t.meter_name_auto LIKE '%%' OR t.meter_name_auto IS null, t.meter_name_auto = '"+meter_name_auto+"' )"
                 + " AND IF('" + survey_id+ "' = '',  s.survey_id LIKE '%%', s.survey_id = '"+survey_id+"' )"
                 + " AND IF('" + searchMeterFunctional+ "' = '',  t.meter_functional LIKE '%%', t.meter_functional = '"+searchMeterFunctional+"' )"
                 + " AND IF('" + searchFeeder + "' = '',  f.feeder_name LIKE '%%', f.feeder_name= '"+searchFeeder+"' )"
                  + " AND IF('" + searchTypeOfConnection + "' = '',  top.type_of_premsis LIKE '%%', top.type_of_premsis= '"+searchTypeOfConnection+"' )"
-                 + " AND IF('" + searchToDate + "' = '',  s.survey_date LIKE '%%', s.survey_date <= '"+searchToDate+"' )"
-                + "  order by switching_point_survey_id "
+               //  + " AND IF('" + searchToDate + "' = '',  s.survey_date LIKE '%%', s.survey_date <= '"+searchToDate+"' )"
+                + "  order by switching_point_survey_id desc "
                 + addLimit;
 
 
@@ -2129,7 +2130,7 @@ public class NewSwitchingPointSurveyModel {
                 TubeWellSurveyBean surveyType = new TubeWellSurveyBean();
                 //surveyType.setSurvey_meter_no(rset.getString("survey_meter_no"));
                 surveyType.setImage_name("image_name");
-                surveyType.setGeneral_image_detials_id(rset.getInt("general_image_details_id"));
+                surveyType.setGeneral_image_detials_id(rset.getInt("gen_image_detail_id"));
                 surveyType.setSurvey_id(rset.getInt("survey_id"));
                 surveyType.setTube_well_survey_id(rset.getInt("switching_point_survey_id"));
                 surveyType.setTube_well_survey_rev_no(rset.getInt("switching_point_survey_rev_no"));
@@ -2239,6 +2240,26 @@ public class NewSwitchingPointSurveyModel {
             System.out.println("Error inside show data of survey: " + e);
         }
         return list;
+    }
+    
+       public String getImageList(int survey_id) {
+        String query;
+        String destination = "";
+        query = " select group_concat(image_name) as image_name  from general_image_details as gd ,survey_gen_image_map as map"
+                + " where gd.general_image_details_id=map.gen_image_detail_id and map.survey_id= " + survey_id + "";
+
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+
+            ResultSet rset = pstmt.executeQuery();
+            if (rset.next()) {
+                destination = rset.getString("image_name");
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Error: UploadBillImageModel-getimage_destination_id-" + ex);
+        }
+        return destination;
     }
 
 //    public JSONArray showJsonData()
@@ -2938,9 +2959,11 @@ public class NewSwitchingPointSurveyModel {
     public String getdestinationPath(int general_image_details_id, String image_name) {
         String query;
         String destination = "";
-        query = " SELECT id.destination_path from image_destination AS id , general_image_details as g"
-                + " WHERE id.image_destination_id=g.image_destination_id AND g.general_image_details_id= '" + general_image_details_id + "' and "
-                + "g.image_name='" + image_name + "'";
+//        query = " SELECT id.destination_path from image_destination AS id , general_image_details as g"
+//                + " WHERE id.image_destination_id=g.image_destination_id AND g.general_image_details_id= '" + general_image_details_id + "' and "
+//                + "g.image_name='" + image_name + "'";
+                query = " SELECT id.destination_path from image_destination AS id , general_image_details as g"
+                + " WHERE id.image_destination_id=g.image_destination_id AND g.general_image_details_id= '" + general_image_details_id + "'";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
 

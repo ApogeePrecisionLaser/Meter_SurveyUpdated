@@ -516,14 +516,11 @@ public class NewSwitchingPointSurveyController extends HttpServlet {
             }
         }
         // Start of Auto Completer code
-      /*  String searchPoleNo = "";
+        /*  String searchPoleNo = "";
         String searchIvrsNo = "";
         String searchFileNo = "";
         String searchPageNo = "";
         String searchByDate = "";*/
-
-
-
 
         try {
             if (searchPoleNo == null) {
@@ -565,10 +562,12 @@ public class NewSwitchingPointSurveyController extends HttpServlet {
         if (task1.equals("viewImage")) {
             try {
                 ArrayList list1 = new ArrayList();
-                int general_image_details_id = Integer.parseInt(request.getParameter("general_image_details_id"));
-                String image_name = request.getParameter("image_name");
-                String[] imageName = image_name.split(",");
                 int survey_id = Integer.parseInt(request.getParameter("survey_id"));
+                int general_image_details_id = Integer.parseInt(request.getParameter("general_image_details_id"));
+//                String image_name = request.getParameter("image_name");
+                String image_name = newSwitchingPointSurveyModel.getImageList(survey_id);
+                String[] imageName = image_name.split(",");
+
                 String destination = newSwitchingPointSurveyModel.getdestinationPath(general_image_details_id, image_name);
                 if (destination.equals("") || destination.isEmpty()) {
                     list1.add(destination + "//" + "no_image.png");
@@ -576,12 +575,13 @@ public class NewSwitchingPointSurveyController extends HttpServlet {
                     //path = destination + "\\" + survey_id + "\\" + image_name;
 
                     for (int i = 0; i < imageName.length; i++) {
-                        File f = new File(destination + "\\switching_point\\" + imageName[i]);
-                        if (f.exists()) {
-                            list1.add(destination + "\\switching_point\\" + imageName[i]);
-                        } else {
-                            list1.add(destination + "//" + "no_image.png");
+                        String imageDestination = destination + "\\switching_point\\" +"survey_id_"+survey_id+"\\"+ imageName[i];
+                        File f = new File(imageDestination);
+                        if (!f.exists()) {
+                            imageDestination = destination + "//" + "no_image.png";
                         }
+                        imageDestination = imageDestination.replace("\\", "$");
+                        list1.add(imageDestination);
                     }
                 }
                 request.setAttribute("imageList", list1);
@@ -842,7 +842,6 @@ public class NewSwitchingPointSurveyController extends HttpServlet {
             servletOutputStream.close();*/
 
             //int a=newSwitchingPointSurveyModel.insertGeneral_Image_Details(pdfFileName,"C:/ssadvt_repository/meter_survey/survey_Image_pdf/");                        
-
             return;
         }
 
@@ -898,7 +897,7 @@ public class NewSwitchingPointSurveyController extends HttpServlet {
         // Logic to show data in the table.
         //List<SurveyBean> surveyTypeList =  newSwitchingPointSurveyModel.showData(lowerLimit, noOfRowsToDisplay, searchPoleNo, searchIvrsNo);
         List<TubeWellSurveyBean> surveyTypeList = newSwitchingPointSurveyModel.showData(lowerLimit, noOfRowsToDisplay, searchPoleNo, searchIvrsNo, searchFileNo, searchPageNo, searchByDate, "", countnum, "", searchMeterFunctional, searchFeeder, searchTypeOfConnection, searchToDate);
-        lowerLimit = lowerLimit + surveyTypeList.size();
+      lowerLimit = lowerLimit + surveyTypeList.size();
         noOfRowsTraversed = surveyTypeList.size();
         // Now set request scoped attributes, and then forward the request to view.
         request.setAttribute("lowerLimit", lowerLimit);

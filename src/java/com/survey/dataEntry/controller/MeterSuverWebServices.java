@@ -803,6 +803,7 @@ public class MeterSuverWebServices {
         org.json.JSONArray jsonArraay = jsn.getJSONArray("image");
         try {
             int size = jsonArraay.length();
+            String path="";
             int survey_gen_image_map_id = 0;
             for (int i = 0; i < size; i++) {
                 org.json.JSONObject jsonObject = jsonArraay.getJSONObject(i);
@@ -811,8 +812,13 @@ public class MeterSuverWebServices {
                 String image_type = jsonObject.getString("type");
                 int image_type_id = wsSurveyModel.getImage_type_id(image_type);
                 try {
-                    String path = "C:/ssadvt_repository/meter_survey/survey_image/tube_well/survey_id_" + survey_id1;
-
+                    if(survey_type.equals("Switching Point")){
+                    path = "C:/ssadvt_repository/meter_survey/survey_image/switching_point/survey_id_" + survey_id1;
+                    }
+                    
+                    if(survey_type.equals("Tube Well")){
+                    path = "C:/ssadvt_repository/meter_survey/survey_image/tube_well/survey_id_" + survey_id1;
+                    }
                     wsSurveyModel.makeDirectory(path);
 
                     String file = path + "/" + fileName;
@@ -1210,12 +1216,12 @@ public class MeterSuverWebServices {
                         fileName = "out.jpg";
                     }
 
-                    destination_path = wsSurveyModel.getDestinationPath("DetailList");
-                    if(destination_path==null || destination_path=="" ){
-                                 destination_path="C:\\ssadvt_repository\\meter_survey\\survey_image";
-                    }
+//                    destination_path = wsSurveyModel.getDestinationPath("DetailList");
+//                    if(destination_path==null || destination_path=="" ){
+//                                 destination_path="C:\\ssadvt_repository\\meter_survey\\survey_image";
+//                    }
                     fileNameArray[i - 1] = fileName;
-                     destination_path         =  "C:\\ssadvt_repository\\meter_survey\\survey_image";
+                     destination_path         =  "C:/ssadvt_repository/meter_survey/survey_image";
                     imagePathMeterNo = destination_path + "/primary_survey_images/imagePathMeterNo/" + Year + "/" + Month + "/" + day + "/" + no_of_rows;
 
                     wsSurveyModel.makeDirectory(imagePathMeterNo);
@@ -1267,7 +1273,7 @@ public class MeterSuverWebServices {
 
 //                    destination_path = wsSurveyModel.getDestinationPath("DetailList");
                     fileNameArray[i - 1] = fileName;
-                                   destination_path         =  "C:\\ssadvt_repository\\meter_survey\\survey_image";
+                                   destination_path         =  "C:/ssadvt_repository/meter_survey/survey_image";
                     image_of_meter_reading = destination_path + "/primary_survey_images/image_of_meter_reading/" + Year + "/" + Month + "/" + day + "/" + no_of_rows;
 
                     wsSurveyModel.makeDirectory(image_of_meter_reading);
@@ -1319,4 +1325,171 @@ public class MeterSuverWebServices {
         return "success";
     }
 
+    // primary meter survey data get
+    @POST
+    @Path("/circuit_data")
+    @Produces(MediaType.APPLICATION_JSON)//http://192.168.1.15:8084/meter_survey/api/service/hello
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String circuitData(JSONObject json) throws Exception {
+        String responseCheck = "Data success fail";
+          String destination_path = "";
+        try {
+            wsSurveyModel = new MeterSurveyWebServicesModel();
+            wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
+            wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
+            wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
+            wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
+            wsSurveyModel.setConnection();
+
+            // JSONObject json = new JSONObject(inputJsonObj);
+            JSONObject json1 = new JSONObject();
+            JSONObject json2 = new JSONObject();
+//        JSONObject json3 = new JSONObject();
+//        JSONObject json4 = new JSONObject();
+//        JSONObject json5 = new JSONObject();
+
+//image part start
+            int no_of_rows = 0;
+            int dataBase = 0;
+            String Year = "";
+            String Month = "";
+            String day = "";
+
+            String imagefirstpolePath = "";
+            String imagelastpolePath = "";
+            json1 = json.getJSONObject("text");
+            json2 = json.getJSONObject("image");
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+            LocalDateTime now = LocalDateTime.now();
+            System.out.println(dtf.format(now));
+
+            String date_check = dtf.format(now);
+
+            String date[] = date_check.split("/");
+            day = date[2];
+            Month = date[1];
+            Year = date[0];
+            OutputStream out = null;
+            no_of_rows = wsSurveyModel.getNoOfRowsCircuit();
+            no_of_rows = no_of_rows + 1;
+            List<File> fileList = new ArrayList<File>();
+
+            try {
+
+                //int size = Integer.parseInt(json2.get("imgnamemeternumber").toString());
+                int size = 1;
+              
+                String fileNameArray[] = new String[size];
+
+                String fileName = "";
+                for (int i = 1; i <= size; i++) {
+
+//                    String getBackEncodedString = json2.get("byte_arrmeternumberimage" + i).toString();
+                    String getBackEncodedString = json2.get("byte_imageoffirstpole").toString();
+                    byte[] imageAsBytes = new BASE64Decoder().decodeBuffer(getBackEncodedString);
+//                    fileName = (json2.get("imgnamemeternumber" + i).toString());
+                    fileName = (json2.get("imgnameoffirstpole").toString());
+                    fileNameArray[i - 1] = fileName;
+                    if (fileName.isEmpty()) {
+                        fileName = "out.jpg";
+                    }
+
+//                    destination_path = wsSurveyModel.getDestinationPath("DetailList");
+//                    if(destination_path==null || destination_path=="" ){
+//                                 destination_path="C:/ssadvt_repository/meter_survey/survey_image";
+//                    }
+                    fileNameArray[i - 1] = fileName;
+                     destination_path         =  "C:/ssadvt_repository/meter_survey/survey_image";
+                    imagefirstpolePath = destination_path + "/circuit_survey_images/image_firstPole/" + Year + "/" + Month + "/" + day + "/" + no_of_rows;
+
+                    wsSurveyModel.makeDirectory(imagefirstpolePath);
+                    String file = imagefirstpolePath + "/" + fileName;
+                    fileList.add(new File(file));
+                    out = new FileOutputStream(file);
+                    out.write(imageAsBytes);
+                    out.close();
+
+//                dataSendModel.insertImageRecord(fileName);
+                    System.out.println("image insert ");
+
+                }
+
+            } catch (Exception e) {
+                System.out.println("Exception" + e);
+            }
+            try {
+                wsSurveyModel.setConnection();
+            } catch (Exception ex) {
+                System.out.println("ERROR: in trafficSignalData : " + ex);
+            }
+
+////image
+            OutputStream out1 = null;
+            no_of_rows = wsSurveyModel.getNoOfRowsCircuit();
+            no_of_rows = no_of_rows + 1;
+            List<File> fileList1 = new ArrayList<File>();
+
+            try {
+
+                // int size = Integer.parseInt(json2.get("imgnamemeterreading").toString());
+                int size = 1;
+              
+                String fileNameArray[] = new String[size];
+
+                String fileName = "";
+                for (int i = 1; i <= size; i++) {
+
+//                    String getBackEncodedString = json2.get("byte_arrmeterreadingimage" + i).toString();
+                    String getBackEncodedString = json2.get("byte_imageoflastpole").toString();
+                    byte[] imageAsBytes = new BASE64Decoder().decodeBuffer(getBackEncodedString);
+//                    fileName = (json2.get("imgnamemeterreading" + i).toString());
+                    fileName = (json2.get("imgnameoflastpole").toString());
+                    fileNameArray[i - 1] = fileName;
+                    if (fileName.isEmpty()) {
+                        fileName = "out.jpg";
+                    }
+
+//                    destination_path = wsSurveyModel.getDestinationPath("DetailList");
+                    fileNameArray[i - 1] = fileName;
+                                   destination_path         =  "C:/ssadvt_repository/meter_survey/survey_image";
+                    imagelastpolePath = destination_path + "/circuit_survey_images/image_lastPole/" + Year + "/" + Month + "/" + day + "/" + no_of_rows;
+
+                    wsSurveyModel.makeDirectory(imagelastpolePath);
+                    String file = imagelastpolePath + "/" + fileName;
+                    fileList.add(new File(file));
+                    out = new FileOutputStream(file);
+                    out.write(imageAsBytes);
+                    out.close();
+
+//                dataSendModel.insertImageRecord(fileName);
+                    System.out.println("image insert ");
+
+                }
+
+            } catch (Exception e) {
+                System.out.println("Exception" + e);
+            }
+            try {
+                wsSurveyModel.setConnection();
+            } catch (Exception ex) {
+                System.out.println("ERROR: in trafficSignalData : " + ex);
+            }
+
+///image end
+            dataBase = wsSurveyModel.insertRecordPrimary(json1, imagefirstpolePath, imagelastpolePath);
+
+            if (dataBase > 0) {
+                responseCheck = "success";
+
+            } else {
+                responseCheck = "Data success fail";
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Exception in web service Controller: " + ex);
+        }
+        return responseCheck;
+    }
+
+    // primary meter survey data get end
 }

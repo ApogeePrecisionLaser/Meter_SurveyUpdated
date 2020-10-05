@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -135,7 +136,7 @@ public class PoleDetailTypeModel {
 
     public List<String> getAreaName(String q, String ward_no) {
         List<String> list = new ArrayList<String>();
-        String query = " SELECT area_name FROM area WHERE ward_id = (select ward_id from ward where ward_no = ?) GROUP BY area_name ORDER BY area_name ";
+        String query = " SELECT area_name FROM area,ward_m WHERE ward_id = (select ward_id from ward_m where ward_no_m = ?) GROUP BY area_name ORDER BY area_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, ward_no);
@@ -160,7 +161,7 @@ public class PoleDetailTypeModel {
 
     public List<String> getWard_No(String q, String city) {
         List<String> list = new ArrayList<String>();
-        String query = " SELECT ward_no FROM ward WHERE city_id = (SELECT city_id FROM city WHERE city_name = ?) ORDER BY ward_no ";
+        String query = " SELECT ward_no FROM ward_m WHERE city_id = (SELECT city_id FROM city WHERE city_name = ?) ORDER BY ward_no_m ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, city);
@@ -168,7 +169,7 @@ public class PoleDetailTypeModel {
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String ward_no = rset.getString("ward_no");
+                String ward_no = rset.getString("ward_no_m");
                 if (ward_no.startsWith(q)) {
                     list.add(ward_no);
                     count++;
@@ -281,8 +282,8 @@ public class PoleDetailTypeModel {
 
     public int getAreaId(String city, String ward_no, String area_name) {
         int area_id = 0;
-        String query = " SELECT area_id FROM area WHERE area_name = ? "
-                + "AND  ward_id = (SELECT ward_id FROM ward WHERE ward_no = ? AND city_id = (SELECT city_id FROM city WHERE city_name = ?))";
+        String query = " SELECT area_id FROM area,ward_m WHERE area_name = ? "
+                + "AND  ward_id = (SELECT ward_id FROM ward_m WHERE ward_no_m = ? AND city_id = (SELECT city_id FROM city WHERE city_name = ?))";
         if (ward_no.isEmpty() || ward_no == null) {
             query = "SELECT area_id FROM area WHERE area_name = ? ";
         }
@@ -371,8 +372,33 @@ public class PoleDetailTypeModel {
         }
         return list;
     }
-    
-
+    //getCircuitName
+   public List<String> getCircuitName(String q, String switching_point_name) {
+        List<String> list = new ArrayList<String>();
+        PreparedStatement pstmt;
+        String query = "SELECT  c.circuit_name FROM switching_point_detail AS spd ,circuit AS c "
+                + " WHERE spd.switching_point_detail_id =c.switching_point_detail_id  and spd.switching_point_name=? and spd.active = 'Y' group by  circuit_name order by circuit_name";
+        try {
+            pstmt = (PreparedStatement) connection.prepareStatement(query);
+            pstmt.setString(1, switching_point_name);
+            ResultSet rset = pstmt.executeQuery();
+            int count = 0;
+            q = q.trim();
+            while (rset.next()) {
+                String ward_no = rset.getString("circuit_name");
+                if (ward_no.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(ward_no);
+                    count++;
+                }
+            }
+            if (count == 0) {
+                list.add("No such switching point name exists.");
+            }
+        } catch (Exception e) {
+            System.out.println("getSwitchingPointName ERROR inside WardTypeModel - " + e);
+        }
+        return list;
+    }
     public List<String> getMountingType(String q) {
         List<String> list = new ArrayList<String>();
         String query = " SELECT mounting_type FROM mounting_type GROUP BY mounting_type ORDER BY mounting_type ";
@@ -605,6 +631,25 @@ public class PoleDetailTypeModel {
         }
         return switching_id_rev_no;
     }
+       public int getCircuitDetailId(String circuitName, int feeder_id,int switching_point_id) {
+      int  circuit_id_rev_no = 0;
+//        String query = " SELECT switching_point_detail_id, switching_rev_no FROM switching_point_detail spd ,feeder fd where spd.feeder_id=fd.feeder_id  and  switching_point_name=?"
+//                + " and fd.feeder_id=? group by switching_point_detail_id ";
+ String query = " SELECT id FROM circuit where circuit_name=?"
+                + " and switching_point_detail_id=? group by id ";        
+try {
+            java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setString(1, circuitName);
+            pstmt.setInt(2, switching_point_id);
+//            pstmt.setInt(2, feeder_id);
+            ResultSet rset = pstmt.executeQuery();
+            rset.next();
+            circuit_id_rev_no = rset.getInt("id");
+        } catch (Exception e) {
+            System.out.println("PoleDEtailTypeModel getSourceWattageId() Error: " + e);
+        }
+        return circuit_id_rev_no;
+    }
 
     public int getPoleId() {
         int pole_id = 0;
@@ -640,10 +685,16 @@ public class PoleDetailTypeModel {
 
     public int insertRecord(PoleDetailTypeBean poleTypeBean) {
 
-        String query = "INSERT INTO pole (pole_id, pole_type_id, pole_span, pole_height, mounting_height, created_by, remark, mounting_type_id, "
+//        String query = "INSERT INTO pole (pole_id, pole_type_id, pole_span, pole_height, mounting_height, created_by, remark, mounting_type_id, "
+//                + " pole_no, gps_code, max_avg_lux_level, min_avg_lux_level, avg_lux_level, standard_lux_level, "
+//                + " is_working,switching_point_detail_id,isSwitchingPoint, area_id, road_id, road_rev_no, traffic_type_id, switching_rev_no) "
+//                + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?) ";
+//        String query2 = "INSERT INTO pole_light_type_mapping (pole_id, light_type_id, quantity)"
+//                + " VALUES (?,?,?) ";
+   String query = "INSERT INTO pole (pole_id, pole_type_id, pole_span, pole_height, mounting_height, created_by, remark, mounting_type_id, "
                 + " pole_no, gps_code, max_avg_lux_level, min_avg_lux_level, avg_lux_level, standard_lux_level, "
-                + " is_working,switching_point_detail_id,isSwitchingPoint, area_id, road_id, road_rev_no, traffic_type_id, switching_rev_no) "
-                + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?) ";
+                + " is_working,switching_point_detail_id,isSwitchingPoint, area_id, road_id, road_rev_no, traffic_type_id, switching_rev_no,circuit_id) "
+                + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?) ";
         String query2 = "INSERT INTO pole_light_type_mapping (pole_id, light_type_id, quantity)"
                 + " VALUES (?,?,?) ";
         int pole_id = getPoleId();
@@ -653,7 +704,7 @@ public class PoleDetailTypeModel {
         int rowsAffected = 0;
         try {
             connection.setAutoCommit(false);
-            java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
+            java.sql.PreparedStatement pstmt = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, pole_id + 1);
             pstmt.setInt(2, poleTypeBean.getPole_type_id());
             pstmt.setString(3, poleTypeBean.getPole_span());
@@ -679,6 +730,7 @@ public class PoleDetailTypeModel {
             pstmt.setInt(20, poleTypeBean.getRoad_rev_no());
             pstmt.setInt(21, poleTypeBean.getTraffic_type_id());
             pstmt.setInt(22, poleTypeBean.getSwitching_rev_no());
+            pstmt.setInt(23, poleTypeBean.getCircuit_id());
             //pstmt.setString(23, poleTypeBean.getPole_no_client());
             rowsAffected = pstmt.executeUpdate();
 
@@ -698,7 +750,7 @@ public class PoleDetailTypeModel {
 
                             int light_type_id = getSourceWattageId(source_wattage[i]);
 
-                            pstmt = connection.prepareStatement(query2);
+                            pstmt = connection.prepareStatement(query2,Statement.RETURN_GENERATED_KEYS);
                             pstmt.setInt(1, max_pole_id);
                             pstmt.setInt(2, light_type_id);
                             pstmt.setInt(3, Integer.parseInt(poleTypeBean.getQuantity()[i]));
@@ -1081,11 +1133,13 @@ public class PoleDetailTypeModel {
                 + "    LEFT JOIN switching_point_detail spd ON p.switching_point_detail_id = "
                 + "  spd.switching_point_detail_id AND spd.active='Y' "
                 + " left join feeder f  on spd.feeder_id=f.feeder_id, "
-                + " area a, road r, traffic_type t, road_category rc, road_use ru, ward w, city cty "
+//                + " area a, road r, traffic_type t, road_category rc, road_use ru, ward w, city cty "
+                + " area a, road r, traffic_type t, road_category rc, road_use ru, ward_m w, city cty "
                 + " where p.active = 'Y' AND  "
                 + " p.area_id = a.area_id And "
-                + " a.ward_id = w.ward_id AND "
-                + " w.city_id = cty.city_id AND "
+//                + " a.ward_id = w.ward_id AND "
+                 + " a.ward_id_m = w.ward_id_m AND "
+//                + " w.city_id = cty.city_id AND "
                 + " p.road_id = r.road_id And "
                 + " p.road_rev_no = r.road_rev_no And "
                 + " r.road_use_id = ru.road_use_id And "
@@ -1130,7 +1184,7 @@ public class PoleDetailTypeModel {
                 + " WHERE p.pole_type_id = pt.pole_type_id "
                 + " AND p.mounting_type_id = m.mounting_type_id "
                 + " AND p.switching_point_detail_id = spd.switching_point_detail_id and spd.feeder_id=f.feeder_id and spd.feeder_id=f.feeder_id and lt.wattage_id=w.wattage_id "  */
-                " SELECT a.area_name, w.ward_no, r.road_name, t.traffic_type, ru.road_use, rc.category_name, cty.city_name , "
+                " SELECT a.area_name, w.ward_no_m, r.road_name, t.traffic_type, ru.road_use, rc.category_name, cty.city_name , "
                 + "    (SELECT GROUP_CONCAT(CAST((concat(spltm.mapping_type_id,'-',spltm.light_type_id))   AS CHAR CHARACTER SET utf8) SEPARATOR '__') "
                 + " FROM pole_light_type_mapping AS spltm,light_type lt,light_source_type   AS l,wattage AS w  WHERE spltm.light_type_id=lt.light_type_id "
                 + " AND p.pole_id = spltm.pole_id and  p.pole_rev_no = spltm.pole_rev_no  AND lt.wattage_id=w.wattage_id "
@@ -1156,11 +1210,13 @@ public class PoleDetailTypeModel {
                 + "    LEFT JOIN switching_point_detail spd ON p.switching_point_detail_id = "
                 + "  spd.switching_point_detail_id AND spd.active='Y' "
                 + " left join feeder f  on spd.feeder_id=f.feeder_id, "
-                + " area a, road r, traffic_type t, road_category rc, road_use ru, ward w, city cty "
+//                + " area a, road r, traffic_type t, road_category rc, road_use ru, ward w, city cty "
+                   + " area a, road r, traffic_type t, road_category rc, road_use ru, ward_m w, city cty "
                 + " where p.active = 'Y' AND "
                 + " p.area_id = a.area_id And "
-                + " a.ward_id = w.ward_id AND "
-                + " w.city_id = cty.city_id AND "
+//                + " a.ward_id = w.ward_id AND "
+                  + " a.ward_id_m = w.ward_id_m AND "
+               // + " w.city_id = cty.city_id AND "
                 + " p.road_id = r.road_id And "
                 + " p.road_rev_no = r.road_rev_no And "
                 + " r.road_use_id = ru.road_use_id And "
@@ -1170,7 +1226,7 @@ public class PoleDetailTypeModel {
                 + " AND IF('" + searchMountingType + "' = '', p.pole_id LIKE '%%', m.mounting_type =? ) "
                 + " AND IF('" + searchSwitchingPoint + "' = '', spd.switching_point_name LIKE '%%', spd.switching_point_name =? ) "
                 + " AND IF('" + searchPoleNo + "' = '', p.pole_no LIKE '%%', p.pole_no =? ) "
-                + " ORDER BY p.switching_point_detail_id "
+                + " ORDER BY p.switching_point_detail_id desc"
                 + " LIMIT " + lowerLimit + "," + noOfRowsToDisplay;
 
         /*" SELECT p.pole_id, pt.pole_type,p.pole_span,p.pole_height,p.mounting_height, DATE_FORMAT(p.created_date,'%d-%m-%Y') AS created_date, "
@@ -1233,7 +1289,7 @@ public class PoleDetailTypeModel {
                 sourceType.setRoad_use(rset.getString("road_use"));
                 sourceType.setRoad_category(rset.getString("category_name"));
                 sourceType.setCity(rset.getString("city_name"));
-                sourceType.setWard_no(rset.getString("ward_no"));
+                sourceType.setWard_no(rset.getString("ward_no_m"));
                 list.add(sourceType);
             }
         } catch (Exception e) {
@@ -1273,7 +1329,7 @@ public class PoleDetailTypeModel {
 
     public List<PoleDetailTypeBean> showAllData(String searchPoleType, String searchMountingType, String searchSwitchingPoint,String searchPoleNo) {
         List<PoleDetailTypeBean> listAll = new ArrayList<PoleDetailTypeBean>();
-        String query = " SELECT a.area_name, w.ward_no, r.road_name, t.traffic_type, ru.road_use, rc.category_name, cty.city_name , "
+        String query = " SELECT a.area_name, w.ward_no_m, r.road_name, t.traffic_type, ru.road_use, rc.category_name, cty.city_name , "
                 + "    (SELECT GROUP_CONCAT(CAST((concat(spltm.mapping_type_id,'-',spltm.light_type_id))   AS CHAR CHARACTER SET utf8) SEPARATOR '__') "
                 + " FROM pole_light_type_mapping AS spltm,light_type lt,light_source_type   AS l,wattage AS w  WHERE spltm.light_type_id=lt.light_type_id "
                 + " AND p.pole_id = spltm.pole_id and  p.pole_rev_no = spltm.pole_rev_no  AND lt.wattage_id=w.wattage_id "
@@ -1299,11 +1355,13 @@ public class PoleDetailTypeModel {
                 + "    LEFT JOIN switching_point_detail spd ON p.switching_point_detail_id = "
                 + "  spd.switching_point_detail_id AND p.switching_rev_no = spd.switching_rev_no "
                 + " left join feeder f  on spd.feeder_id=f.feeder_id, "
-                + " area a, road r, traffic_type t, road_category rc, road_use ru, ward w, city cty "
+//                + " area a, road r, traffic_type t, road_category rc, road_use ru, ward w, city cty "
+                  + " area a, road r, traffic_type t, road_category rc, road_use ru, ward_m w, city cty "
                 + " where p.active = 'Y' AND "
                 + " p.area_id = a.area_id And "
-                + " a.ward_id = w.ward_id AND "
-                + " w.city_id = cty.city_id AND "
+//                + " a.ward_id = w.ward_id AND "
+                + " a.ward_id_m = w.ward_id_m AND "
+                //+ " w.city_id = cty.city_id AND "
                 + " p.road_id = r.road_id And "
                 + " p.road_rev_no = r.road_rev_no And "
                 + " r.road_use_id = ru.road_use_id And "

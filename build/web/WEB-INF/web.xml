@@ -217,7 +217,7 @@
         <url-pattern>/cityTypeCont</url-pattern>
     </servlet-mapping>
     <!--end of City Type Controller -->
-    <!--    <servlet>
+<!--        <servlet>
         <servlet-name>servlet Adapter</servlet-name>
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
@@ -537,6 +537,20 @@
         <servlet-name>primary_survey</servlet-name>
         <url-pattern>/primary_survey</url-pattern>
     </servlet-mapping>
+    
+     <servlet>
+        <servlet-name>circuit_survey</servlet-name>
+        <jsp-file>/view/dataEntry/circuit_survey.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>circuit_survey</servlet-name>
+        <url-pattern>/circuit_survey</url-pattern>
+    </servlet-mapping>
+    
+     <servlet>
+        <servlet-name>CircuitSurveyController</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.CircuitSurveyController</servlet-class>
+    </servlet>
     <!--Start of Pole Type Controller -->
     <servlet>
         <servlet-name>Pole_Type_View</servlet-name>
@@ -911,6 +925,10 @@
     <servlet-mapping>
         <servlet-name>PopulateTables</servlet-name>
         <url-pattern>/PopulateTables</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CircuitSurveyController</servlet-name>
+        <url-pattern>/CircuitSurveyController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>PrimarySurveyController</servlet-name>
@@ -1555,6 +1573,25 @@
         <url-pattern>/MultipleImagesurvey</url-pattern>
     </servlet-mapping>
     
+    
+    
+       <servlet>
+        <servlet-name>MultipleImagesurveycircuit</servlet-name>
+        <jsp-file>/view/dataEntry/MultipleImagesurveycircuit.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MultipleImagesurveycircuit</servlet-name>
+        <url-pattern>/MultipleImagesurveycircuit</url-pattern>
+    </servlet-mapping>
+    
+     <servlet>
+        <servlet-name>MultipleImagesurvey_last</servlet-name>
+        <jsp-file>/view/dataEntry/MultipleImagesurvey_last.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MultipleImagesurvey_last</servlet-name>
+        <url-pattern>/MultipleImagesurvey_last</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>dataEntry jFreeChart</servlet-name>
         <servlet-class>com.survey.general.controller.JFreeChart</servlet-class>
@@ -1575,3 +1612,4 @@
         <url-pattern>/MultipleImagesurvey_reading</url-pattern>
     </servlet-mapping>
 </web-app>
+

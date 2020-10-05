@@ -24,6 +24,8 @@ public class PoleDetailTypeBean {
     private String active;
     private String remark;
     private String is_switch_point;
+    private String is_circuit;
+    private String circuit_name;
     private String feeder_name;
     private int light_type_id;
     private String pole_no;
@@ -46,6 +48,7 @@ public class PoleDetailTypeBean {
     private double latitude;
     private double longitude;
     private int switch_point_detail_id;
+     private int circuit_id;
     private String map_id;
     private int area_id;
     private int road_id;
@@ -64,6 +67,34 @@ public class PoleDetailTypeBean {
     private String[] client_pole_no_id;  // for check uncheck
     private String[] client_pole_no_edit;
 
+    public int getCircuit_id() {
+        return circuit_id;
+    }
+
+    public void setCircuit_id(int circuit_id) {
+        this.circuit_id = circuit_id;
+    }
+
+    
+    
+    public String getIs_circuit() {
+        return is_circuit;
+    }
+
+    public void setIs_circuit(String is_circuit) {
+        this.is_circuit = is_circuit;
+    }
+
+    public String getCircuit_name() {
+        return circuit_name;
+    }
+
+    public void setCircuit_name(String circuit_name) {
+        this.circuit_name = circuit_name;
+    }
+
+    
+    
     public String[] getClient_pole_no_edit() {
         return client_pole_no_edit;
     }

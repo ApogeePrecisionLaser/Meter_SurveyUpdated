@@ -270,8 +270,13 @@ public class SwitchingPointSurveyController extends HttpServlet {
             }
 
             //       String city = request.getParameter("zone");
-            String road_category = request.getParameter("road_category").trim();
-            String road_use = request.getParameter("road_use").trim();
+            String road_category="";
+            // road_category = request.getParameter("road_category").trim();
+             String road_use="";
+//             road_use = request.getParameter("road_use");
+//             if(road_use==null || road_use.equals("")){
+//                  road_use="";
+//             }
             String fuseY = request.getParameter("fuseY");
             String fuseN = request.getParameter("fuseN");
             String contacterY = request.getParameter("contacterY");
@@ -300,88 +305,108 @@ public class SwitchingPointSurveyController extends HttpServlet {
             } else {
                 surveyTypeBean.setTimer("Y");
             }
+            String feder="";
+            String zone_check="";
+            String division_check ="";
+            feder=request.getParameter("feeder");
+            zone_check=request.getParameter("zone");
+            division_check= request.getParameter("division");
             surveyTypeBean.setIs_on_pole(request.getParameter("is_on_pole"));
-            surveyTypeBean.setFeeder_id(surveyTypeModel.getFeeder_id(request.getParameter("feeder").trim(), request.getParameter("zone").trim(), request.getParameter("division").trim()));
-            surveyTypeBean.setArea_id(surveyTypeModel.getAreaId(request.getParameter("city").trim(), request.getParameter("ward_no").trim(), request.getParameter("area_name").trim()));
-            surveyTypeBean.setSwitching_point_name(request.getParameter("switching_point_name").trim());
-            surveyTypeBean.setGps_code_s(request.getParameter("gps_code_s").trim());
-            surveyTypeBean.setControl_mechanism_id(surveyTypeModel.getControlId(request.getParameter("control_mechanism_type").trim()));
-            surveyTypeBean.setTraffic_type_id(surveyTypeModel.getTrafficId(request.getParameter("traffic_type").trim()));
+            surveyTypeBean.setFeeder_id(surveyTypeModel.getFeeder_id(feder,zone_check,division_check));
+            surveyTypeBean.setArea_id(surveyTypeModel.getAreaId(request.getParameter("city"), request.getParameter("ward_no"), request.getParameter("area_name")));
+            surveyTypeBean.setSwitching_point_name(request.getParameter("switching_point_name"));
+            surveyTypeBean.setGps_code_s(request.getParameter("gps_code_s"));
+            surveyTypeBean.setControl_mechanism_id(surveyTypeModel.getControlId(request.getParameter("control_mechanism_type")));
+            surveyTypeBean.setTraffic_type_id(surveyTypeModel.getTrafficId(request.getParameter("traffic_type")));
 
-            String road_id_rev_no = surveyTypeModel.getRoadId_Rev(request.getParameter("road_name").trim(), road_category, road_use);
+            String road_id_rev_no = surveyTypeModel.getRoadId_Rev(request.getParameter("road_name"), road_category, road_use);
 
             if (road_id_rev_no != null && !road_id_rev_no.isEmpty()) {
                 surveyTypeBean.setRoad_id(Integer.parseInt(road_id_rev_no.split("_")[0]));
                 surveyTypeBean.setRoad_rev_no(Integer.parseInt(road_id_rev_no.split("_")[1]));
             }
             //        surveyTypeBean.setRoad_id(surveyTypeModel.getRoadId(request.getParameter("road_name").trim(), road_category, road_use));
-            surveyTypeBean.setPhase(Integer.parseInt(request.getParameter("phase").trim()));
-            surveyTypeBean.setIs_working(request.getParameter("is_working").trim());
-            surveyTypeBean.setRemark(request.getParameter("remark").trim());
+           String phase_check=request.getParameter("phase");
+           if(phase_check==null || phase_check.equals("")){
+              surveyTypeBean.setPhase(0);
+           }else{
+            surveyTypeBean.setPhase(Integer.parseInt(phase_check));
+           }
+            surveyTypeBean.setIs_working(request.getParameter("is_working"));
+            surveyTypeBean.setRemark(request.getParameter("remark"));
             // surveyTypeBean.setFuse_id(surveyTypeModel.getFuseId(request.getParameter("fuse_type").trim()));
-            surveyTypeBean.setFuse_quantity(request.getParameter("fuse_quantity").trim());
+            surveyTypeBean.setFuse_quantity(request.getParameter("fuse_quantity"));
             // surveyTypeBean.setContacter();
             // surveyTypeBean.setContacter_id(surveyTypeModel.getContacterId(request.getParameter("contacter_type").trim()));
             //   surveyTypeBean.setContacter_quantity(request.getParameter("contacter_quantity").trim());
             //  surveyTypeBean.setMccb();
             //  surveyTypeBean.setMccb_id(surveyTypeModel.getMccbId(request.getParameter("mccb_type").trim()));
-            surveyTypeBean.setMccb_quantity(request.getParameter("mccb_quantity").trim());
+            surveyTypeBean.setMccb_quantity(request.getParameter("mccb_quantity"));
             // surveyTypeBean.setTimer();
             // surveyTypeBean.setTimer_id(surveyTypeModel.getTimerId(request.getParameter("timer_type").trim()));
             // surveyTypeBean.setTimer_quantity(request.getParameter("timer_quantity").trim());
-            if (request.getParameter("logitude") != null && request.getParameter("logitude").trim().isEmpty()) {
+            if (request.getParameter("logitude") != null && !request.getParameter("logitude").trim().isEmpty()) {
                 surveyTypeBean.setLongitude(Double.parseDouble(request.getParameter("logitude").trim()));
             }
-            if (request.getParameter("lattitude") == null && request.getParameter("lattitude").trim().isEmpty()) {
+            if (request.getParameter("lattitude")!= null && !request.getParameter("lattitude").trim().isEmpty()) {
                 surveyTypeBean.setLattitude(Double.parseDouble(request.getParameter("lattitude").trim()));
             }
 
 
-            surveyTypeBean.setIvrs_no(request.getParameter("ivrs_no").trim());
-            surveyTypeBean.setMeter_no_s(request.getParameter("meter_no_s").trim());
-            surveyTypeBean.setService_conn_no(request.getParameter("service_conn_no").trim());
-            surveyTypeBean.setIsCheckedTrue(request.getParameter("isCheckedTrue").trim());
-            surveyTypeBean.setFuse1(request.getParameter("fuse_1").trim());
-            surveyTypeBean.setFuse2(request.getParameter("fuse_2").trim());
-            surveyTypeBean.setFuse3(request.getParameter("fuse_3").trim());
-            surveyTypeBean.setMccb1(request.getParameter("mccb_1").trim());
-            surveyTypeBean.setMccb2(request.getParameter("mccb_2").trim());
-            surveyTypeBean.setMccb3(request.getParameter("mccb_3").trim());
+            surveyTypeBean.setIvrs_no(request.getParameter("ivrs_no"));
+            surveyTypeBean.setMeter_no_s(request.getParameter("meter_no_s"));
+            surveyTypeBean.setService_conn_no(request.getParameter("service_conn_no"));
+            surveyTypeBean.setIsCheckedTrue(request.getParameter("isCheckedTrue"));
+            surveyTypeBean.setFuse1(request.getParameter("fuse_1"));
+            surveyTypeBean.setFuse2(request.getParameter("fuse_2"));
+            surveyTypeBean.setFuse3(request.getParameter("fuse_3"));
+            surveyTypeBean.setMccb1(request.getParameter("mccb_1"));
+            surveyTypeBean.setMccb2(request.getParameter("mccb_2"));
+            surveyTypeBean.setMccb3(request.getParameter("mccb_3"));
             //surveyTypeBean.setContacter_type(request.getParameter("contacter_type").trim());
-            surveyTypeBean.setContacter_capacity(request.getParameter("contacter_capacity").trim());
-            surveyTypeBean.setContacter_make(request.getParameter("contacter_make").trim());
-            surveyTypeBean.setFuse_id1(surveyTypeModel.getFuseId(request.getParameter("fuse_type1").trim()));
-            surveyTypeBean.setFuse_id2(surveyTypeModel.getFuseId(request.getParameter("fuse_type2").trim()));
-            surveyTypeBean.setFuse_id3(surveyTypeModel.getFuseId(request.getParameter("fuse_type3").trim()));
-            surveyTypeBean.setMccb_id1(surveyTypeModel.getMccbId(request.getParameter("mccb_type3").trim()));
-            surveyTypeBean.setMccb_id2(surveyTypeModel.getMccbId(request.getParameter("mccb_type2").trim()));
-            surveyTypeBean.setMccb_id3(surveyTypeModel.getMccbId(request.getParameter("mccb_type3").trim()));
-            surveyTypeBean.setContacter_id(surveyTypeModel.getContacterId(request.getParameter("contacter_type").trim()));
-            surveyTypeBean.setAuto_switch_type_id(surveyTypeModel.getSwitchId(request.getParameter("auto_switch_type").trim()));
-            surveyTypeBean.setMain_switch_type_id(surveyTypeModel.getSwitchId(request.getParameter("main_switch_type").trim()));
-            surveyTypeBean.setEnclosure_type_id(surveyTypeModel.getEnclosureTypeId(request.getParameter("enclosure_type").trim()));
+            surveyTypeBean.setContacter_capacity(request.getParameter("contacter_capacity"));
+            surveyTypeBean.setContacter_make(request.getParameter("contacter_make"));
+            surveyTypeBean.setFuse_id1(surveyTypeModel.getFuseId(request.getParameter("fuse_type1")));
+            surveyTypeBean.setFuse_id2(surveyTypeModel.getFuseId(request.getParameter("fuse_type2")));
+            surveyTypeBean.setFuse_id3(surveyTypeModel.getFuseId(request.getParameter("fuse_type3")));
+            surveyTypeBean.setMccb_id1(surveyTypeModel.getMccbId(request.getParameter("mccb_type3")));
+            surveyTypeBean.setMccb_id2(surveyTypeModel.getMccbId(request.getParameter("mccb_type2")));
+            surveyTypeBean.setMccb_id3(surveyTypeModel.getMccbId(request.getParameter("mccb_type3")));
+            surveyTypeBean.setContacter_id(surveyTypeModel.getContacterId(request.getParameter("contacter_type")));
+            surveyTypeBean.setAuto_switch_type_id(surveyTypeModel.getSwitchId(request.getParameter("auto_switch_type")));
+            surveyTypeBean.setMain_switch_type_id(surveyTypeModel.getSwitchId(request.getParameter("main_switch_type")));
+            surveyTypeBean.setEnclosure_type_id(surveyTypeModel.getEnclosureTypeId(request.getParameter("enclosure_type")));
             surveyTypeBean.setMain_switch_reading(request.getParameter("main_switch_reading"));
             String[] source_wattage = request.getParameterValues("source_wattage");
             String[] splited_values = null;
             String bulb_type = null;
             String bulb_wattage = null;
+            int source_wattage_lenght=source_wattage.length;
             int[] light_typeIDs = new int[source_wattage.length];
-            for (int i = 0; i < source_wattage.length; i++) {
+            
+            for (int i = 0; i < source_wattage_lenght; i++) {
+                
                 String single_source = source_wattage[i].trim();
+                if(!single_source.equals("")){
                 if (!single_source.isEmpty()) {
                     splited_values = single_source.split("-");
                     bulb_type = splited_values[0];
                     bulb_wattage = splited_values[1];
                     light_typeIDs[i] = surveyTypeModel.getlightTypeID(bulb_type, bulb_wattage);
                 }
+                surveyTypeBean.setLight_type_id_M(light_typeIDs);
+         
+                }else {
+                    source_wattage_lenght=0;
+                }
             }
-            surveyTypeBean.setLight_type_id_M(light_typeIDs);
-            surveyTypeBean.setQuantity(request.getParameterValues("quantity"));
+               surveyTypeBean.setQuantity(request.getParameterValues("quantity"));
             surveyTypeBean.setWorking(request.getParameterValues("working"));
             surveyTypeBean.setN_working(request.getParameterValues("n_working"));
             surveyTypeBean.setMapp_ids(request.getParameterValues("mapp_id"));
             surveyTypeBean.setLight_type_ids(request.getParameterValues("light_type_id"));
-
+            
+            
 
             if (request.getParameter("no_of_poles") != null && !request.getParameter("no_of_poles").isEmpty()) {
                 surveyTypeBean.setNo_of_poles(Integer.parseInt(request.getParameter("no_of_poles").trim()));
@@ -396,7 +421,7 @@ public class SwitchingPointSurveyController extends HttpServlet {
                 surveyTypeBean.setPole_no("NoPoleEntry");
             }
             //    surveyTypeBean.setPole_type_id(surveyTypeModel.getPoleId(request.getParameter("pole_no").trim()));
-            surveyTypeBean.setPole_no_s(request.getParameter("pole_no_s").trim());  // Switching point no
+            surveyTypeBean.setPole_no_s(request.getParameter("pole_no_s"));  // Switching point no
             if(request.getParameter("m_load") != null && !request.getParameter("m_load").trim().isEmpty())
                 surveyTypeBean.setMeasured_load(Double.parseDouble(request.getParameter("m_load").trim()));
             else
@@ -428,12 +453,12 @@ public class SwitchingPointSurveyController extends HttpServlet {
 
             if (switching_point_detail_id == 0) {
                 System.out.println("Inserting values by model......");
-                if (surveyTypeModel.validationCheck(request.getParameter("service_conn_no").trim(), request.getParameter("ivrs_no").trim(), surveyTypeBean.getPole_no(), switching_point_detail_id, switching_rev_no, surveyTypeBean.getIsCheckedTrue())) {
+                if (surveyTypeModel.validationCheck(request.getParameter("service_conn_no"), request.getParameter("ivrs_no"), surveyTypeBean.getPole_no(), switching_point_detail_id, switching_rev_no, surveyTypeBean.getIsCheckedTrue())) {
                     surveyTypeModel.insertRecord(surveyTypeBean);
                 }
             } else {
                 System.out.println("Update values by model........");
-                String isOnPole = request.getParameter("isCheckedTrue").trim();
+                String isOnPole = request.getParameter("isCheckedTrue");
 
                 //       surveyTypeBean.setPole_id(Integer.parseInt(request.getParameter("pole_id").trim()));
                 //       surveyTypeBean.setPole_rev_no(Integer.parseInt(request.getParameter("pole_rev_no").trim()));
@@ -441,11 +466,11 @@ public class SwitchingPointSurveyController extends HttpServlet {
                 surveyTypeBean.setSwitching_point_detail_id(switching_point_detail_id);
                 surveyTypeBean.setSwitching_rev_no(switching_rev_no);
                 if (task.equals("Revise")) {
-                    if (surveyTypeModel.validationCheckforRevise(request.getParameter("service_conn_no").trim(), request.getParameter("ivrs_no").trim(), surveyTypeBean.getPole_no(), switching_point_detail_id, switching_rev_no, surveyTypeBean.getIsCheckedTrue())) {
+                    if (surveyTypeModel.validationCheckforRevise(request.getParameter("service_conn_no"), request.getParameter("ivrs_no"), surveyTypeBean.getPole_no(), switching_point_detail_id, switching_rev_no, surveyTypeBean.getIsCheckedTrue())) {
                         surveyTypeModel.reviseRecord(surveyTypeBean);
                     }
                 } else if (task.equals("Update")) {
-                    if (surveyTypeModel.validationCheckforRevise(request.getParameter("service_conn_no").trim(), request.getParameter("ivrs_no").trim(), surveyTypeBean.getPole_no(), switching_point_detail_id, switching_rev_no, surveyTypeBean.getIsCheckedTrue())) {
+                    if (surveyTypeModel.validationCheckforRevise(request.getParameter("service_conn_no"), request.getParameter("ivrs_no"), surveyTypeBean.getPole_no(), switching_point_detail_id, switching_rev_no, surveyTypeBean.getIsCheckedTrue())) {
                         surveyTypeModel.updateRecord(surveyTypeBean);
                     }
                 }
@@ -511,10 +536,11 @@ public class SwitchingPointSurveyController extends HttpServlet {
         if(task.equals("showSurveyData")){
             if(SurveyTypeList.size()==0){
                 countnum=1;
+                String surveyId = request.getParameter("surveyId");
                 //NewSwitchingPointSurveyModel newSwitchingPointSurveyModel = new NewSwitchingPointSurveyModel();
-                SurveyTypeList = newSwitchingPointSurveyModel.showData(lowerLimit, noOfRowsToDisplay, searchPoleNo,service_conn_no,"","","",meter_name_auto,countnum,"","","","","");
+                SurveyTypeList = newSwitchingPointSurveyModel.showData(lowerLimit, noOfRowsToDisplay, searchPoleNo,service_conn_no,"","","",meter_name_auto,countnum,surveyId,"","","","");
 
-                SurveyTypeList = meter.showData(lowerLimit, noOfRowsToDisplay, "", 0, 0, 0, "Y", "", "", "", "", "", "", "", "ALL", "", "Y", 0, "",SurveyTypeList,countnum,meter_name_auto,service_conn_no);
+               ////SurveyTypeList = meter.showData(lowerLimit, noOfRowsToDisplay, "", 0, 0, 0, "Y", "", "", "", "", "", "", "", "ALL", "", "Y", 0, "",SurveyTypeList,countnum,meter_name_auto,service_conn_no);
 //                Iterator itr=SurveyTypeList.iterator();
 //                SwitchingPointSurveyBean surveyTypeBean1 = new SwitchingPointSurveyBean();
 //                while(itr.hasNext()){
