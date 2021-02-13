@@ -504,8 +504,17 @@
             document.getElementById("addRowCount").value = "0";
 
             deleteRow();
+        } else if(id == 'edit'){
+            document.getElementById("revise").disabled = false;
+            document.getElementById("cancel").disabled = true;
+            document.getElementById("update").disabled = true;
+            document.getElementById("save_As").disabled = true;
+            document.getElementById("save").disabled = true;
+            setDefaultColor(document.getElementById("noOfRowsTraversed").value, 54);
+            document.getElementById("pole_no_s").focus();
+            document.getElementById("addMore").disabled = false;
+            document.getElementById("addRowCount").value = "0";
         }
-
     }
     function addRow() {
         var count = document.getElementById("addRowCount").value;
@@ -1554,21 +1563,21 @@
                                                 </td>
                                                 <th class="heading">Switching Point Name</th>
                                                 <td>
-                                                    <input class="input" type="text" id="switching_point_name" name="switching_point_name" value="" size="20" disabled>
+                                                    <input class="input" type="text" id="switching_point_name" name="switching_point_name" value="" size="20" disabled required>
                                                 </td>
                                                 <th class="heading">Switching Point GPS Code</th>
                                                 <td>
-                                                    <input class="input" type="text" id="gps_code_s" name="gps_code_s" value="" size="20" disabled>
+                                                    <input class="input" type="text" id="gps_code_s" name="gps_code_s" value="" size="20" disabled required>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="heading">Service Conn. No.</th>
                                                 <td>
-                                                    <input class="input" type="text" id="service_conn_no" name="service_conn_no" value="${surveyTypeBean.service_conn_no eq '' ? '' : surveyTypeBean.service_conn_no}" size="20" disabled>
+                                                    <input class="input" type="text" id="service_conn_no" name="service_conn_no" value="${surveyTypeBean.service_conn_no eq '' ? '' : surveyTypeBean.service_conn_no}" size="20" disabled required>
                                                 </td>
                                                 <th class="heading">IVRS No.</th>
                                                 <td>
-                                                    <input class="input" type="text" id="ivrs_no" name="ivrs_no" value="${surveyTypeBean.ivrs_no eq '' ? '' : surveyTypeBean.ivrs_no}" size="20" disabled>
+                                                    <input class="input" type="text" id="ivrs_no" name="ivrs_no" value="${surveyTypeBean.ivrs_no eq '' ? '' : surveyTypeBean.ivrs_no}" size="20" disabled required>
                                                 </td>
                                                 <th class="heading">No. of Poles Connected</th>
                                                 <td>
@@ -1602,10 +1611,10 @@
                                                 </td>
                                                 <th class="heading">Phase</th>
                                                 <td>
-                                                    <input class="input" type="text" id="phase" name="phase" value="${surveyTypeBean.phase_no eq '' ? '' : surveyTypeBean.phase_no}" size="20" maxlength="1" onchange="IsNumeric(id)" onkeyup="IsNumeric(id)" disabled>
+                                                    <input class="input" type="text" id="phase" name="phase" value="${surveyTypeBean.phase_no eq '' ? '' : surveyTypeBean.phase_no}" size="20" maxlength="1" onchange="IsNumeric(id)" onkeyup="IsNumeric(id)" disabled required>
                                                 </td>
                                                 <th class="heading">Is On Pole
-                                                    <input class="input" type="checkbox" id="is_on_pole" name="is_on_pole" size="20" onchange="poleNoBox_hide()" checked disabled>
+                                                    <input class="input" type="checkbox" id="is_on_pole" name="is_on_pole" size="20" onchange="poleNoBox_hide()"  disabled>
                                                 </th>
                                                 <td>
                                                     <span id ="pole_no_box">
@@ -1629,7 +1638,7 @@
                                                 </td>
                                                 <th class="heading">Feeder</th>
                                                 <td>
-                                                    <input class="input" type="text" id="feeder" name="feeder" value="${surveyTypeBean.feeder eq '' ? '' : surveyTypeBean.feeder}" size="20" disabled>
+                                                    <input class="input" type="text" id="feeder" name="feeder" value="${surveyTypeBean.feeder eq '' ? '' : surveyTypeBean.feeder}" size="20" disabled required>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -1637,19 +1646,19 @@
                                                 <td><input class="input" type="text" id="city" name="city" value="${surveyTypeBean.city eq '' ? '' : surveyTypeBean.city}" size="20" disabled>
                                                 </td>
                                                 <th class="heading">Ward No</th>
-                                                <td><input class="input" type="text" id="ward_no" name="ward_no" value="" size="20" disabled>
+                                                <td><input class="input" type="text" id="ward_no" name="ward_no" value="" size="20" disabled >
                                                 </td>
                                                 <th class="heading">Area Name</th>
-                                                <td><input class="input" type="text" id="area_name" name="area_name" value="" size="20" disabled>
+                                                <td><input class="input" type="text" id="area_name" name="area_name" value="" size="20" disabled >
                                                 </td>
                                             </tr>
                                             <tr>                                             
                                                 <th class="heading">Road Category</th>
                                                 <td>
-                                                    <input class="input" type="text" id="road_category" name="road_category" value="" size="20" disabled>
+                                                    <input class="input" type="text" id="road_category" name="road_category" value="" size="20" disabled required>
                                                 </td>
                                                 <th class="heading">Road Use</th>
-                                                <td><input class="input" type="text" id="road_use" name="road_use" value="" size="20" disabled>
+                                                <td><input class="input" type="text" id="road_use" name="road_use" value="" size="20" disabled >
                                                 </td>
                                                 <th class="heading">Road Name</th>
                                                 <td><input class="input" type="text" id="road_name" name="road_name" value="" size="20" disabled></td>
@@ -1660,17 +1669,17 @@
                                                     <input class="input" type="text" id="traffic_type" name="traffic_type" value="${surveyTypeBean.traffic_type eq '' ? '' : surveyTypeBean.traffic_type}" size="20" disabled>
                                                 </td>
                                                 <th class="heading">Longitude</th>
-                                                <td><input class="input" type="text" id="logitude" name="logitude" value="${surveyTypeBean.longitude eq '' ? '' : surveyTypeBean.longitude}" size="20" disabled></td>
+                                                <td><input class="input" type="text" id="logitude" name="logitude" value="${surveyTypeBean.longitude eq '' ? '' : surveyTypeBean.longitude}" size="20" disabled required></td>
                                                 <th class="heading">Latitude</th>
-                                                <td><input class="input" type="text" id="lattitude" name="lattitude" value="${surveyTypeBean.lattitude eq '' ? '' : surveyTypeBean.lattitude}" size="20" disabled>
+                                                <td><input class="input" type="text" id="lattitude" name="lattitude" value="${surveyTypeBean.lattitude eq '' ? '' : surveyTypeBean.lattitude}" size="20" disabled required>
                                                 </td>
                                             </tr>
 
                                             <tr>
                                                 <th class="heading">Fuse</th>
                                                 <td>
-                                                    <input type="radio" id="fuseYes" name="fuseY" value="Y" onclick="uncheckAnother(id)" checked>Yes
-                                                    <input type="radio" id="fuseNo" name="fuseN" value="N" onclick="uncheckAnother(id)" >No
+                                                    <input type="radio" id="fuseYes" name="fuseY" value="Y" onclick="uncheckAnother(id)" >Yes
+                                                    <input type="radio" id="fuseNo" name="fuseN" value="N" onclick="uncheckAnother(id)" checked>No
                                                 </td>
                                                 <!--  <input class="input" type="text" id="fuse" name="fuse" value="" size="10" disabled></td>-->
 
@@ -1683,7 +1692,7 @@
                                             <tr>
                                                 <th class="heading">Fuse Type1</th>
                                                 <td>
-                                                    <input class="input" type="text" id="fuse_type1" name="fuse_type1" value="${surveyTypeBean.fuse_type eq '' ? '' : surveyTypeBean.fuse_type}" size="20" disabled>
+                                                    <input class="input" type="text" id="fuse_type1" name="fuse_type1" value="${surveyTypeBean.fuse_type eq '' ? '' : surveyTypeBean.fuse_type}" size="20" disabled >
                                                 </td>
                                                 <th class="heading">Fuse 1</th>
                                                 <td>
@@ -1718,8 +1727,8 @@
                                             <tr>
                                                 <th class="heading">Mccb</th>
                                                 <td>
-                                                    <input type="radio" id="mccbYes" name="mccbY" value="Y" onclick="uncheckAnother(id)"checked>Yes
-                                                    <input type="radio" id="mccbNo" name="mccbN" value="N" onclick="uncheckAnother(id)">No
+                                                    <input type="radio" id="mccbYes" name="mccbY" value="Y" onclick="uncheckAnother(id)">Yes
+                                                    <input type="radio" id="mccbNo" name="mccbN" value="N" onclick="uncheckAnother(id)" checked>No
                                                 </td>
 
                                                 <th class="heading">Mccb Quantity</th>
@@ -1767,8 +1776,8 @@
 
                                                 <th class="heading">Contacter</th>
                                                 <td>
-                                                    <input type="radio" id="contacterYes" name="contacterY" value="Y" onclick="uncheckAnother(id)"checked>Yes
-                                                    <input type="radio" id="contacterNo" name="contacterN" value="N" onclick="uncheckAnother(id)">No
+                                                    <input type="radio" id="contacterYes" name="contacterY" value="Y" onclick="uncheckAnother(id)">Yes
+                                                    <input type="radio" id="contacterNo" name="contacterN" value="N" onclick="uncheckAnother(id)" checked>No
                                                 </td>
 
                                                
@@ -1776,15 +1785,15 @@
                                             <tr>
                                                  <th class="heading">Contacter Capacity</th>
                                                 <td>
-                                                    <input class="input" type="text" id="contacter_capacity" name="contacter_capacity" value="${surveyTypeBean.contacter_capacity eq '' ? '' : surveyTypeBean.contacter_capacity}" size="20" disabled>
+                                                    <input class="input" type="text" id="contacter_capacity" name="contacter_capacity" value="${surveyTypeBean.contacter_capacity eq '' ? '' : surveyTypeBean.contacter_capacity}" size="20" disabled required>
                                                 </td>
                                                 <th class="heading">Contacter Type</th>
                                                 <td>
-                                                    <input class="input" type="text" id="contacter_type" name="contacter_type" value="${surveyTypeBean.contacter_type eq '' ? '' : surveyTypeBean.contacter_type}" size="20" disabled>
+                                                    <input class="input" type="text" id="contacter_type" name="contacter_type" value="${surveyTypeBean.contacter_type eq '' ? '' : surveyTypeBean.contacter_type}" size="20" disabled required>
                                                 </td>
                                                   <th class="heading">Contacter Make</th>
                                                 <td>
-                                                    <input class="input" type="text" id="contacter_make" name="contacter_make" value="${surveyTypeBean.contacter_make eq '' ? '' : surveyTypeBean.contacter_make}" size="20" disabled>
+                                                    <input class="input" type="text" id="contacter_make" name="contacter_make" value="${surveyTypeBean.contacter_make eq '' ? '' : surveyTypeBean.contacter_make}" size="20" disabled required>
                                                 </td>
 
                                             </tr>
@@ -1792,7 +1801,7 @@
                                             <tr>
                                                 <th class="heading">Control Mechanism</th>
                                                 <td>
-                                                    <input class="input" type="text" id="control_mechanism_type" name="control_mechanism_type" value="" size="20" disabled>
+                                                    <input class="input" type="text" id="control_mechanism_type" name="control_mechanism_type" value="" size="20" disabled required>
                                                 </td>
                                                 <th class="heading">Is Working</th>
                                                 <td><input class="input" type="text" id="is_working" name="is_working" value="" size="20" disabled></td>
@@ -1801,17 +1810,17 @@
                                              <tr>
                                                 <th class="heading">Auto Switch Type</th>
                                                 <td>
-                                                    <input class="input" type="text" id="auto_switch_type" name="auto_switch_type" value="${surveyTypeBean.auto_switch_type eq '' ? '' : surveyTypeBean.auto_switch_type}" size="20" disabled>
+                                                    <input class="input" type="text" id="auto_switch_type" name="auto_switch_type" value="${surveyTypeBean.auto_switch_type eq '' ? '' : surveyTypeBean.auto_switch_type}" size="20" disabled required>
                                                 </td>
                                                 <th class="heading">Main Switch Type</th>
-                                                <td><input class="input" type="text" id="main_switch_type" name="main_switch_type" value="${surveyTypeBean.main_switch_type eq '' ? '' : surveyTypeBean.main_switch_type}" size="20" disabled></td>
+                                                <td><input class="input" type="text" id="main_switch_type" name="main_switch_type" value="${surveyTypeBean.main_switch_type eq '' ? '' : surveyTypeBean.main_switch_type}" size="20" disabled required></td>
                                                 <th class="heading">Main Switch Reading</th>
-                                                <td><input class="input" type="text" id="main_switch_reading" name="main_switch_reading" value="${surveyTypeBean.main_switch_reading eq '' ? '' : surveyTypeBean.main_switch_reading}" size="20" disabled></td>
+                                                <td><input class="input" type="text" id="main_switch_reading" name="main_switch_reading" value="${surveyTypeBean.main_switch_reading eq '' ? '' : surveyTypeBean.main_switch_reading}" size="20" disabled required></td>
 
                                             </tr>
                                             <tr>
                                                 <th class="heading">Enclosure Type</th>
-                                                <td><input class="input" type="text" id="enclosure_type" name="enclosure_type" value="${surveyTypeBean.enclosure_type eq '' ? '' : surveyTypeBean.enclosure_type}" size="20" disabled></td>
+                                                <td><input class="input" type="text" id="enclosure_type" name="enclosure_type" value="${surveyTypeBean.enclosure_type eq '' ? '' : surveyTypeBean.enclosure_type}" size="20" disabled required></td>
 
                                                 <th class="heading">Remark</th><td><input class="input" type="text" id="remark" name="remark" value="" size="20" disabled></td>
 
@@ -1880,12 +1889,13 @@
                                         </table>
                                         <table>  <tr>
                                                 <td align='center' colspan="6">
-                                                    <input class="button" type="submit" name="task" id="revise" value="Revise" onclick="setStatus(id)" disabled> &nbsp;&nbsp;
-                                                    <input class="button" type="submit" name="task" id="save" value="Save" onclick="setStatus(id)" disabled> &nbsp;&nbsp;
-                                                    <input class="button" type="submit" name="task" id="save_As" value="Save AS New" onclick="setStatus(id)" disabled> &nbsp;&nbsp;
+                                                    <input class="button" type="submit" name="task" id="revise" value="Revise" onclick="setStatus(id)" > &nbsp;&nbsp;
+                                                    <input class="button" type="submit" name="task" id="save" value="Save" onclick="setStatus(id)" > &nbsp;&nbsp;
+                                                    <input class="button" type="submit" name="task" id="save_As" value="Save AS New" onclick="setStatus(id)" > &nbsp;&nbsp;
                                                     <input class="button" type="reset" name="new" id="new" value="New" onclick="makeEditable(id)"> &nbsp;&nbsp;
-                                                    <input class="button" type="submit" name="task" id="cancel" value="Cancel" onclick="setStatus(id)" disabled> &nbsp;&nbsp;
-                                                    <input class="button" type="submit" name="task" id="update" value="Update" onclick="setStatus(id)" disabled>
+                                                    <input class="button" type="button" name="new" id="edit" value="Edit" onclick="makeEditable(id)"> &nbsp;&nbsp;
+                                                    <input class="button" type="submit" name="task" id="cancel" value="Cancel" onclick="setStatus(id)" > &nbsp;&nbsp;
+                                                    <input class="button" type="submit" name="task" id="update" value="Update" onclick="setStatus(id)" >
                                                 </td>
                                             </tr>
                                             <%-- These hidden fields "lowerLimit", "noOfRowsTraversed", and "clickedButton" belong to form2 of table2. --%>

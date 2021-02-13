@@ -136,8 +136,8 @@ public class MeterSurveyWebServicesModel {
                 + " remark,created_by,fuse1,fuse2,fuse3,starter_id,"
                 + "starter_make_id,starter_capacity,mccb1,mccb2,mccb3,fuse_id1,fuse_id2,"
                 + "fuse_id3,mccb_id1,mccb_id2,mccb_id3,no_of_phase,meter_phase,meter_reading,"
-                + "auto_switch_type_id,main_switch_type_id,main_switch_rating,enclosure_type_id,reason_id,revison_no, meter_name_auto, service_conn_no)"
-                + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "auto_switch_type_id,main_switch_type_id,main_switch_rating,enclosure_type_id,reason_id,revison_no, meter_name_auto, service_conn_no,meter_status)"
+                + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         String updateQuery = "UPDATE survey set general_image_details_id=? where image_name=? and status='Y' ";
         String meter_name_auto = surveyBean.getMeter_name_auto();
@@ -233,10 +233,15 @@ public class MeterSurveyWebServicesModel {
                             pstmt.setString(30, surveyBean.getMeter_reading());
                         }
                     } else {
-                        pstmt.setString(2, surveyBean.getMeter_no());
-                        pstmt.setString(3, surveyBean.getMeter_functional());
-                        pstmt.setInt(29, surveyBean.getMeter_phase());
-                        pstmt.setString(30, surveyBean.getMeter_reading());
+//                        pstmt.setString(2, surveyBean.getMeter_no());
+//                        pstmt.setString(3, surveyBean.getMeter_functional());
+//                        pstmt.setInt(29, surveyBean.getMeter_phase());
+//                        pstmt.setString(30, surveyBean.getMeter_reading());
+                        pstmt.setString(2, "");
+                        pstmt.setString(3, "");
+                        pstmt.setInt(29, 0);
+                        pstmt.setNull(30, java.sql.Types.DOUBLE);
+                      
                     }
 
                     if (surveyBean.getNo_of_phase() == 3) {
@@ -298,6 +303,9 @@ public class MeterSurveyWebServicesModel {
                     
                     //if(service_conn_no == null)
                         pstmt.setString(38, service_conn_no);
+                          if (surveyBean.getSurvey_type().equals("tubewell_type_survey")) {
+                         pstmt.setString(39, surveyBean.getMeter_status());
+                          }
                     //else
                        // pstmt.setNull(38, java.sql.Types.NULL);
                     rowsAffected = pstmt.executeUpdate();
@@ -799,8 +807,7 @@ public class MeterSurveyWebServicesModel {
         }
         return rowData;
     }
-
-    public JSONArray getArea_data(){
+       public JSONArray getArea_data(){
         JSONArray rowData = new JSONArray();
         List<String> list = new ArrayList<String>();
         String meter_id = null;
@@ -828,6 +835,61 @@ public class MeterSurveyWebServicesModel {
         return rowData;
     }
 
+    public JSONArray getLight_data(){
+        JSONArray rowData = new JSONArray();
+        List<String> list = new ArrayList<String>();
+        String meter_id = null;
+        String query = " select IFNULL(light_type_id, '') light_type_id,IFNULL(wattage_id, '') wattage_id,"
+                + " IFNULL(remark, '') remark,IFNULL(source_id, '') source_id "
+                       +" from light_type a "
+                       +" where a.active='Y'";
+        try {
+            java.sql.PreparedStatement pstmt = null;
+            ResultSet rset = null;
+                pstmt = connection.prepareStatement(query);
+                rset = pstmt.executeQuery();
+                while (rset.next()) {
+                    JSONObject obj = new JSONObject();
+                    obj.put("light_type_id", rset.getString("light_type_id"));
+                    obj.put("wattage_id", rset.getString("wattage_id"));
+                    obj.put("remark", rset.getString("remark"));
+                    obj.put("source_id", rset.getString("source_id"));
+
+                    rowData.put(obj);
+                }
+        } catch (Exception e) {
+            System.out.println("MeterSurveyWebServiceModel getAreaData() Error: " + e);
+        }
+        return rowData;
+    }
+   public JSONArray getPole_data(){
+        JSONArray rowData = new JSONArray();
+        List<String> list = new ArrayList<String>();
+        String meter_id = null;
+        String query = " select IFNULL(pole_type_id, '') pole_type_id,IFNULL(pole_type, '') pole_type,"
+                + " IFNULL(remark, '') remark,IFNULL(created_date, '') created_date "
+                       +" from pole_type a "
+                       +" where a.active='Y'";
+        try {
+           
+            java.sql.PreparedStatement pstmt = null;
+            ResultSet rset = null;
+                pstmt = connection.prepareStatement(query);
+                rset = pstmt.executeQuery();
+                while (rset.next()) {
+                    JSONObject obj = new JSONObject();
+                    obj.put("pole_type_id", rset.getString("pole_type_id"));
+                    obj.put("pole_type", rset.getString("pole_type"));
+                    obj.put("remark", rset.getString("remark"));
+                    obj.put("created_date", rset.getString("created_date"));
+
+                    rowData.put(obj);
+                }
+        } catch (Exception e) {
+            System.out.println("MeterSurveyWebServiceModel getAreaData() Error: " + e);
+        }
+        return rowData;
+    }
 
 
     public int insertImageRecord(String image_name,int image_type_id) {

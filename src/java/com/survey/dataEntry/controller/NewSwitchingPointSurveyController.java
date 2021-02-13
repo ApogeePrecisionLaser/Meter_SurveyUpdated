@@ -897,7 +897,7 @@ public class NewSwitchingPointSurveyController extends HttpServlet {
         // Logic to show data in the table.
         //List<SurveyBean> surveyTypeList =  newSwitchingPointSurveyModel.showData(lowerLimit, noOfRowsToDisplay, searchPoleNo, searchIvrsNo);
         List<TubeWellSurveyBean> surveyTypeList = newSwitchingPointSurveyModel.showData(lowerLimit, noOfRowsToDisplay, searchPoleNo, searchIvrsNo, searchFileNo, searchPageNo, searchByDate, "", countnum, "", searchMeterFunctional, searchFeeder, searchTypeOfConnection, searchToDate);
-      lowerLimit = lowerLimit + surveyTypeList.size();
+        lowerLimit = lowerLimit + surveyTypeList.size();
         noOfRowsTraversed = surveyTypeList.size();
         // Now set request scoped attributes, and then forward the request to view.
         request.setAttribute("lowerLimit", lowerLimit);

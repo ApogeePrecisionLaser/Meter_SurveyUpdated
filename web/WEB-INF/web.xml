@@ -3,11 +3,11 @@
     <distributable/>
     <context-param>
         <param-name>driverClass</param-name>
-        <param-value>com.mysql.jdbc.Driver</param-value>
+        <param-value>com.mysql.cj.jdbc.Driver</param-value>
     </context-param>
     <context-param>
         <param-name>connectionString</param-name>
-        <param-value>jdbc:mysql://localhost:3306/meter_survey2</param-value>
+        <param-value>jdbc:mysql://localhost:3306/meter_survey2</param-value>      
     </context-param>
     <context-param>
         <param-name>db_username</param-name>

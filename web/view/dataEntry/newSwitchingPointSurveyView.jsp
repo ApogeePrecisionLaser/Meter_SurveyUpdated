@@ -605,7 +605,7 @@
                             var image = document.getElementById('image'+id).value;
                             var survey_id=document.getElementById('survey_id'+id).value;
                             var image_id=document.getElementById('image_id'+id).value;
-                            alert(image,survey_id,image_id);
+                           
                             var queryString = "task1=viewImage&image_name="+image+"&general_image_details_id="+image_id+"&survey_id="+survey_id ;
                             var url = "newSwitchingPointSurveyCont.do?"+queryString;
                             popupwin = openPopUp(url, "Mounting Type Map Details", 500, 1000);

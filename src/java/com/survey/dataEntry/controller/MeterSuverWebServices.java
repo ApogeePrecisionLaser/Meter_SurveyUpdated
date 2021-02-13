@@ -41,7 +41,6 @@ import javax.ws.rs.core.Response;
 //import org.json.simple.JSONArray;
 //import org.json.simple.JSONObject;
 
-import org.codehaus.jettison.json.*;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import sun.misc.BASE64Decoder;
@@ -560,7 +559,12 @@ public class MeterSuverWebServices {
         } catch (Exception e) {
             System.out.println("Exception occurs: " + e);
         }
+       
+       try{
         surveyBean.setY_phase(inputJsonObj.get("y_phase").toString());
+         } catch (Exception e) {
+            surveyBean.setY_phase(null);
+        }
         String input = (String) inputJsonObj.get("survey_by");
         String output = "The input you sent is :" + input;
         String age = (String) inputJsonObj.get("pole_no");
@@ -927,9 +931,9 @@ public class MeterSuverWebServices {
             wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
             wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
             wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
-            wsSurveyModel.setConnection();
+            wsSurveyModel.setConnection();     
             //String imei = "";
-            JSONArray json = null;
+            JSONArray json = null;       
             try {
                 if (imei != null && !imei.isEmpty()) {
                     json = wsSurveyModel.showData(imei);/// meters table data
@@ -995,7 +999,20 @@ public class MeterSuverWebServices {
             } catch (Exception e) {
                 System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
             }
-
+            //pole Type
+ try {
+                json = wsSurveyModel.getPole_data();
+                obj.put("pole_type", json);
+            } catch (Exception e) {
+                System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
+            }
+ //light Type
+  try {
+                json = wsSurveyModel.getLight_data();
+                obj.put("light_type", json);
+            } catch (Exception e) {
+                System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
+            }
             NewSwitchingPointSurveyModel nsp = new NewSwitchingPointSurveyModel();
             nsp.setConnection(wsSurveyModel.getConnection());
             json = nsp.showSwitchingJsonData();

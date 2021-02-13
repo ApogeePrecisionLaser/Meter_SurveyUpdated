@@ -136,7 +136,7 @@ public class PoleDetailTypeModel {
 
     public List<String> getAreaName(String q, String ward_no) {
         List<String> list = new ArrayList<String>();
-        String query = " SELECT area_name FROM area,ward_m WHERE ward_id = (select ward_id from ward_m where ward_no_m = ?) GROUP BY area_name ORDER BY area_name ";
+        String query = " SELECT area_name FROM area,ward WHERE ward_id = (select ward_id from ward where ward_no = ?) GROUP BY area_name ORDER BY area_name ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, ward_no);
@@ -161,7 +161,7 @@ public class PoleDetailTypeModel {
 
     public List<String> getWard_No(String q, String city) {
         List<String> list = new ArrayList<String>();
-        String query = " SELECT ward_no FROM ward_m WHERE city_id = (SELECT city_id FROM city WHERE city_name = ?) ORDER BY ward_no_m ";
+        String query = " SELECT w.ward_no FROM ward w,city WHERE w.city_id = (SELECT city_id FROM city WHERE city_name = ?) ORDER BY w.ward_no ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, city);
@@ -169,7 +169,7 @@ public class PoleDetailTypeModel {
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String ward_no = rset.getString("ward_no_m");
+                String ward_no = rset.getString("ward_no");
                 if (ward_no.startsWith(q)) {
                     list.add(ward_no);
                     count++;
@@ -282,8 +282,8 @@ public class PoleDetailTypeModel {
 
     public int getAreaId(String city, String ward_no, String area_name) {
         int area_id = 0;
-        String query = " SELECT area_id FROM area,ward_m WHERE area_name = ? "
-                + "AND  ward_id = (SELECT ward_id FROM ward_m WHERE ward_no_m = ? AND city_id = (SELECT city_id FROM city WHERE city_name = ?))";
+        String query = " SELECT area_id FROM area,ward WHERE area_name = ? "
+                + "AND  ward_id = (SELECT ward_id FROM ward WHERE ward_no = ? AND city_id = (SELECT city_id FROM city WHERE city_name = ?))";
         if (ward_no.isEmpty() || ward_no == null) {
             query = "SELECT area_id FROM area WHERE area_name = ? ";
         }
@@ -1133,13 +1133,13 @@ try {
                 + "    LEFT JOIN switching_point_detail spd ON p.switching_point_detail_id = "
                 + "  spd.switching_point_detail_id AND spd.active='Y' "
                 + " left join feeder f  on spd.feeder_id=f.feeder_id, "
-//                + " area a, road r, traffic_type t, road_category rc, road_use ru, ward w, city cty "
-                + " area a, road r, traffic_type t, road_category rc, road_use ru, ward_m w, city cty "
+                + " area a, road r, traffic_type t, road_category rc, road_use ru, ward w, city cty "
+               // + " area a, road r, traffic_type t, road_category rc, road_use ru, ward_m w, city cty "
                 + " where p.active = 'Y' AND  "
                 + " p.area_id = a.area_id And "
-//                + " a.ward_id = w.ward_id AND "
-                 + " a.ward_id_m = w.ward_id_m AND "
-//                + " w.city_id = cty.city_id AND "
+               + " a.ward_id = w.ward_id AND "
+                // + " a.ward_id_m = w.ward_id_m AND "
+               + " w.city_id = cty.city_id AND "
                 + " p.road_id = r.road_id And "
                 + " p.road_rev_no = r.road_rev_no And "
                 + " r.road_use_id = ru.road_use_id And "
@@ -1184,7 +1184,7 @@ try {
                 + " WHERE p.pole_type_id = pt.pole_type_id "
                 + " AND p.mounting_type_id = m.mounting_type_id "
                 + " AND p.switching_point_detail_id = spd.switching_point_detail_id and spd.feeder_id=f.feeder_id and spd.feeder_id=f.feeder_id and lt.wattage_id=w.wattage_id "  */
-                " SELECT a.area_name, w.ward_no_m, r.road_name, t.traffic_type, ru.road_use, rc.category_name, cty.city_name , "
+                " SELECT a.area_name, w.ward_no, r.road_name, t.traffic_type, ru.road_use, rc.category_name, cty.city_name , "
                 + "    (SELECT GROUP_CONCAT(CAST((concat(spltm.mapping_type_id,'-',spltm.light_type_id))   AS CHAR CHARACTER SET utf8) SEPARATOR '__') "
                 + " FROM pole_light_type_mapping AS spltm,light_type lt,light_source_type   AS l,wattage AS w  WHERE spltm.light_type_id=lt.light_type_id "
                 + " AND p.pole_id = spltm.pole_id and  p.pole_rev_no = spltm.pole_rev_no  AND lt.wattage_id=w.wattage_id "
@@ -1211,12 +1211,12 @@ try {
                 + "  spd.switching_point_detail_id AND spd.active='Y' "
                 + " left join feeder f  on spd.feeder_id=f.feeder_id, "
 //                + " area a, road r, traffic_type t, road_category rc, road_use ru, ward w, city cty "
-                   + " area a, road r, traffic_type t, road_category rc, road_use ru, ward_m w, city cty "
+                   + " area a, road r, traffic_type t, road_category rc, road_use ru, ward w, city cty "
                 + " where p.active = 'Y' AND "
                 + " p.area_id = a.area_id And "
-//                + " a.ward_id = w.ward_id AND "
-                  + " a.ward_id_m = w.ward_id_m AND "
-               // + " w.city_id = cty.city_id AND "
+                + " a.ward_id = w.ward_id AND "
+             //     + " a.ward_id_m = w.ward_id_m AND "
+                + " w.city_id = cty.city_id AND "
                 + " p.road_id = r.road_id And "
                 + " p.road_rev_no = r.road_rev_no And "
                 + " r.road_use_id = ru.road_use_id And "
@@ -1289,7 +1289,7 @@ try {
                 sourceType.setRoad_use(rset.getString("road_use"));
                 sourceType.setRoad_category(rset.getString("category_name"));
                 sourceType.setCity(rset.getString("city_name"));
-                sourceType.setWard_no(rset.getString("ward_no_m"));
+                sourceType.setWard_no(rset.getString("ward_no"));
                 list.add(sourceType);
             }
         } catch (Exception e) {
@@ -1329,7 +1329,7 @@ try {
 
     public List<PoleDetailTypeBean> showAllData(String searchPoleType, String searchMountingType, String searchSwitchingPoint,String searchPoleNo) {
         List<PoleDetailTypeBean> listAll = new ArrayList<PoleDetailTypeBean>();
-        String query = " SELECT a.area_name, w.ward_no_m, r.road_name, t.traffic_type, ru.road_use, rc.category_name, cty.city_name , "
+        String query = " SELECT a.area_name, w.ward_no, r.road_name, t.traffic_type, ru.road_use, rc.category_name, cty.city_name , "
                 + "    (SELECT GROUP_CONCAT(CAST((concat(spltm.mapping_type_id,'-',spltm.light_type_id))   AS CHAR CHARACTER SET utf8) SEPARATOR '__') "
                 + " FROM pole_light_type_mapping AS spltm,light_type lt,light_source_type   AS l,wattage AS w  WHERE spltm.light_type_id=lt.light_type_id "
                 + " AND p.pole_id = spltm.pole_id and  p.pole_rev_no = spltm.pole_rev_no  AND lt.wattage_id=w.wattage_id "
@@ -1355,13 +1355,13 @@ try {
                 + "    LEFT JOIN switching_point_detail spd ON p.switching_point_detail_id = "
                 + "  spd.switching_point_detail_id AND p.switching_rev_no = spd.switching_rev_no "
                 + " left join feeder f  on spd.feeder_id=f.feeder_id, "
-//                + " area a, road r, traffic_type t, road_category rc, road_use ru, ward w, city cty "
-                  + " area a, road r, traffic_type t, road_category rc, road_use ru, ward_m w, city cty "
+              + " area a, road r, traffic_type t, road_category rc, road_use ru, ward w, city cty "
+               //   + " area a, road r, traffic_type t, road_category rc, road_use ru, ward_m w, city cty "
                 + " where p.active = 'Y' AND "
                 + " p.area_id = a.area_id And "
-//                + " a.ward_id = w.ward_id AND "
-                + " a.ward_id_m = w.ward_id_m AND "
-                //+ " w.city_id = cty.city_id AND "
+               + " a.ward_id = w.ward_id AND "
+             //   + " a.ward_id_m = w.ward_id_m AND "
+                + " w.city_id = cty.city_id AND "
                 + " p.road_id = r.road_id And "
                 + " p.road_rev_no = r.road_rev_no And "
                 + " r.road_use_id = ru.road_use_id And "

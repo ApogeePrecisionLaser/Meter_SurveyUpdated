@@ -185,7 +185,7 @@ public int insertRecordswitching_point_detail() {
 
         String query1="select meter_id,feeder_id,ivrs_no,poll_no " +
 "                     from meters " +
-"                      where active='Y' and tariff_code in('LV3.2.A','LV3.2','LV3.2.B','LV3.2.C')";
+"                      where final_revision='VALID' and tariff_code in('LV3.2.A','LV3.2','LV3.2.B','LV3.2.C')";
 
         try{
 
@@ -235,7 +235,7 @@ public int insertRecord1() {
 
         String query1=" select meter_id,feeder_id,ivrs_no,poll_no "
                      +" from meters  "
-                     +" where active='Y' and tariff_code in('LV3.1.A','LV3.1','LV3.1.B','LV3.1A.T','LV3.1T','LV3.1C')";
+                     +" where final_revision='VALID' and tariff_code in('LV3.1.A','LV3.1','LV3.1.B','LV3.1A.T','LV3.1T','LV3.1C')";
 
         try{
 

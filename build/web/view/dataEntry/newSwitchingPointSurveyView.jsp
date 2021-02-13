@@ -605,7 +605,7 @@
                             var image = document.getElementById('image'+id).value;
                             var survey_id=document.getElementById('survey_id'+id).value;
                             var image_id=document.getElementById('image_id'+id).value;
-                            alert(image,survey_id,image_id);
+                           
                             var queryString = "task1=viewImage&image_name="+image+"&general_image_details_id="+image_id+"&survey_id="+survey_id ;
                             var url = "newSwitchingPointSurveyCont.do?"+queryString;
                             popupwin = openPopUp(url, "Mounting Type Map Details", 500, 1000);
@@ -798,7 +798,7 @@
                                                     <td id=""  onclick="" >${surveyTypeBean.consume_unit}</td>
                                                     <td id=""  onclick="" >${surveyTypeBean.amount}</td>
                                                     <td id="t1c${IDGenerator.uniqueID}" style="display: none"  onclick="fillColumns(id)" >${surveyTypeBean.meter_name_auto}</td>
-                                                    <td ><a target="_blank" href="switchingPointSurvey?task=showSurveyData&meter_name_auto=${surveyTypeBean.meter_name_auto}&service_conn_no=${surveyTypeBean.service_conn_no}" id="surveyView${loopCounter.count}">Update</a></td>
+                                                    <td ><a target="_blank" href="switchingPointSurvey?task=showSurveyData&meter_name_auto=${surveyTypeBean.meter_name_auto}&service_conn_no=${surveyTypeBean.service_conn_no}&surveyId=${surveyTypeBean.survey_id}" id="surveyView${loopCounter.count}">Update</a></td>
                                                     <td>
                                                         <input type="button" class="btn"  value ="View Map" id="map_container${loopCounter.count}" onclick="openMap('${surveyTypeBean.longitude}' , '${surveyTypeBean.latitude}');"/>
                                                     </td>

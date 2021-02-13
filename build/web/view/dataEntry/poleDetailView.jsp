@@ -93,6 +93,14 @@
             }
         });
 
+       
+       
+        $("#circuit_name").autocomplete("poleDetailCont", {
+            extraParams: {
+                action1: function() { return "getCircuitName"},
+                action2: function() { return  $("#switching_point_name").val();}
+            }
+        });
         $("#city").result(function(event, data, formatted){
             document.getElementById("ward_no").value = "";
             document.getElementById("area_name").value = "";
@@ -914,6 +922,12 @@
     function isSwitchPoint(id){
         document.getElementById("is_switch_point").value="Yes";
     }
+    
+     function isCircuit(id){
+         debugger;
+        document.getElementById("is_circuit").value="Yes";
+         document.getElementById("circuit_name").disabled=false;
+    }
 
     function singleCheckUncheck(id){
         //  alert(document.getElementById('insertTable').rows.length);
@@ -1187,11 +1201,16 @@
 
                                                     <input class="input" type="text" id="switching_point_name" name="switching_point_name" value="" size="20" disabled>
                                                 </td>
+                                                
                                                 <th class="heading1">Is Switch Point</th>
                                                 <td><input type="checkbox"id="is_switch" name="pole_is_switch_point_name" value="" onclick="isSwitchPoint(id)"/></td>
                                                 <td><input type="hidden"id="is_switch_point" name="pole_is_switch_point" value="No"/></td>
                                                     <%--    <th class="heading1">Pole Span</th>
                                                        <td><input class="input" type="text" id="pole_span" name="pole_span" value="" size="20" disabled></td>  --%>
+                                                <th class="heading1">Is Circuit</th>
+                                                <td><input type="checkbox"id="is_circuit" name="pole_is_circuit_name" value="" onclick="isCircuit(id)"/></td>
+                                                <td><input type="hidden"id="is_circuit" name="pole_is_circuit" value="No"/></td>
+                                           
                                             </tr>
 
                                             <tr>
@@ -1205,6 +1224,11 @@
                                                 <td>
 
                                                     <input class="input" type="text" id="pole_no" name="pole_no" value="" size="20" disabled/>
+                                                </td>
+                                                 <th class="heading1">Circuit name</th>
+                                                <td>
+
+                                                    <input class="input" type="text" id="circuit_name" name="circuit_name" value="" size="20" disabled>
                                                 </td>
                                                 <th class="heading1" style="display: none">Pole No (Client)</th>
                                                 <td style="display: none">
