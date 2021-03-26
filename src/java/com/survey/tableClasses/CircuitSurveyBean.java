@@ -11,8 +11,8 @@ package com.survey.tableClasses;
  */
 public class CircuitSurveyBean {
     
-    int circuit_id;
-    String first_pole_image,last_pole_image,circuit_name, irvs_no, circuitno,time, is_child,parent,timestamptime, sync_status, accuracyfirstpole, accuracylasttpole;
+    int circuit_id,Switchingpointid,firstpoleid,lastpoleid,cabletypeid;
+    String first_pole_image,last_pole_image,circuit_name, irvs_no, circuitno,time, is_child,parent,timestamptime, sync_status, accuracyfirstpole, accuracylasttpole,imagepathoffirstpole,imagepathoflastpole;
              
     double  lattitudelasttpole, longitudelasttpole, altitudelastpole,lattitudefirstpole, longitudefirstpole, altitudefirstpole;
 
@@ -22,6 +22,54 @@ public class CircuitSurveyBean {
 
     public void setFirst_pole_image(String first_pole_image) {
         this.first_pole_image = first_pole_image;
+    }
+
+    public int getSwitchingpointid() {
+        return Switchingpointid;
+    }
+
+    public void setSwitchingpointid(int Switchingpointid) {
+        this.Switchingpointid = Switchingpointid;
+    }
+
+    public int getFirstpoleid() {
+        return firstpoleid;
+    }
+
+    public void setFirstpoleid(int firstpoleid) {
+        this.firstpoleid = firstpoleid;
+    }
+
+    public int getLastpoleid() {
+        return lastpoleid;
+    }
+
+    public void setLastpoleid(int lastpoleid) {
+        this.lastpoleid = lastpoleid;
+    }
+
+    public int getCabletypeid() {
+        return cabletypeid;
+    }
+
+    public void setCabletypeid(int cabletypeid) {
+        this.cabletypeid = cabletypeid;
+    }
+
+    public String getImagepathoffirstpole() {
+        return imagepathoffirstpole;
+    }
+
+    public void setImagepathoffirstpole(String imagepathoffirstpole) {
+        this.imagepathoffirstpole = imagepathoffirstpole;
+    }
+
+    public String getImagepathoflastpole() {
+        return imagepathoflastpole;
+    }
+
+    public void setImagepathoflastpole(String imagepathoflastpole) {
+        this.imagepathoflastpole = imagepathoflastpole;
     }
 
     public String getLast_pole_image() {

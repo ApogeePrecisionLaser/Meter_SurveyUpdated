@@ -590,7 +590,7 @@
     }
     function setStatus(id) {
         if(id == 'save'){
-            document.getElementById("clickedButton").value = "Save";
+            document.getElementById("clickedButton").value = "Save AS New";
         }
         else if(id == 'addMore'){
             document.getElementById("clickedButton").value = "Add More";
@@ -1758,7 +1758,7 @@
                                                     <input class="input" type="hidden" id="tube_well_rev_no" name="tube_well_rev_no" value="${tubeWellTypeBean.tube_well_rev_no eq '' ? '' : tubeWellTypeBean.tube_well_rev_no}" >
 
                                                     <input class="input" type="hidden" id="twd_pole_no_s" name="twd_pole_no_s" value="${tubeWellTypeBean.pole_no_s eq '' ? '' : tubeWellTypeBean.pole_no_s}" size="20">
-                                                    <input class="input" type="text" id="pole_no_s" name="pole_no_s" title="${tubeWellTypeBean.pole_no_s}" value="${tubeWellSurveyData.pole_no eq '' ? '' : tubeWellSurveyData.pole_no}" size="20" disabled>
+                                                    <input class="input" type="hidden" id="pole_no_s" name="pole_no_s" title="${tubeWellTypeBean.pole_no_s}" value="${tubeWellSurveyData.pole_no eq '' ? '' : tubeWellSurveyData.pole_no}" size="20" disabled>
                                                 </td>
                                                 <th class="heading">TubeWell Name</th>
                                                 <td>
@@ -1808,78 +1808,78 @@
                                                 <th class="heading">Meter No</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_meter_no_s" name="twd_meter_no_s"  value="${tubeWellTypeBean.meter_no_s eq '' ? '' : tubeWellTypeBean.meter_no_s}" size="20">
-                                                    <input class="input" type="text" id="meter_no_s" name="meter_no_s" title="${tubeWellTypeBean.meter_no_s}" value="${tubeWellSurveyData.meter_no eq '' ? '' : tubeWellSurveyData.meter_no}" size="20" disabled>
+                                                    <input class="input" type="text" id="meter_no_s" name="meter_no_s" title="${tubeWellTypeBean.meter_no_s}" value="${tubeWellSurveyData.meter_no eq '' ? '' : tubeWellSurveyData.meter_no}" size="20" >
                                                 </td>
                                                 <th class="heading">Phase</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_phase" name="twd_phase" value="${tubeWellTypeBean.phase eq '' ? '' : tubeWellTypeBean.phase}" size="20" maxlength="1" onchange="IsNumeric(id)" onkeyup="IsNumeric(id)" >
-                                                    <input class="input" type="text" id="phase" name="phase" title="${tubeWellTypeBean.phase}" value="${tubeWellSurveyData.no_of_phase eq '' ? '' : tubeWellSurveyData.no_of_phase}" size="20" maxlength="1" onchange="IsNumeric(id)" onkeyup="IsNumeric(id)" disabled>
+                                                    <input class="input" type="text" id="phase" name="phase" title="${tubeWellTypeBean.phase}" value="${tubeWellSurveyData.no_of_phase eq '' ? '' : tubeWellSurveyData.no_of_phase}" size="20" maxlength="1" onchange="IsNumeric(id)" onkeyup="IsNumeric(id)" >
                                                 </td>
                                                 <th class="heading">Meter Status</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_meter_status" name="twd_meter_status" value="${tubeWellTypeBean.meter_status eq '' ? '' : tubeWellTypeBean.meter_status}" size="20" maxlength="1" onchange="IsNumeric(id)" onkeyup="IsNumeric(id)" >
-                                                    <input class="input" type="text" id="meter_status" name="meter_status" title="${tubeWellTypeBean.meter_status}" value="${tubeWellSurveyData.meter_status eq '' ? '' : tubeWellSurveyData.meter_status}" size="20" maxlength="1"  disabled>
+                                                    <input class="input" type="text" id="meter_status" name="meter_status" title="${tubeWellTypeBean.meter_status}" value="${tubeWellSurveyData.meter_status eq '' ? '' : tubeWellSurveyData.meter_status}" size="20" maxlength="1"  >
                                                 </td>
 
                                             </tr>
                                             <tr>
                                                 <th class="heading">B phase</th>
                                                 <td><input class="input" type="hidden" id="twd_b_phase" name="twd_b_phase" value="${tubeWellTypeBean.b_phase eq '' ? '' : tubeWellTypeBean.b_phase}" size="20">
-                                                    <input class="input" type="text" id="b_phase" name="b_phase" title="${tubeWellTypeBean.b_phase}" value="${tubeWellSurveyData.b_phase eq '' ? '' : tubeWellSurveyData.b_phase}" size="20"onkeypress="return isNumberKey(event)" required disabled></td>
+                                                    <input class="input" type="text" id="b_phase" name="b_phase" title="${tubeWellTypeBean.b_phase}" value="${tubeWellSurveyData.b_phase eq '' ? '' : tubeWellSurveyData.b_phase}" size="20"onkeypress="return isNumberKey(event)"></td>
 
                                                 <th class="heading">R Phase</th>
                                                 <td><input class="input" type="hidden" id="twd_r_phase" name="twd_r_phase" value="${tubeWellTypeBean.r_phase eq '' ? '' : tubeWellTypeBean.r_phase}" size="20">
-                                                    <input class="input" type="text" id="r_phase" name="r_phase" title="${tubeWellTypeBean.r_phase}" value="${tubeWellSurveyData.r_phase eq '' ? '' : tubeWellSurveyData.r_phase}" size="20" onkeypress="return isNumberKey(event)"disabled></td>
+                                                    <input class="input" type="text" id="r_phase" name="r_phase" title="${tubeWellTypeBean.r_phase}" value="${tubeWellSurveyData.r_phase eq '' ? '' : tubeWellSurveyData.r_phase}" size="20" onkeypress="return isNumberKey(event)"></td>
 
                                                 <th class="heading">Y Phase</th>
                                                 <td><input class="input" type="hidden" id="twd_y_phase" name="twd_y_phase" value="${tubeWellTypeBean.y_phase eq '' ? '' : tubeWellTypeBean.y_phase}" size="20">
-                                                    <input class="input" type="text" id="y_phase" name="y_phase" title="${tubeWellTypeBean.y_phase}" value="${tubeWellSurveyData.y_phase eq '' ? '' : tubeWellSurveyData.y_phase}" size="20"onkeypress="return isNumberKey(event)" disabled></td>
+                                                    <input class="input" type="text" id="y_phase" name="y_phase" title="${tubeWellTypeBean.y_phase}" value="${tubeWellSurveyData.y_phase eq '' ? '' : tubeWellSurveyData.y_phase}" size="20"onkeypress="return isNumberKey(event)" ></td>
 
 
                                             </tr>
                                             <tr>
                                                 <th class="heading">Division</th>
                                                 <td>
-                                                    <input class="input" type="text" id="division" name="division" value="${tubeWellTypeBean.division eq '' ? '' : tubeWellTypeBean.division}" size="20" disabled>
+                                                    <input class="input" type="text" id="division" name="division" value="${tubeWellTypeBean.division eq '' ? '' : tubeWellTypeBean.division}" size="20" >
                                                 </td>
                                                 <th class="heading">Feeder_Zone</th>
                                                 <td>
-                                                    <input class="input" type="hidden" id="twd_feeder_zone" name="twd_feeder_zone" value="${tubeWellTypeBean.zone eq '' ? '' : tubeWellTypeBean.zone}" size="20" disabled>
-                                                    <input class="input" type="text" id="feeder_zone" name="feeder_zone"  value="${tubeWellTypeBean.feeder_zone eq '' ? '' : tubeWellTypeBean.feeder_zone}" size="20" disabled>
+                                                    <input class="input" type="hidden" id="twd_feeder_zone" name="twd_feeder_zone" value="${tubeWellTypeBean.zone eq '' ? '' : tubeWellTypeBean.zone}" size="20" >
+                                                    <input class="input" type="text" id="feeder_zone" name="feeder_zone"  value="${tubeWellTypeBean.feeder_zone eq '' ? '' : tubeWellTypeBean.feeder_zone}" size="20" >
                                                 </td>
                                                 <th class="heading">Feeder</th>
                                                 <td>
-                                                    <input class="input" type="text" id="feeder" name="feeder" value="${tubeWellTypeBean.feeder eq '' ? '' : tubeWellTypeBean.feeder}" size="20" disabled>
+                                                    <input class="input" type="text" id="feeder" name="feeder" value="${tubeWellTypeBean.feeder eq '' ? '' : tubeWellTypeBean.feeder}" size="20" >
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="heading">Zone</th>
                                                 <td>
-                                                    <input class="input" type="hidden" id="twd_zone" name="twd_zone" value="${tubeWellTypeBean.zone eq '' ? '' : tubeWellTypeBean.zone}" size="20" disabled>
-                                                    <input class="input" type="text" id="zone" name="zone" title="${tubeWellTypeBean.zone}" value="${tubeWellSurveyData.zone_m eq '' ? '' : tubeWellSurveyData.zone_m}" size="20" disabled>
+                                                    <input class="input" type="hidden" id="twd_zone" name="twd_zone" value="${tubeWellTypeBean.zone eq '' ? '' : tubeWellTypeBean.zone}" size="20" >
+                                                    <input class="input" type="text" id="zone" name="zone" title="${tubeWellTypeBean.zone}" value="${tubeWellSurveyData.zone_m eq '' ? '' : tubeWellSurveyData.zone_m}" size="20" >
                                                 </td>
 <!--                                                <th class="heading">City</th>
                                                 <td><input class="input" type="text" id="city" name="city" value="${tubeWellTypeBean.city eq '' ? '' : tubeWellTypeBean.city}" size="20" disabled>
                                                 </td>-->
                                                 <th class="heading">Ward No</th>
-                                                <td><input class="input" type="hidden" id="twd_ward_no" name="twd_ward_no" value="${tubeWellTypeBean.ward_no eq '' ? '' : tubeWellTypeBean.ward_no}" size="20" disabled>
-                                                    <input class="input" type="text" id="ward_no" name="ward_no" title="${tubeWellTypeBean.ward_no}" value="${tubeWellSurveyData.ward_no_m eq '' ? '' : tubeWellSurveyData.ward_no_m}" size="20"onkeypress="return isNumberKey(event)" disabled>
+                                                <td><input class="input" type="hidden" id="twd_ward_no" name="twd_ward_no" value="${tubeWellTypeBean.ward_no eq '' ? '' : tubeWellTypeBean.ward_no}" size="20" >
+                                                    <input class="input" type="text" id="ward_no" name="ward_no" title="${tubeWellTypeBean.ward_no}" value="${tubeWellSurveyData.ward_no_m eq '' ? '' : tubeWellSurveyData.ward_no_m}" size="20"onkeypress="return isNumberKey(event)" >
                                                 </td>
                                                 <th class="heading">Area Name</th>
-                                                <td><input class="input" type="hidden" id="twd_area_name" name="twd_area_name" value="${tubeWellTypeBean.area_name eq '' ? '' : tubeWellTypeBean.area_name}" size="20" disabled>
-                                                    <input class="input" type="text" id="area_name" name="area_name" title="${tubeWellTypeBean.area_name}" value="${tubeWellSurveyData.area_name eq '' ? '' : tubeWellSurveyData.area_name}" size="20"onkeypress="return isNumberKey(event)" disabled>
+                                                <td><input class="input" type="hidden" id="twd_area_name" name="twd_area_name" value="${tubeWellTypeBean.area_name eq '' ? '' : tubeWellTypeBean.area_name}" size="20" >
+                                                    <input class="input" type="text" id="area_name" name="area_name" title="${tubeWellTypeBean.area_name}" value="${tubeWellSurveyData.area_name eq '' ? '' : tubeWellSurveyData.area_name}" size="20"onkeypress="return isNumberKey(event)" >
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th class="heading">Road Category</th>
                                                 <td>
-                                                    <input class="input" type="text" id="road_category" name="road_category" value="${tubeWellTypeBean.road_category eq '' ? '' : tubeWellTypeBean.road_category}" size="20" disabled>
+                                                    <input class="input" type="text" id="road_category" name="road_category" value="${tubeWellTypeBean.road_category eq '' ? '' : tubeWellTypeBean.road_category}" size="20" >
                                                 </td>
                                                 <th class="heading">Road Use</th>
-                                                <td><input class="input" type="text" id="road_use" name="road_use" value="${tubeWellTypeBean.road_use eq '' ? '' : tubeWellTypeBean.road_use}" size="20" disabled>
+                                                <td><input class="input" type="text" id="road_use" name="road_use" value="${tubeWellTypeBean.road_use eq '' ? '' : tubeWellTypeBean.road_use}" size="20" >
                                                 </td>
                                                 <th class="heading">Road Name</th>
-                                                <td><input class="input" type="text" id="road_name" name="road_name" value="${tubeWellTypeBean.road_name eq '' ? '' : tubeWellTypeBean.road_name}" size="20" disabled></td>
+                                                <td><input class="input" type="text" id="road_name" name="road_name" value="${tubeWellTypeBean.road_name eq '' ? '' : tubeWellTypeBean.road_name}" size="20" ></td>
                                             </tr>
                                             <tr>
                                                 <th class="heading">Traffic Type</th>
@@ -1888,10 +1888,10 @@
                                                 </td>
                                                 <th class="heading">Longitude</th>
                                                 <td><input class="input" type="hidden" id="twd_longitude" name="twd_longitude" value="${tubeWellTypeBean.longitude eq '' ? '' : tubeWellTypeBean.longitude}" size="20">
-                                                    <input class="input" type="text" id="longitude" name="longitude" title="${tubeWellTypeBean.longitude}" value="${tubeWellSurveyData.longitude eq '' ? '' : tubeWellSurveyData.longitude}" size="20"  required disabled></td>
+                                                    <input class="input" type="text" id="longitude" name="longitude" title="${tubeWellTypeBean.longitude}" value="${tubeWellSurveyData.longitude eq '' ? '' : tubeWellSurveyData.longitude}" size="20"   ></td>
                                                 <th class="heading">Latitude</th>
                                                 <td><input class="input" type="hidden" id="twd_latitude" name="twd_latitude" value="${tubeWellTypeBean.lattitude eq '' ? '' : tubeWellTypeBean.lattitude}" size="20" >
-                                                    <input class="input" type="text" id="latitude" name="latitude" title="${tubeWellTypeBean.lattitude}" value="${tubeWellSurveyData.latitude eq '' ? '' : tubeWellSurveyData.latitude}" size="20" required disabled><input class="button" type="button" id="get_cordinate" value="Get Cordinate" onclick="openMapForCord()">
+                                                    <input class="input" type="text" id="latitude" name="latitude" title="${tubeWellTypeBean.lattitude}" value="${tubeWellSurveyData.latitude eq '' ? '' : tubeWellSurveyData.latitude}" size="20"  ><input class="button" type="button" id="get_cordinate" value="Get Cordinate" onclick="openMapForCord()">
                                                 </td>
                                             </tr>
 
@@ -1906,13 +1906,13 @@
 
                                                 <th class="heading">Fuse Quantity</th>
                                                 <td>
-                                                    <input class="input" type="text" id="fuse_quantity" name="fuse_quantity" value="0" size="20" disabled>
+                                                    <input class="input" type="text" id="fuse_quantity" name="fuse_quantity" value="0" size="20" >
                                                 </td>
 
                                                 <th class="heading">Meter Address</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_meter_address" name="twd_meter_address" value="${tubeWellTypeBean.meter_address eq '' ? '' : tubeWellTypeBean.meter_address}" size="20">
-                                                    <input class="input" type="text" id="meter_address" name="meter_address" title="${tubeWellTypeBean.meter_address}" value="${tubeWellSurveyData.meter_address eq '' ? '' : tubeWellSurveyData.meter_address}" size="20" disabled>
+                                                    <input class="input" type="text" id="meter_address" name="meter_address" title="${tubeWellTypeBean.meter_address}" value="${tubeWellSurveyData.meter_address eq '' ? '' : tubeWellSurveyData.meter_address}" size="20" >
                                                 </td>
 
                                             </tr>
@@ -1920,17 +1920,17 @@
                                                 <th class="heading">Fuse Type1</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_fuse_type1" name="twd_fuse_type1" value="${tubeWellTypeBean.fuse_type1 eq '' ? '' : tubeWellTypeBean.fuse_type1}" size="20">
-                                                    <input class="input" type="text" id="fuse_type1" name="fuse_type1" title="${tubeWellTypeBean.fuse_type1}" value="${tubeWellSurveyData.fuse_type1 eq '' ? '' : tubeWellSurveyData.fuse_type1}" size="20" disabled>
+                                                    <input class="input" type="text" id="fuse_type1" name="fuse_type1" title="${tubeWellTypeBean.fuse_type1}" value="${tubeWellSurveyData.fuse_type1 eq '' ? '' : tubeWellSurveyData.fuse_type1}" size="20" >
                                                 </td>
                                                 <th class="heading">Fuse 1</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_fuse_1" name="twd_fuse_1" value="${tubeWellTypeBean.fuse1 eq '' ? '' : tubeWellTypeBean.fuse1}" size="20">
-                                                    <input class="input" type="text" id="fuse_1" name="fuse_1" title="${tubeWellTypeBean.fuse1}" value="${tubeWellSurveyData.fuse1 eq '' ? '' : tubeWellSurveyData.fuse1}" size="20" disabled>
+                                                    <input class="input" type="text" id="fuse_1" name="fuse_1" title="${tubeWellTypeBean.fuse1}" value="${tubeWellSurveyData.fuse1 eq '' ? '' : tubeWellSurveyData.fuse1}" size="20" >
                                                 </td>
                                                 <th class="heading">Fuse Type2</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_fuse_type2" name="twd_fuse_type2" value="${tubeWellTypeBean.fuse_type2 eq '' ? '' : tubeWellTypeBean.fuse_type2}" size="20" >
-                                                    <input class="input" type="text" id="fuse_type2" name="fuse_type2" title="${tubeWellTypeBean.fuse_type2}" value="${tubeWellSurveyData.fuse_type2 eq '' ? '' : tubeWellSurveyData.fuse_type2}" size="20" disabled>
+                                                    <input class="input" type="text" id="fuse_type2" name="fuse_type2" title="${tubeWellTypeBean.fuse_type2}" value="${tubeWellSurveyData.fuse_type2 eq '' ? '' : tubeWellSurveyData.fuse_type2}" size="20" >
                                                 </td>
                                                 <!--  <input class="input" type="text" id="fuse" name="fuse" value="" size="10" disabled></td>-->
 
@@ -1941,17 +1941,17 @@
                                                 <th class="heading">Fuse 2</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_fuse_2" name="twd_fuse_2" value="${tubeWellTypeBean.fuse2 eq '' ? '' : tubeWellTypeBean.fuse2}" size="20">
-                                                    <input class="input" type="text" id="fuse_2" name="fuse_2" title="${tubeWellTypeBean.fuse2}" value="${tubeWellSurveyBean.fuse2 eq '' ? '' : tubeWellSurveyBean.fuse2}" size="20" disabled>
+                                                    <input class="input" type="text" id="fuse_2" name="fuse_2" title="${tubeWellTypeBean.fuse2}" value="${tubeWellSurveyBean.fuse2 eq '' ? '' : tubeWellSurveyBean.fuse2}" size="20" >
                                                 </td>
                                                 <th class="heading">Fuse Type3</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_fuse_type3" name="twd_fuse_type3" value="${tubeWellTypeBean.fuse_type3 eq '' ? '' : tubeWellTypeBean.fuse_type3}" size="20" >
-                                                    <input class="input" type="text" id="fuse_type3" name="fuse_type3" title="${tubeWellTypeBean.fuse_type3}" value="${tubeWellSurveyData.fuse_type3 eq '' ? '' : tubeWellSurveyData.fuse_type3}" size="20" disabled>
+                                                    <input class="input" type="text" id="fuse_type3" name="fuse_type3" title="${tubeWellTypeBean.fuse_type3}" value="${tubeWellSurveyData.fuse_type3 eq '' ? '' : tubeWellSurveyData.fuse_type3}" size="20" >
                                                 </td>
                                                 <th class="heading">Fuse 3</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_fuse_3" name="twd_fuse_3" value="${tubeWellTypeBean.fuse3 eq '' ? '' : tubeWellTypeBean.fuse3}" size="20">
-                                                    <input class="input" type="text" id="fuse_3" name="fuse_3" title="${tubeWellTypeBean.fuse3}" value="${tubeWellSurveyData.fuse3 eq '' ? '' : tubeWellSurveyData.fuse3}" size="20" disabled>
+                                                    <input class="input" type="text" id="fuse_3" name="fuse_3" title="${tubeWellTypeBean.fuse3}" value="${tubeWellSurveyData.fuse3 eq '' ? '' : tubeWellSurveyData.fuse3}" size="20" >
                                                 </td>
 
                                             </tr>
@@ -1966,7 +1966,7 @@
 
                                                 <th class="heading">Mccb Quantity</th>
                                                 <td>
-                                                    <input class="input" type="text" id="mccb_quantity" name="mccb_quantity" value="0" size="20" disabled>
+                                                    <input class="input" type="text" id="mccb_quantity" name="mccb_quantity" value="0" size="20" >
                                                 </td>
 
                                             </tr>
@@ -1974,17 +1974,17 @@
                                                 <th class="heading">Mccb Type1</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_mccb_type1" name="twd_mccb_type1" value="${tubeWellTypeBean.mccb_type1 eq '' ? '' : tubeWellTypeBean.mccb_type1}" size="20" >
-                                                    <input class="input" type="text" id="mccb_type1" title="${tubeWellTypeBean.mccb_type1}" name="mccb_type1" value="${tubeWellSurveyData.mccb_type1 eq '' ? '' : tubeWellSurveyData.mccb_type1}" size="20" disabled>
+                                                    <input class="input" type="text" id="mccb_type1" title="${tubeWellTypeBean.mccb_type1}" name="mccb_type1" value="${tubeWellSurveyData.mccb_type1 eq '' ? '' : tubeWellSurveyData.mccb_type1}" size="20" >
                                                 </td>
                                                 <th class="heading">Mccb 1</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_mccb_1" name="twd_mccb_1" value="${tubeWellTypeBean.mccb1 eq '' ? '' : tubeWellTypeBean.mccb1}" size="20">
-                                                    <input class="input" type="text" id="mccb_1" name="mccb_1" title="${tubeWellTypeBean.mccb1}" value="${tubeWellSurveyData.mccb1 eq '' ? '' : tubeWellSurveyData.mccb1}" size="20" disabled>
+                                                    <input class="input" type="text" id="mccb_1" name="mccb_1" title="${tubeWellTypeBean.mccb1}" value="${tubeWellSurveyData.mccb1 eq '' ? '' : tubeWellSurveyData.mccb1}" size="20" >
                                                 </td>
                                                 <th class="heading">Mccb Type2</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_mccb_type2" name="twd_mccb_type2" value="${tubeWellTypeBean.mccb_type2 eq '' ? '' : tubeWellTypeBean.mccb_type2}" size="20" >
-                                                    <input class="input" type="text" id="mccb_type2" title="${tubeWellTypeBean.mccb_type2}" name="mccb_type2" value="${tubeWellSurveyData.mccb_type2 eq '' ? '' : tubeWellSurveyData.mccb_type2}" size="20" disabled>
+                                                    <input class="input" type="text" id="mccb_type2" title="${tubeWellTypeBean.mccb_type2}" name="mccb_type2" value="${tubeWellSurveyData.mccb_type2 eq '' ? '' : tubeWellSurveyData.mccb_type2}" size="20" >
                                                 </td>
                                                 <!--  <input class="input" type="text" id="fuse" name="fuse" value="" size="10" disabled></td>-->
 
@@ -1996,17 +1996,17 @@
                                                 <th class="heading">Mccb 2</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_mccb_2" name="twd_mccb_2" value="${tubeWellTypeBean.mccb2 eq '' ? '' : tubeWellTypeBean.mccb2}" size="20" >
-                                                    <input class="input" type="text" id="mccb_2" name="mccb_2" title="${tubeWellTypeBean.mccb2}" value="${tubeWellSurveyData.mccb2 eq '' ? '' : tubeWellSurveyData.mccb2}" size="20" disabled>
+                                                    <input class="input" type="text" id="mccb_2" name="mccb_2" title="${tubeWellTypeBean.mccb2}" value="${tubeWellSurveyData.mccb2 eq '' ? '' : tubeWellSurveyData.mccb2}" size="20" >
                                                 </td>
                                                 <th class="heading">Mccb Type3</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_mccb_type3" name="twd_mccb_type3" value="${tubeWellTypeBean.mccb_type3 eq '' ? '' : tubeWellTypeBean.mccb_type3}" size="20" >
-                                                    <input class="input" type="text" id="mccb_type3" title="${tubeWellTypeBean.mccb_type3}" name="mccb_type3" value="${tubeWellSurveyData.mccb_type3 eq '' ? '' : tubeWellSurveyData.mccb_type3}" size="20" disabled>
+                                                    <input class="input" type="text" id="mccb_type3" title="${tubeWellTypeBean.mccb_type3}" name="mccb_type3" value="${tubeWellSurveyData.mccb_type3 eq '' ? '' : tubeWellSurveyData.mccb_type3}" size="20" >
                                                 </td>
                                                 <th class="heading">Mccb 3</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_mccb_3" name="twd_mccb_3" value="${tubeWellTypeBean.mccb3 eq '' ? '' : tubeWellTypeBean.mccb3}" size="20">
-                                                    <input class="input" type="text" id="mccb_3" name="mccb_3" title="${tubeWellTypeBean.mccb3}" value="${tubeWellSurveyData.mccb3 eq '' ? '' : tubeWellSurveyData.mccb3}" size="20" disabled>
+                                                    <input class="input" type="text" id="mccb_3" name="mccb_3" title="${tubeWellTypeBean.mccb3}" value="${tubeWellSurveyData.mccb3 eq '' ? '' : tubeWellSurveyData.mccb3}" size="20" >
                                                 </td>
 
                                             </tr>
@@ -2025,17 +2025,17 @@
                                                 <th class="heading">Starter Capacity</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_starter_capacity" name="twd_starter_capacity" value="${tubeWellTypeBean.starter_capacity eq '' ? '' : tubeWellTypeBean.starter_capacity}" size="20" >
-                                                    <input class="input" type="text" id="starter_capacity" name="starter_capacity" title="${tubeWellTypeBean.starter_capacity}" value="${tubeWellSurveyData.starter_capacity eq '' ? '' : tubeWellSurveyData.starter_capacity}" size="20" disabled>
+                                                    <input class="input" type="text" id="starter_capacity" name="starter_capacity" title="${tubeWellTypeBean.starter_capacity}" value="${tubeWellSurveyData.starter_capacity eq '' ? '' : tubeWellSurveyData.starter_capacity}" size="20" >
                                                 </td>
                                                 <th class="heading">Starter Type</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_starter_type" name="twd_starter_type" value="${tubeWellTypeBean.starter_type eq '' ? '' : tubeWellTypeBean.starter_type}" size="20" >
-                                                    <input class="input" type="text" id="starter_type" name="starter_type" title="${tubeWellTypeBean.starter_type}" value="${tubeWellSurveyData.starter_type eq '' ? '' : tubeWellSurveyData.starter_type}" size="20" disabled>
+                                                    <input class="input" type="text" id="starter_type" name="starter_type" title="${tubeWellTypeBean.starter_type}" value="${tubeWellSurveyData.starter_type eq '' ? '' : tubeWellSurveyData.starter_type}" size="20" >
                                                 </td>
                                                 <th class="heading">Starter Make</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_starter_make" name="twd_starter_make" value="${tubeWellTypeBean.starter_make eq '' ? '' : tubeWellTypeBean.starter_make}" size="20">
-                                                    <input class="input" type="text" id="starter_make" name="starter_make" title="${tubeWellTypeBean.starter_make}" value="${tubeWellSurveyData.starter_make eq '' ? '' : tubeWellSurveyData.starter_make}" size="20" disabled>
+                                                    <input class="input" type="text" id="starter_make" name="starter_make" title="${tubeWellTypeBean.starter_make}" value="${tubeWellSurveyData.starter_make eq '' ? '' : tubeWellSurveyData.starter_make}" size="20" >
                                                 </td>
 
                                             </tr>
@@ -2043,34 +2043,34 @@
                                             <tr>
                                                 <th class="heading">Control Mechanism</th>
                                                 <td>
-                                                    <input class="input" type="text" id="control_mechanism_type" name="control_mechanism_type" value="${tubeWellTypeBean.control_mechanism_type eq '' ? '' : tubeWellTypeBean.control_mechanism_type}" size="20" disabled>
+                                                    <input class="input" type="text" id="control_mechanism_type" name="control_mechanism_type" value="${tubeWellTypeBean.control_mechanism_type eq '' ? '' : tubeWellTypeBean.control_mechanism_type}" size="20" >
                                                 </td>
                                                 <th class="heading">Is Working</th>
-                                                <td><input class="input" type="text" id="is_working" name="is_working" value="${tubeWellTypeBean.is_working eq '' ? '' : tubeWellTypeBean.is_working}" size="20" disabled></td>
+                                                <td><input class="input" type="text" id="is_working" name="is_working" value="${tubeWellTypeBean.is_working eq '' ? '' : tubeWellTypeBean.is_working}" size="20" ></td>
 
                                             </tr>
                                             <tr>
                                                 <th class="heading">Auto Switch Type</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_auto_switch_type" name="twd_auto_switch_type" value="${tubeWellTypeBean.auto_switch_type eq '' ? '' : tubeWellTypeBean.auto_switch_type}" size="20">
-                                                    <input class="input" type="text" id="auto_switch_type" name="auto_switch_type" title="${tubeWellTypeBean.auto_switch_type}" value="${tubeWellSurveyData.auto_switch_type eq '' ? '' : tubeWellSurveyData.auto_switch_type}" size="20" disabled>
+                                                    <input class="input" type="text" id="auto_switch_type" name="auto_switch_type" title="${tubeWellTypeBean.auto_switch_type}" value="${tubeWellSurveyData.auto_switch_type eq '' ? '' : tubeWellSurveyData.auto_switch_type}" size="20" >
                                                 </td>
                                                 <th class="heading">Main Switch Type</th>
-                                                <td><input class="input" type="hidden" id="twd_main_switch_type" name="twd_main_switch_type" value="${tubeWellTypeBean.main_switch_type eq '' ? '' : tubeWellTypeBean.main_switch_type}" size="20" disabled>
-                                                    <input class="input" type="text" id="main_switch_type" name="main_switch_type" title="${tubeWellTypeBean.main_switch_type}" value="${tubeWellSurveyData.main_switch_type eq '' ? '' : tubeWellSurveyData.main_switch_type}" size="20" disabled></td>
+                                                <td><input class="input" type="hidden" id="twd_main_switch_type" name="twd_main_switch_type" value="${tubeWellTypeBean.main_switch_type eq '' ? '' : tubeWellTypeBean.main_switch_type}" size="20" >
+                                                    <input class="input" type="text" id="main_switch_type" name="main_switch_type" title="${tubeWellTypeBean.main_switch_type}" value="${tubeWellSurveyData.main_switch_type eq '' ? '' : tubeWellSurveyData.main_switch_type}" size="20" ></td>
                                                 <th class="heading">Main Switch Reading</th>
                                                 <td>
                                                     <input class="input" type="hidden" id="twd_main_switch_rating" name="twd_main_switch_rating" value="${tubeWellTypeBean.main_switch_reading eq '' ? '' : tubeWellTypeBean.main_switch_reading}" size="20" >
-                                                    <input class="input" type="text" id="main_switch_rating" name="main_switch_rating" title="${tubeWellTypeBean.main_switch_reading}" value="${tubeWellSurveyData.main_switch_rating eq '' ? '' : tubeWellSurveyData.main_switch_rating}" size="20" disabled>
+                                                    <input class="input" type="text" id="main_switch_rating" name="main_switch_rating" title="${tubeWellTypeBean.main_switch_reading}" value="${tubeWellSurveyData.main_switch_rating eq '' ? '' : tubeWellSurveyData.main_switch_rating}" size="20" >
                                                 </td>
 
                                             </tr>
                                             <tr>
                                                 <th class="heading">Enclosure Type</th>
                                                 <td><input class="input" type="hidden" id="twd_enclosure_type" name="twd_enclosure_type" value="${tubeWellTypeBean.enclosure_type eq '' ? '' : tubeWellTypeBean.enclosure_type}" size="20">
-                                                    <input class="input" type="text" id="enclosure_type" name="enclosure_type" title="${tubeWellTypeBean.enclosure_type}" value="${tubeWellSurveyData.enclosure_type eq '' ? '' : tubeWellSurveyData.enclosure_type}" size="20" disabled></td>
+                                                    <input class="input" type="text" id="enclosure_type" name="enclosure_type" title="${tubeWellTypeBean.enclosure_type}" value="${tubeWellSurveyData.enclosure_type eq '' ? '' : tubeWellSurveyData.enclosure_type}" size="20" ></td>
 
-                                                <th class="heading">Remark</th><td><input class="input" type="text" id="remark" name="remark" value="${tubeWellTypeBean.remark eq '' ? '' : tubeWellTypeBean.remark}" size="20" disabled></td>
+                                                <th class="heading">Remark</th><td><input class="input" type="text" id="remark" name="remark" value="${tubeWellTypeBean.remark eq '' ? '' : tubeWellTypeBean.remark}" size="20" ></td>
 
 
                                             </tr>

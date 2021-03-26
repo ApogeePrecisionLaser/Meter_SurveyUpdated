@@ -49,9 +49,12 @@
                         </li>
                         <li><a id="mpeb1" href="#">Pole Detail</a>
                             <ul>
+                                  <li><a href="poleTypeCont">Pole Type</a></li>
+                                  <li><a href="PoleLightTypeCont">Pole Light Type</a></li>
                                 <li><a href="poleDetailCont">Pole Detail</a></li>
-                                <li><a href="poleTypeCont">Pole Type</a></li>
+                              
                                 <li><a href="mountingTypeCont">Mounting Type</a></li>
+                                <li><a href="PoleSurveyCont">Pole Survey View</a></li>
                             </ul>
                         </li>
                         <li>
@@ -182,7 +185,8 @@
                         <li><a href="switchingtypeCont.do">Switching Type</a></li>
                          <li><a href="ShowMeterDataCont.do">Meter Details</a></li>
                          <li><a href="PrimarySurveyController">Primary Survey</a></li>
-                           <li><a href="CircuitSurveyController">Circuit Survey</a></li>
+                           <li><a href="CircuitSurveyController">Circuit Data</a></li>
+                           <li><a href="CircuitSurveyDataController">Circuit Survey</a></li>
                     </ul>
 
                 </li>

@@ -1145,7 +1145,7 @@ try {
                 + " r.road_use_id = ru.road_use_id And "
                 + " r.category_id = rc.category_id And "
                 + " p.traffic_type_id = t.traffic_type_id AND "
-                + " IF('" + searchPoleType + "' = '', p.pole_id LIKE '%%', pt.pole_type =? ) "
+                + " IF('" + searchPoleType + "' = '', p.pole_id LIKE '%%', pt.pole_type_name =? ) "
                 + " AND IF('" + searchMountingType + "' = '', p.pole_id LIKE '%%', m.mounting_type =? ) "
                 + " AND IF('" + searchSwitchingPoint + "' = '', spd.switching_point_name LIKE '%%', spd.switching_point_name =? ) "
                 + " AND IF('" + searchPole_no + "' = '', p.pole_no LIKE '%%', p.pole_no =? ) "
@@ -1196,7 +1196,7 @@ try {
                 + "  AND p.pole_id = spltm.pole_id and  p.pole_rev_no = spltm.pole_rev_no "
                 + " AND lt.wattage_id=w.wattage_id AND "
                 + "  lt.source_id=l.source_type_id)AS source_wattage,p.latitude "
-                + " ,p.longitude,pt.pole_type,p.pole_rev_no,p.pole_span,p.pole_height,p.mounting_height, "
+                + " ,p.longitude,pt.pole_type_name,p.pole_rev_no,p.pole_span,p.pole_height,p.mounting_height, "
                 + " DATE_FORMAT(p.created_date,'%d-%m-%Y') AS "
                 + "  created_date,f.feeder_name,p.isSwitchingPoint as is_switch_point, "
                 + " p.created_by, p.remark,p.pole_no, "//p.pole_no_client, "
@@ -1214,7 +1214,7 @@ try {
                    + " area a, road r, traffic_type t, road_category rc, road_use ru, ward w, city cty "
                 + " where p.active = 'Y' AND "
                 + " p.area_id = a.area_id And "
-                + " a.ward_id = w.ward_id AND "
+             //   + " a.ward_id = w.ward_id AND "
              //     + " a.ward_id_m = w.ward_id_m AND "
                 + " w.city_id = cty.city_id AND "
                 + " p.road_id = r.road_id And "
@@ -1222,7 +1222,7 @@ try {
                 + " r.road_use_id = ru.road_use_id And "
                 + " r.category_id = rc.category_id And "
                 + " p.traffic_type_id = t.traffic_type_id AND "
-                + " IF('" + searchPoleType + "' = '', p.pole_id LIKE '%%', pt.pole_type =? ) "
+                + " IF('" + searchPoleType + "' = '', p.pole_id LIKE '%%', pt.pole_type_name =? ) "
                 + " AND IF('" + searchMountingType + "' = '', p.pole_id LIKE '%%', m.mounting_type =? ) "
                 + " AND IF('" + searchSwitchingPoint + "' = '', spd.switching_point_name LIKE '%%', spd.switching_point_name =? ) "
                 + " AND IF('" + searchPoleNo + "' = '', p.pole_no LIKE '%%', p.pole_no =? ) "
@@ -1255,7 +1255,7 @@ try {
                 PoleDetailTypeBean sourceType = new PoleDetailTypeBean();
                 sourceType.setPole_id(rset.getInt("pole_id"));
                 sourceType.setPole_rev_no(rset.getInt("pole_rev_no"));
-                sourceType.setPole_type(rset.getString("pole_type"));
+                sourceType.setPole_type(rset.getString("pole_type_name"));
                 sourceType.setPole_span(rset.getString("pole_span"));
                 sourceType.setPole_height(rset.getString("pole_height"));
                 sourceType.setMounting_height(rset.getString("mounting_height"));
@@ -1341,7 +1341,7 @@ try {
                 + "  AND p.pole_id = spltm.pole_id and  p.pole_rev_no = spltm.pole_rev_no "
                 + " AND lt.wattage_id=w.wattage_id AND "
                 + "  lt.source_id=l.source_type_id)AS source_wattage,p.latitude "
-                + " ,p.longitude,pt.pole_type,p.pole_rev_no,p.pole_span,p.pole_height,p.mounting_height, "
+                + " ,p.longitude,pt.pole_type_name,p.pole_rev_no,p.pole_span,p.pole_height,p.mounting_height, "
                 + " DATE_FORMAT(p.created_date,'%d-%m-%Y') AS "
                 + "  created_date,f.feeder_name,p.isSwitchingPoint as is_switch_point, "
                 + " p.created_by, p.remark,p.pole_no, "
@@ -1367,7 +1367,7 @@ try {
                 + " r.road_use_id = ru.road_use_id And "
                 + " r.category_id = rc.category_id And "
                 + " p.traffic_type_id = t.traffic_type_id AND "
-                + " IF('" + searchPoleType + "' = '', p.pole_id LIKE '%%', pt.pole_type =? ) "
+                + " IF('" + searchPoleType + "' = '', p.pole_id LIKE '%%', pt.pole_type_name =? ) "
                 + " AND IF('" + searchMountingType + "' = '', p.pole_id LIKE '%%', m.mounting_type =? ) "
                 + " AND IF('" + searchSwitchingPoint + "' = '', spd.switching_point_name LIKE '%%', spd.switching_point_name =? ) "
                 + " AND IF('" + searchPoleNo + "' = '', p.pole_no LIKE '%%', p.pole_no ='"+searchPoleNo+"' ) "

@@ -2748,16 +2748,31 @@ public class SwitchingPointSurveyModel {
                 + "left join road_use as ru on ru.road_use_id=r.road_use_id "
                 + "left join zone as z on fe.zone_id=z.zone_id "
                 + "left join division as d on d.division_id = z.division_id AND d.active='Y' "
-                + "left join ward as w on w.ward_id = a.ward_id "
+                + "left join ward as w on w.ward_id = a.ward_id_m "
                 + " left join city as cy on cy.city_id = w.city_id "
-                + " where t.active='Y' "
-                + "AND IF( '" + meter_name_auto + "' = '', t.meter_name_auto LIKE '%%', t.meter_name_auto ='" + meter_name_auto + "' ) "
-                + "AND IF( '" + add + "' = '', t.service_conn_no LIKE '%%', t.service_conn_no ='" + add + "' ) "
-                + " AND IF( '" + searchPoleNo + "' = '', t.pole_no_s LIKE '%%', t.pole_no_s ='" + searchPoleNo + "' ) "
-                + "AND IF( '" + searchSwitchingPtName + "' = '', t.switching_point_name LIKE '%%', t.switching_point_name ='" + searchSwitchingPtName + "' ) "
-                + "AND IF( '" + zone + "' = '', z.zone LIKE '%%', z.zone ='" + zone + "' ) "
-                + "order by t.switching_point_detail_id ";
-
+                + " where t.active='Y' ";
+//                + "AND IF( '" + meter_name_auto + "' = '', t.meter_name_auto LIKE '%%', t.meter_name_auto ='" + meter_name_auto + "' ) "
+//                + "AND IF( '" + add + "' = '', t.service_conn_no LIKE '%%', t.service_conn_no ='" + add + "' ) "
+//                + " AND IF( '" + searchPoleNo + "' = '', t.pole_no_s LIKE '%%', t.pole_no_s ='" + searchPoleNo + "' ) "
+//                + "AND IF( '" + searchSwitchingPtName + "' = '', t.switching_point_name LIKE '%%', t.switching_point_name ='" + searchSwitchingPtName + "' ) "
+//                + "AND IF( '" + zone + "' = '', z.zone LIKE '%%', z.zone ='" + zone + "' ) "
+//                + "order by t.switching_point_detail_id ";
+if(zone!=""){
+        query=query+"and z.zone='"+zone+"'";
+        }
+if(searchPoleNo!=""){
+        query=query+"and t.pole_no_s='"+searchPoleNo+"'";
+        }
+         if(searchSwitchingPtName!=""){
+        query+=" and  t.switching_point_name='"+searchSwitchingPtName+"'";
+        }
+if(meter_name_auto!=""){
+        query=query+"and t.meter_name_auto='"+meter_name_auto+"'";
+        }
+         if(add!=""){
+        query+=" and t.service_conn_no='"+add+"'";
+        }
+              query+= "order by t.switching_point_detail_id ";      
         int rowsAffected = -1;
         try {
             connection.setAutoCommit(false);

@@ -19,6 +19,7 @@ public class SurveyBean {
     private int switching_point_survey_rev_no;
     private int survey_rev_no;
     private String created_by;
+    private String meter_address;
     private String survey_file_no;
     private String survey_page_no;
     private String survey_date;
@@ -100,6 +101,14 @@ public class SurveyBean {
 
     public void setSurvey_with_name(String survey_with_name) {
         this.survey_with_name = survey_with_name;
+    }
+
+    public String getMeter_address() {
+        return meter_address;
+    }
+
+    public void setMeter_address(String meter_address) {
+        this.meter_address = meter_address;
     }
 
     public String getSurvey_with_contact() {

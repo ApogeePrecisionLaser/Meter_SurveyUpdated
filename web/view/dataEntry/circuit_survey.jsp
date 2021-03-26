@@ -17,22 +17,24 @@
 <script type="text/javascript" src="JS/jquery.autocomplete.js"></script>
 <script type="text/javascript" language="javascript">
 
-      jQuery(function(){
-      
+    jQuery(function () {
+
         $("#meter_name_search1").autocomplete("CircuitSurveyController", {
             extraParams: {
-                action1: function() { return "getmeter_name_search"}
+                action1: function () {
+                    return "getmeter_name_search"
+                }
             }
         });
-       $("#irvs_no_search1").autocomplete("CircuitSurveyController", {
+        $("#irvs_no_search1").autocomplete("CircuitSurveyController", {
             extraParams: {
                 action1: function () {
                     return "getirvs_search"
                 }
             }
         });
-        
-         $("#circuit_search1").autocomplete("CircuitSurveyController", {
+
+        $("#circuit_search1").autocomplete("CircuitSurveyController", {
             extraParams: {
                 action1: function () {
                     return "getcircuit_search"
@@ -41,7 +43,7 @@
             }
         });
     });
-  
+
 // jQuery(function(){
 //        $("#city_name").autocomplete("areaTypeCont", {
 //            extraParams: {
@@ -194,14 +196,14 @@
 
         return window.open(url, window_name, window_features);
     }
-  
-      function viewFirstPoleImage(circiut_id)
+
+    function viewFirstPoleImage(circiut_id)
     {
         debugger;
         var queryString = "task=viewFirstPoleImage&circiut_id=" + circiut_id;
 
         var url = "CircuitSurveyController?" + queryString;
-  
+
 
         popupwin = openPopUp(url, "Mounting Type Map Details", 500, 1000);
     }
@@ -212,10 +214,14 @@
         var queryString = "task=viewlastPoleImage&circiut_id=" + circiut_id;
 
         var url = "CircuitSurveyController?" + queryString;
-       alert(url);
+        alert(url);
 
         popupwin = openPopUp(url, "Mounting Type Map Details", 500, 1000);
     }
+      function setStatus(id) {
+        if(id == 'save'){
+            document.getElementById("clickedButton").value = "Save";
+        }}
 </script>
 
 <html>
@@ -290,23 +296,23 @@
                                                     <th class="heading">Sync Status</th>
 
                                                     <th class="heading">Latitude First Pole</th>
-                                                    
+
                                                     <th class="heading">Longitude First Pole</th>
-                                                    
+
                                                     <th class="heading">Altitude First Pole</th>
-                                                    
+
                                                     <th class="heading">Accuracy First Pole</th>
-                                                    
+
                                                     <th class="heading">Latitude Last Pole</th>
-                                                    
+
                                                     <th class="heading">Longitude Last Pole</th>
-                                                    
+
                                                     <th class="heading">Altitude First Pole</th>
-                                                    
+
                                                     <th class="heading">Accuracy Last Pole</th>
-                                                    
+
                                                     <th class="heading">Image First Pole</th>
-                                                    
+
                                                     <th class="heading">Image Last Pole</th>
 
                                                 </tr>
@@ -324,8 +330,8 @@
                                                         <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)">${area.parent}</td>
                                                         <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)">${area.timestamptime}</td>
 
-                                                        
-                                                        
+
+
                                                         <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${area.sync_status}</td>
                                                         <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)">${area.lattitudefirstpole}</td>
                                                         <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)">${area.longitudefirstpole}</td>
@@ -333,7 +339,7 @@
 
                                                         <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)">${area.accuracyfirstpole}</td>
                                                         <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)">${area.lattitudelasttpole}</td>
-                                                         <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)">${area.longitudelasttpole}</td>
+                                                        <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)">${area.longitudelasttpole}</td>
                                                         <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)">${area.altitudelastpole}</td>
 
                                                         <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)">${area.accuracylasttpole}</td>
@@ -378,75 +384,148 @@
                                                         </c:choose>
                                                     </td>  </tr>
                                                     <%-- These hidden fields "lowerLimit", and "noOfRowsTraversed" belong to form1 of table1. --%>
-                                                <input type="hidden" name="lowerLimit" value="${lowerLimit}">
-                                                <input type="hidden" id="noOfRowsTraversed" name="noOfRowsTraversed" value="${noOfRowsTraversed}">
-                                                <input type="hidden" name="meter_name_search" value="${meter_name_search}">
-                                                <input type="hidden" name="irvs_search" value="${irvs_search}">
-                                                <input type="hidden" name="circuit_search" value="${circuit_search}">
 
+                                         
+ 
+
+                                            
+                                                               
+
+                                                                </table>
+                                                        </DIV>
+                                                        </form>
+                                                    </td>
+                            </tr>
+    <tr>
+
+                                                    <td align="center">
+                                                       
+                                                            <form name="form2" method="POST" action="CircuitSurveyController"  >
+                                                                <table id="table2"  class="content" border="0"  align="center" width="600">
+                                                                  
+
+                                                                    <tr>
+                                                                         <th class="heading">ivrsno</th>
+                                                                         <td>
+                                                                            <input class="input" type="text" id="ivrsno1" name="ivrsno1" value="${ivrsno1}" size="20"  >
+                                                                         </td>
+                                                                        
+                                                                             <input class="input" type="hidden" id="switchingid" name="switchingid" value="${switchingid}" size="20"  >
+                                                                        
+                                                                        
+                                                                             <input class="input" type="hidden" id="cableid" name="cableid" value="${cableid}" size="20"  >
+                                                                        
+                                                                        
+                                                                            <input class="input" type="hidden" id="firstpoleid" name="firstpoleid" value="${firstpoleid}" size="20"  >
+                                                                       
+                                                                       
+                                                                       
+                                                                            <input class="input" type="hidden" id="lastpoleid" name="lastpoleid" value="${lastpoleid}" size="20"   >
+                                                                       
+                                                                      
+                                                                            <input class="input" type="hidden" id="firstpoleimage" name="firstpoleimage" value="${firstpoleimage}" size="20"  >
+                                                                       
+                                                                        
+                                                                            <input class="input" type="hidden" id="lastpoleimage" name="lastpoleimage" value="${lastpoleimage}" size="20"  >
+                                                                       
+                                                                        <th class="heading">circuitno</th>
+                                                                        <td>
+                                                                        
+                                                                            <input class="input" type="text" id="circuitno1" name="circuitno1" value="${circuitno1}" size="20"  >
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                <th class="heading">Datetime</th>
+                                                                        <td>
+                                                                            <input class="input" type="text" id="time1" name="time1" value="${time1}" size="20"  >
+                                                                        </td>
+                                                                        <th class="heading">ischild1</th>
+                                                                        <td>
+                                                                            <input class="input" type="text" id="ischild1" name="ischild1" value="${ischild1}" size="20"  >
+                                                                        </td>
+
+                                                                    </tr>
+
+                               
+                                                                    <tr>
+
+                                                                       
+                                                                            <input class="input" type="hidden" id="timestamptime1" name="timestamptime1"  value="${timestamptime1}" size="20">
+
+                                                                        <th class="heading">syncstatus1</th>
+                                                                        <td>
+                                                                            <input class="input" type="text" id="syncstatus1" name="syncstatus1" value="${syncstatus1}" size="20"  >
+                                                                        </td>
+                                                                        <th class="heading">acuracyfirstpole</th>
+
+                                                                        <td>
+                                                                            <input class="input" type="text" id="acuracyfirstpole1" name="acuracyfirstpole1" title="${acuracyfirstpole1}" size="20"    >
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th class="heading">acuracylastpole</th>
+                                                                        <td>
+                                                                            <input class="input" type="text" id="acuracylastpole1" name="accuracylastpole1" title="${accuracylastpole1}" size="20"    >
+                                                                        </td>
+
+
+                                                                        <th class="heading">lattitudefirstpole1e</th>
+                                                                        <td>    <input class="input" type="text" id="lattitudefirstpole1" name="lattitudefirstpole1"   value=" ${lattitudefirstpole1}" size="20"></td>
+                                                                        </td>  </tr> <tr>
+                                                                        <th class="heading">lattitudelastpole1</th>
+                                                                        <td>    <input class="input" type="text" id="lattitudelastpole1" name="lattitudelastpole1"   value=" ${lattitudelastpole1}" size="20"></td>
+                                                                        </td> 
+
+                                                                        <th class="heading">longitudefirstpole1</th>
+                                                                        <td>    <input class="input" type="text" id="longitudefirstpole1" name="longitudefirstpole1"   value=" ${longitudefirstpole1}" size="20"></td>
+                                                                        </td>  </tr>
+                                                                    <tr>
+                                                                        <th class="heading">longitudelastpole1</th>
+                                                                        <td>    <input class="input" type="text" id="longitudelastpole1" name="longitudelastpole1"   value=" ${longitudelastpole1}" size="20"></td>
+                                                                        </td> 
+
+
+
+                                                                        <th class="heading">altitudefirstpole</th>
+                                                                        <td>    <input class="input" type="text" id="altitudefirstpole" name="altitudefirstpole"   value=" ${altitudefirstpole}" size="20"></td>
+                                                                        </td>  </tr>
+                                                                    <tr>
+                                                                        <th class="heading">altitudelastpole</th>
+                                                                        <td>    <input class="input" type="text" id="altitudelastpole" name="altitudelastpole"   value=" ${altitudelastpole}" size="20"></td>
+                                                                        </td> 
+                                                                        <th class="heading">circuitname</th>
+                                                                        <td>    <input class="input" type="text" id="circuitname" name="circuitname"   value=" ${circuitname}" size="20"></td>
+                                                                        </td> 
+                                                                    </tr>
+                                                                    <tr> 
+                                                                    <td>      <input class="button" type="submit" name="task" id="save" value="Save" onclick="setStatus(id)" ></td>
+                                                                        </td> 
+                                                                       
+                                                                    </tr>
+                                                                </table>
+                                                            </form>
+                                                            </td>
+                                                                </tr>
+                                             
+                                                <%-- These hidden fields "lowerLimit", "noOfRowsTraversed", and "clickedButton" belong to form2 of table2. --%>
+                                                <input type="hidden" name="lowerLimit" value="${lowerLimit}">
+                                                <input type="hidden" name="noOfRowsTraversed" value="${noOfRowsTraversed}">
+                                                <input type="hidden" id="clickedButton" value="">
+                                                <input type="hidden" name="searchWardNo" value="${ward_no}">
+                                                <input type="hidden" name="searchAreaName" value="${area_name}">
+                    <!--                                                <input type="hidden" name="searchWardName" value="${ward_name}">-->
                                             </table>
-                                        </DIV>
+
                                     </form>
+                                    </DIV>
                                 </td>
                             </tr>
-
-                            <!--                            <tr>
-                                                            <td align="center">
-                                                                <DIV>
-                                                                    <form name="form2" method="POST" action="areaTypeCont" onsubmit="return verify()">
-                                                                        <table  border="0" id="table2" align="center" width="600" class="content">
-                                                                            <tr id="message">
-                            <c:if test="${not empty message}">
-                                <td colspan="2" bgcolor="${msgBgColor}"><b>Result: ${message}</b></td>
-                            </c:if>
-                        </tr>
-                        <tr>
-                            <th class="heading1">Area Name</th>
-                            <td><input type="hidden" id="area_id" name="area_id" value="" >
-                                <input class="input" type="text" id="area_name" name="area_name" size="30" value="" disabled>
-                            </td>
-                             <th class="heading1">Ward No</th>
-                            <td>
-                                <input class="input" type="text" id="ward_no" name="ward_no" size="30" value="" disabled>
-                            </td>
-                        </tr>
-                            <tr>
-                            
-                            <th class="heading1">Remark</th>
-                          <td><input class="input" type="text" id="remark" name="remark" value="" size="30" disabled></td>
-                        </tr>
-                       
-                        
-                        
-                      
-                        <tr>
-                            <td align='center' colspan="4">
-                                <input class="button" type="button" name="edit" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
-                                <input class="button" type="submit" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>
-                                <input class="button" type="submit" name="task" id="save_As" value="Save AS New" onclick="setStatus(id)" disabled>
-                                <input class="button" type="reset" name="new" id="new" value="New" onclick="makeEditable(id)">
-                                <input class="button" type="submit" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled>
-                            </td>
-                        </tr>-->
-                            <%-- These hidden fields "lowerLimit", "noOfRowsTraversed", and "clickedButton" belong to form2 of table2. --%>
-                            <input type="hidden" name="lowerLimit" value="${lowerLimit}">
-                            <input type="hidden" name="noOfRowsTraversed" value="${noOfRowsTraversed}">
-                            <input type="hidden" id="clickedButton" value="">
-                            <input type="hidden" name="searchWardNo" value="${ward_no}">
-                            <input type="hidden" name="searchAreaName" value="${area_name}">
-<!--                                                <input type="hidden" name="searchWardName" value="${ward_name}">-->
                         </table>
 
-                        </form>
                     </DIV>
-                </td>
-            </tr>
+                </td></tr>
+            <tr><td><%@include file="/layout/footer.jsp" %></td> </tr>
         </table>
-
-    </DIV>
-</td></tr>
-<tr><td><%@include file="/layout/footer.jsp" %></td> </tr>
-</table>
-</body>
+    </body>
 </html>
 

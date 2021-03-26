@@ -905,8 +905,9 @@ public class TubeWellDetailModel {
 
     public List<String> getAutoSwitchType(String q) {
         List<String> list = new ArrayList<String>();
-        String query = " SELECT st.switch_type FROM switch_type as st,switch as s where s.switch_id-st.switch_id"
-                + " and s.switch='auto_switch' GROUP BY switch_type ORDER BY switch_type ";
+        String query = "SELECT switch_type FROM switch_type as st ,switch as s where s.switch_id=st.switch_id and s.switch='auto_switch' ";
+//        String query = " SELECT st.switch_type FROM switch_type as st,switch as s where s.switch_id-st.switch_id"
+//                + " and s.switch='auto_switch' GROUP BY switch_type ORDER BY switch_type ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
@@ -1417,13 +1418,7 @@ public class TubeWellDetailModel {
                 + "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?)";
 
 
-        String query2 = "INSERT INTO switching_point_light_type_mapping (tube_well_detail_id , light_type_id , no_of_working , no_of_not_working, total_fittings)"
-                + " VALUES (?, ?, ?, ?, ?)";
-
-        String query3 = "INSERT INTO pole "
-                + " (created_by, pole_no, tube_well_detail_id, tube_well_rev_no, isSwitchingPoint, area_id, road_id, road_rev_no, traffic_type_id) "
-                + " VALUES "
-                + " (?, ?, ?, 0, 'Yes', ?,?,?,?) ";
+   
 
         java.sql.Date s_date = null;
         ResultSet rs = null;
@@ -1438,23 +1433,64 @@ public class TubeWellDetailModel {
             connection.setAutoCommit(false);
             pstmt = connection.prepareStatement(query1);
 //            pstmt.setInt(1, survey_id + 1);
-            pstmt.setString(1, tubeWellTypeBean.getTube_well_name());
-            pstmt.setString(2, tubeWellTypeBean.getPole_no_s());
-            pstmt.setString(3, tubeWellTypeBean.getGps_code_s());
+             if (!tubeWellTypeBean.getTube_well_name().isEmpty()) {
+                pstmt.setString(1, tubeWellTypeBean.getTube_well_name());
+            } else {
+                pstmt.setString(1, "yes");
+            }
+              if (!tubeWellTypeBean.getPole_no_s().isEmpty()) {
+               pstmt.setString(2, tubeWellTypeBean.getPole_no_s());
+            } else {
+                pstmt.setNull(2, java.sql.Types.NULL);
+            }
+               if (!tubeWellTypeBean.getGps_code_s().isEmpty()) {
+               pstmt.setString(3, tubeWellTypeBean.getGps_code_s());
+            } else {
+                pstmt.setNull(3, java.sql.Types.NULL);
+            }
 //            if (tubeWellTypeBean.getIsCheckedTrue().equals("Y")) {
 //                pstmt.setNull(4, java.sql.Types.INTEGER);
 //                pstmt.setNull(5, java.sql.Types.INTEGER);
 //                pstmt.setNull(7, java.sql.Types.INTEGER);
 //                pstmt.setNull(26, java.sql.Types.INTEGER);
 //            } else {
-            pstmt.setInt(4, tubeWellTypeBean.getArea_id());
-            pstmt.setInt(5, tubeWellTypeBean.getRoad_id());
-            pstmt.setInt(7, tubeWellTypeBean.getTraffic_type_id());
-            pstmt.setInt(26, tubeWellTypeBean.getRoad_rev_no());
+          if ( tubeWellTypeBean.getArea_id() != 0) {
+                pstmt.setInt(4, tubeWellTypeBean.getArea_id());
+            } else {
+                pstmt.setNull(4, java.sql.Types.INTEGER);
+            }
+//            pstmt.setInt(4, tubeWellTypeBean.getArea_id());
+          if ( tubeWellTypeBean.getRoad_id() != 0) {
+                pstmt.setInt(5, tubeWellTypeBean.getRoad_id());
+            } else {
+                pstmt.setNull(5, java.sql.Types.INTEGER);
+            }
+           if (tubeWellTypeBean.getTraffic_type_id() != 0) {
+                pstmt.setInt(7, tubeWellTypeBean.getTraffic_type_id());
+            } else {
+                pstmt.setNull(7, java.sql.Types.INTEGER);
+            }
+           // pstmt.setInt(7, tubeWellTypeBean.getTraffic_type_id());
+            if (tubeWellTypeBean.getRoad_rev_no() != 0) {
+                pstmt.setInt(26, tubeWellTypeBean.getRoad_rev_no());
+            } else {
+                pstmt.setNull(26, java.sql.Types.INTEGER);
+            }
             // }
-            pstmt.setString(6, tubeWellTypeBean.getIs_working());
-            pstmt.setString(8, tubeWellTypeBean.getCreated_by());
-            pstmt.setString(9, tubeWellTypeBean.getRemark());
+             if (!tubeWellTypeBean.getIs_working().isEmpty()) {
+                   pstmt.setString(6, tubeWellTypeBean.getIs_working());
+            } else {
+                pstmt.setNull(6, java.sql.Types.NULL);
+            }
+              
+                pstmt.setInt(8,0);
+           
+               if (!tubeWellTypeBean.getRemark().isEmpty()) {
+                 pstmt.setString(9, tubeWellTypeBean.getRemark());
+            } else {
+                pstmt.setNull(9, java.sql.Types.NULL);
+            }
+       
             if (!tubeWellTypeBean.getMeter_no_s().isEmpty()) {
                 pstmt.setString(10, tubeWellTypeBean.getMeter_no_s());
             } else {
@@ -1463,12 +1499,12 @@ public class TubeWellDetailModel {
             if (tubeWellTypeBean.getPhase() != 0) {
                 pstmt.setInt(11, tubeWellTypeBean.getPhase());
             } else {
-                pstmt.setNull(11, java.sql.Types.INTEGER);
+                pstmt.setInt(11, 3);
             }
             if (tubeWellTypeBean.getControl_mechanism_id() != 0) {
                 pstmt.setInt(12, tubeWellTypeBean.getControl_mechanism_id());
             } else {
-                pstmt.setNull(12, java.sql.Types.INTEGER);
+                pstmt.setInt(12, 1);
             }
             if (!tubeWellTypeBean.getFuse().isEmpty()) {
                 pstmt.setString(13, tubeWellTypeBean.getFuse());
@@ -1503,12 +1539,12 @@ public class TubeWellDetailModel {
             if (!tubeWellTypeBean.getLongitude().isEmpty()) {
                 pstmt.setString(19, tubeWellTypeBean.getLongitude());
             } else {
-                pstmt.setNull(19, java.sql.Types.NULL);
+                 pstmt.setString(19, "0.0");
             }
             if (!tubeWellTypeBean.getLattitude().isEmpty()) {
                 pstmt.setString(20, tubeWellTypeBean.getLattitude());
             } else {
-                pstmt.setNull(20, java.sql.Types.NULL);
+                pstmt.setString(20, "0.0");
             }
             if (!tubeWellTypeBean.getService_conn_no().isEmpty()) {
                 pstmt.setString(21, tubeWellTypeBean.getService_conn_no());
@@ -1518,16 +1554,26 @@ public class TubeWellDetailModel {
             if (!tubeWellTypeBean.getIvrs_no().isEmpty()) {
                 pstmt.setString(22, tubeWellTypeBean.getIvrs_no());
             } else {
-                pstmt.setNull(22, java.sql.Types.NULL);
+              pstmt.setString(22, "0");
             }
             if (!tubeWellTypeBean.getMeasured_load().isEmpty()) {
                 pstmt.setString(23, tubeWellTypeBean.getMeasured_load());
             } else {
-                pstmt.setNull(23, java.sql.Types.NULL);
+               pstmt.setString(23, "0");
             }
 
-            pstmt.setInt(24, tubeWellTypeBean.getFeeder_id());
-            pstmt.setString(25, tubeWellTypeBean.getIsCheckedTrue());
+           if (tubeWellTypeBean.getFeeder_id() != 0) {
+                pstmt.setInt(24, tubeWellTypeBean.getFeeder_id());
+            } else {
+                pstmt.setInt(24, 123);
+            }
+          ////////////////////////////
+        
+            if (!tubeWellTypeBean.getIsCheckedTrue().isEmpty()) {
+                   pstmt.setString(25, tubeWellTypeBean.getIsCheckedTrue());
+            } else {
+                pstmt.setString(25, "Y");
+            }
             if (!tubeWellTypeBean.getFuse1().isEmpty()) {
                 pstmt.setString(27, tubeWellTypeBean.getFuse1());
             } else {
@@ -1628,11 +1674,35 @@ public class TubeWellDetailModel {
             } else {
                 pstmt.setNull(46, java.sql.Types.INTEGER);
             }
-            pstmt.setInt(47, tube_well_detail_id);
+            if (tube_well_detail_id != 0) {
+                 pstmt.setInt(47, tube_well_detail_id);
+            } else {
+                pstmt.setNull(47, java.sql.Types.INTEGER);
+            }
+           if (!tubeWellTypeBean.getR_phase().isEmpty()) {
+                 pstmt.setString(48, tubeWellTypeBean.getR_phase());
+          
+            } else {
+                pstmt.setNull(48, java.sql.Types.NULL);
+            }
+            if (!tubeWellTypeBean.getB_phase().isEmpty()) {
+                 pstmt.setString(49, tubeWellTypeBean.getB_phase());
+          
+            } else {
+                pstmt.setNull(49, java.sql.Types.NULL);
+            }
+             if (!tubeWellTypeBean.getY_phase().isEmpty()) {
+               pstmt.setString(50, tubeWellTypeBean.getY_phase());
+            } else {
+                pstmt.setNull(50, java.sql.Types.NULL);
+            }
             pstmt.setString(48, tubeWellTypeBean.getR_phase());
-            pstmt.setString(49, tubeWellTypeBean.getB_phase());
-            pstmt.setString(50, tubeWellTypeBean.getY_phase());
-            pstmt.setInt(51, tubeWellTypeBean.getPole_id());
+           if (tubeWellTypeBean.getPole_id() != 0) {
+               pstmt.setInt(51, tubeWellTypeBean.getPole_id());
+            } else {
+                pstmt.setNull(51, java.sql.Types.INTEGER);
+            }
+           
             rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
 //                rs = pstmt.getGeneratedKeys();
@@ -2024,18 +2094,7 @@ public class TubeWellDetailModel {
 
         String query2 = " UPDATE tube_well_detail SET active='N'"
                 + " WHERE tube_well_detail_id = ? and tube_well_rev_no = ? ";
-        String query33 = "INSERT INTO switching_point_light_type_mapping( tube_well_detail_id, light_type_id, no_of_working, no_of_not_working, total_fittings,"
-                + " tube_well_rev_no ) "
-                + " VALUES (?,?,?,?,?,?) ";
-        String query3 = "UPDATE switching_point_light_type_mapping  SET active = 'N' "
-                + " WHERE tube_well_detail_id = ?  ";
-        String query4 = " UPDATE pole SET active = 'N', pole_no = ? ,tube_well_detail_id = ?, tube_well_rev_no = ? , isSwitchingPoint = 'No' WHERE tube_well_detail_id = ?  AND tube_well_rev_no = ? AND isSwitchingPoint = 'Yes'";
-        String query5 = " UPDATE pole SET pole_no = ?, tube_well_detail_id = ? ,tube_well_rev_no = ?, area_id=? , road_id= ?, road_rev_no=?, traffic_type_id=?  "
-                + " WHERE tube_well_detail_id = ?  AND tube_well_rev_no = ?  AND isSwitchingPoint = 'Yes'";
-        String query6 = "SELECT count(*) FROM pole WHERE tube_well_detail_id = ? AND tube_well_rev_no = ? AND isSwitchingPoint = 'Yes' AND active = 'Y'";
-        String query7 = "UPDATE junction SET tube_well_rev_no = ? WHERE tube_well_detail_id = ? AND active = 'Y'";
-        String isPoleExistsInPole = "select count(*) from pole where pole_no = ? and tube_well_detail_id != ?  AND tube_well_rev_no != ?  AND active = 'Y' ";
-
+      
         int rowsAffected = 0;
        
         
@@ -2043,15 +2102,25 @@ public class TubeWellDetailModel {
             connection.setAutoCommit(false);
             PreparedStatement pstmt = null;
             pstmt = connection.prepareStatement(query1);
-            pstmt.setString(1, tubeWellTypeBean.getTube_well_name());
-            pstmt.setString(2, tubeWellTypeBean.getPole_no_s());
-            pstmt.setString(3, tubeWellTypeBean.getGps_code_s());
-//            if (tubeWellTypeBean.getIsCheckedTrue().equals("Y")) {
-//                pstmt.setNull(4, java.sql.Types.INTEGER);
-//                pstmt.setNull(5, java.sql.Types.INTEGER);
-//                pstmt.setNull(7, java.sql.Types.INTEGER);
-//                pstmt.setNull(26, java.sql.Types.INTEGER);
-//            } else {
+             if (!tubeWellTypeBean.getTube_well_name().isEmpty()) {
+                pstmt.setString(1, tubeWellTypeBean.getTube_well_name());
+            } else {
+               pstmt.setString(1,"yes");
+            }
+              if (!tubeWellTypeBean.getPole_no_s().isEmpty()) {
+               pstmt.setString(2, tubeWellTypeBean.getPole_no_s());
+            } else {
+                pstmt.setNull(2, java.sql.Types.NULL);
+            }
+               if (!tubeWellTypeBean.getGps_code_s().isEmpty()) {
+               pstmt.setString(3, tubeWellTypeBean.getGps_code_s());
+            } else {
+                pstmt.setNull(3, java.sql.Types.NULL);
+            }
+         
+          
+           
+ 
  if ( tubeWellTypeBean.getArea_id() != 0) {
                 pstmt.setInt(4, tubeWellTypeBean.getArea_id());
             } else {
@@ -2076,9 +2145,22 @@ public class TubeWellDetailModel {
             }
            // pstmt.setInt(26, tubeWellTypeBean.getRoad_rev_no());
             //   }
-            pstmt.setString(6, tubeWellTypeBean.getIs_working());
-            pstmt.setString(8, tubeWellTypeBean.getCreated_by());
-            pstmt.setString(9, tubeWellTypeBean.getRemark());
+             if (!tubeWellTypeBean.getIs_working().isEmpty()) {
+                   pstmt.setString(6, tubeWellTypeBean.getIs_working());
+            } else {
+                pstmt.setNull(6, java.sql.Types.NULL);
+            }
+             
+                pstmt.setInt(8, 0);
+          
+               if (!tubeWellTypeBean.getRemark().isEmpty()) {
+                 pstmt.setString(9, tubeWellTypeBean.getRemark());
+            } else {
+                pstmt.setNull(9, java.sql.Types.NULL);
+            }
+       
+         
+          
             if (!tubeWellTypeBean.getMeter_no_s().isEmpty()) {
                 pstmt.setString(10, tubeWellTypeBean.getMeter_no_s());
             } else {
@@ -2087,12 +2169,12 @@ public class TubeWellDetailModel {
             if (tubeWellTypeBean.getPhase() != 0) {
                 pstmt.setInt(11, tubeWellTypeBean.getPhase());
             } else {
-                pstmt.setNull(11, java.sql.Types.INTEGER);
+                pstmt.setInt(11, 3);
             }
             if (tubeWellTypeBean.getControl_mechanism_id() != 0) {
                 pstmt.setInt(12, tubeWellTypeBean.getControl_mechanism_id());
             } else {
-                pstmt.setNull(12, java.sql.Types.INTEGER);
+                pstmt.setNull(12, 1);
             }
             if (!tubeWellTypeBean.getFuse().isEmpty()) {
                 pstmt.setString(13, tubeWellTypeBean.getFuse());
@@ -2127,12 +2209,12 @@ public class TubeWellDetailModel {
             if (!tubeWellTypeBean.getLongitude().isEmpty()) {
                 pstmt.setString(19, tubeWellTypeBean.getLongitude());
             } else {
-                pstmt.setNull(19, java.sql.Types.NULL);
+                 pstmt.setString(19, "0.0");
             }
             if (!tubeWellTypeBean.getLattitude().isEmpty()) {
                 pstmt.setString(20, tubeWellTypeBean.getLattitude());
             } else {
-                pstmt.setNull(20, java.sql.Types.NULL);
+                 pstmt.setString(20, "0.0");
             }
             if (!tubeWellTypeBean.getService_conn_no().isEmpty()) {
                 pstmt.setString(21, tubeWellTypeBean.getService_conn_no());
@@ -2142,16 +2224,25 @@ public class TubeWellDetailModel {
             if (!tubeWellTypeBean.getIvrs_no().isEmpty()) {
                 pstmt.setString(22, tubeWellTypeBean.getIvrs_no());
             } else {
-                pstmt.setNull(22, java.sql.Types.NULL);
+                pstmt.setString(22, "0");
             }
             if (!tubeWellTypeBean.getMeasured_load().isEmpty()) {
                 pstmt.setString(23, tubeWellTypeBean.getMeasured_load());
             } else {
-                pstmt.setNull(23, java.sql.Types.NULL);
+               pstmt.setString(23, "0");
             }
-
-            pstmt.setInt(24, tubeWellTypeBean.getFeeder_id());////////////////////////////
-            pstmt.setString(25, tubeWellTypeBean.getIsCheckedTrue());
+  if (tubeWellTypeBean.getFeeder_id() != 0) {
+                pstmt.setInt(24, tubeWellTypeBean.getFeeder_id());
+            } else {
+                 pstmt.setInt(24, 123);
+            }
+          ////////////////////////////
+        
+            if (!tubeWellTypeBean.getIsCheckedTrue().isEmpty()) {
+                   pstmt.setString(25, tubeWellTypeBean.getIsCheckedTrue());
+            } else {
+                 pstmt.setString(25, "y");
+            }
             if (!tubeWellTypeBean.getFuse1().isEmpty()) {
                 pstmt.setString(27, tubeWellTypeBean.getFuse1());
             } else {
@@ -2252,18 +2343,45 @@ public class TubeWellDetailModel {
             } else {
                 pstmt.setNull(46, java.sql.Types.INTEGER);
             }
+            if (tubeWellTypeBean.getTube_well_detail_id() != 0) {
+                pstmt.setInt(47, tubeWellTypeBean.getTube_well_detail_id());
+            } else {
+                pstmt.setNull(47, java.sql.Types.INTEGER);
+            }
             //pstmt.setInt(47, tubeWellTypeBean.getTube_well_rev_no() + 1);
-            pstmt.setInt(47, tubeWellTypeBean.getTube_well_detail_id());
+           
             pstmt.setInt(48, tubeWellTypeBean.getTube_well_rev_no()+1);
+ if (!tubeWellTypeBean.getR_phase().isEmpty()) {
+                pstmt.setString(49, tubeWellTypeBean.getR_phase());
+            } else {
+                pstmt.setNull(49, java.sql.Types.NULL);
+            }
+  if (!tubeWellTypeBean.getB_phase().isEmpty()) {
+             pstmt.setString(50, tubeWellTypeBean.getB_phase());
+            } else {
+                pstmt.setNull(50, java.sql.Types.NULL);
+            }
+          
+           
+           if (!tubeWellTypeBean.getMeter_address().isEmpty()) {
+           pstmt.setString(53,tubeWellTypeBean.getMeter_address());
+            } else {
+                pstmt.setNull(53, java.sql.Types.NULL);
+            }
+          
+           
 
-            pstmt.setString(49, tubeWellTypeBean.getR_phase());
-            pstmt.setString(50, tubeWellTypeBean.getB_phase());
-            pstmt.setString(51, tubeWellTypeBean.getY_phase());
-            pstmt.setString(52, tubeWellTypeBean.getMeter_status());
-
-            pstmt.setString(53,tubeWellTypeBean.getMeter_address());
-
-
+           
+ if (!tubeWellTypeBean.getY_phase().isEmpty()) {
+          pstmt.setString(51, tubeWellTypeBean.getY_phase());
+            } else {
+                pstmt.setNull(51, java.sql.Types.NULL);
+            }
+ if (!tubeWellTypeBean.getMeter_status().isEmpty()) {
+              pstmt.setString(52, tubeWellTypeBean.getMeter_status());
+            } else {
+                pstmt.setNull(52, java.sql.Types.NULL);
+            }
             rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
                 connection.commit();
@@ -2278,111 +2396,7 @@ public class TubeWellDetailModel {
                 pstmt.setInt(2, tubeWellTypeBean.getTube_well_rev_no());
                 rowsAffected = pstmt.executeUpdate();
             }
-//                if(rowsAffected > 0){}
-//                if (rowsAffected > 0) {
-//                    pstmt.close();
-//                    rowsAffected = 0;
-//                    pstmt = connection.prepareStatement(query3);
-//                    pstmt.setInt(1, tubeWellTypeBean.getTube_well_detail_id());
-//                    rowsAffected = pstmt.executeUpdate();
-////                    if (rowsAffected > 0) {
-////                        pstmt.close();
-////                        rowsAffected = 0;
-////                        pstmt = connection.prepareStatement(query7);
-////                        pstmt.setInt(1, tubeWellTypeBean.getTube_well_rev_no() + 1);
-////                        pstmt.setInt(2, tubeWellTypeBean.getTube_well_detail_id());
-////                        rowsAffected = pstmt.executeUpdate();
-//
-//                    if (rowsAffected > 0) {
-//                        pstmt.close();
-//                        rowsAffected = 0;
-//                        int loop = 0;
-//                        int flag = 0;
-//                        pstmt = connection.prepareStatement(query33);
-//                        int light_type_idArr[] = tubeWellTypeBean.getLight_type_id_M();
-//                        String working[] = tubeWellTypeBean.getWorking();
-//                        String n_working[] = tubeWellTypeBean.getN_working();
-//                        String quantity[] = tubeWellTypeBean.getQuantity();
-//                        for (int i = 0; i < light_type_idArr.length; i++) {
-//
-//                            if (light_type_idArr[i] != 0) {
-//                                loop = i + 1;
-//                                pstmt.setInt(1, tubeWellTypeBean.getTube_well_detail_id());
-//                                pstmt.setInt(2, light_type_idArr[i]);
-//                                pstmt.setInt(3, Integer.parseInt(working[i].trim()));
-//                                pstmt.setInt(4, Integer.parseInt(n_working[i].trim()));
-//                                pstmt.setInt(5, Integer.parseInt(quantity[i].trim()));
-//                                pstmt.setInt(6, tubeWellTypeBean.getTube_well_rev_no() + 1);
-//
-//                                rowsAffected = pstmt.executeUpdate();
-//                                flag = flag + rowsAffected;
-//                            } else {
-//
-//                                break;
-//                            }
-//                        }
-//                        if (flag == loop) {
-//                            pstmt.close();
-//                            rowsAffected = 0;
-//                            pstmt = connection.prepareStatement(query6);
-//                            pstmt.setInt(1, tubeWellTypeBean.getTube_well_detail_id());
-//                            pstmt.setInt(2, tubeWellTypeBean.getTube_well_rev_no());
-//                            ResultSet rs = pstmt.executeQuery();
-//                            if (rs.next()) {
-//                                rowsAffected = rs.getInt("count(*)");
-//                            }
-//                            if (rowsAffected == 0) {
-//                                connection.commit();
-//                                rowsAffected = 1;
-//                            } else {
-//                                pstmt.close();
-//                                rowsAffected = 0;
-//                                if (tubeWellTypeBean.getIsCheckedTrue().equals("Y")) {
-//                                    if (checkIfPoleAlreadyExists(isPoleExistsInPole, tubeWellTypeBean.getPole_no(), tubeWellTypeBean.getTube_well_detail_id(), tubeWellTypeBean.getTube_well_rev_no())) {
-//                                        pstmt = connection.prepareStatement(query5);
-//                                        pstmt.setString(1, tubeWellTypeBean.getPole_no());
-//                                        pstmt.setInt(2, tubeWellTypeBean.getTube_well_detail_id());
-//                                        pstmt.setInt(3, tubeWellTypeBean.getTube_well_rev_no() + 1);
-//                                        pstmt.setInt(4, tubeWellTypeBean.getArea_id());
-//                                        pstmt.setInt(5, tubeWellTypeBean.getRoad_id());
-//                                        pstmt.setInt(6, tubeWellTypeBean.getRoad_rev_no());
-//                                        pstmt.setInt(7, tubeWellTypeBean.getTraffic_type_id());
-//                                        pstmt.setInt(8, tubeWellTypeBean.getTube_well_detail_id());
-//                                        pstmt.setInt(9, tubeWellTypeBean.getTube_well_rev_no());
-//                                        rowsAffected = pstmt.executeUpdate();
-//                                    } else {
-//                                        rowsAffected = -2;
-//                                    }
-//                                } else {
-//                                    pstmt = connection.prepareStatement(query4);
-//                                    pstmt.setString(1, tubeWellTypeBean.getPole_no());
-//                                    pstmt.setInt(2, tubeWellTypeBean.getTube_well_detail_id());
-//                                    pstmt.setInt(3, tubeWellTypeBean.getTube_well_rev_no() + 1);
-//                                    pstmt.setInt(4, tubeWellTypeBean.getTube_well_detail_id());
-//                                    pstmt.setInt(5, tubeWellTypeBean.getTube_well_rev_no());
-//                                    rowsAffected = pstmt.executeUpdate();
-//                                }
-//                                if (rowsAffected > 0) {
-//                                    connection.commit();
-//                                } else {
-//                                    connection.rollback();
-//                                }
-//                            }
-//                        } else {
-//                            connection.rollback();
-//                        }
-//                    } else {
-//                        connection.rollback();
-//                    }
-////                    } else {
-////                        connection.rollback();
-////                    }
-//                } else {
-//                    connection.rollback();
-//                }
-//            } else {
-//                connection.rollback();
-//            }
+ 
         } catch (Exception e) {
             
             try {
@@ -2446,7 +2460,7 @@ public class TubeWellDetailModel {
              +" left join zone_m as z on w.zone_id_m=z.zone_id_m "
              +" where t.active='Y' "
 
-             + " AND IF ( '" + zone_search + "'  = '' , z.zone_m like '%%' , z.zone_m = ? ) "
+          //   + " AND IF ( '" + zone_search + "'  = '' , z.zone_m like '%%' , z.zone_m = ? ) "
              + " AND IF ( '" + service_conn_no_Search + "'  = '' , t.ivrs_no like '%%' , t.ivrs_no = ? ) "
              + " AND IF ( '" + searchSwitchingPtName + "'  = '' , t.tube_well_name like '%%' , t.tube_well_name = ? ) "
              + " AND IF ( '" + searchPoleNo + "'  = '' , t.pole_no_s like '%%' , t.pole_no_s = ? ) ";
@@ -2455,10 +2469,10 @@ public class TubeWellDetailModel {
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
 
-            stmt.setString(1, zone_search);
-            stmt.setString(2, service_conn_no_Search);
-            stmt.setString(3, searchSwitchingPtName);
-            stmt.setString(4, searchPoleNo);
+          //  stmt.setString(1, zone_search);
+            stmt.setString(1, service_conn_no_Search);
+            stmt.setString(2, searchSwitchingPtName);
+            stmt.setString(3, searchPoleNo);
 
             ResultSet rs = stmt.executeQuery();
             rs.next();
@@ -2527,23 +2541,23 @@ public class TubeWellDetailModel {
              +" left join zone_m as z on w.zone_id_m=z.zone_id_m "
              +" where t.active='Y' "
 
-             + " AND IF ( '" + zone_search + "'  = '' , z.zone_m like '%%' , z.zone_m = ? ) "
+         //    + " AND IF ( '" + zone_search + "'  = '' , z.zone_m like '%%' , z.zone_m = ? ) "
              + " AND IF ( '" + service_conn_no_Search + "'  = '' , t.ivrs_no like '%%' , t.ivrs_no = ? ) "
              + " AND IF ( '" + searchSwitchingPtName + "'  = '' , t.tube_well_name like '%%' , t.tube_well_name = ? ) "
              + " AND IF ( '" + searchPoleNo + "'  = '' , t.pole_no_s like '%%' , t.pole_no_s = ? ) "
 
-             +" order by t.tube_well_detail_id LIMIT " + lowerLimit + "," + noOfRowsToDisplay;
+             +" order by t.tube_well_detail_id desc LIMIT " + lowerLimit + "," + noOfRowsToDisplay;
 
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
 
-            pstmt.setString(1, zone_search);
-             pstmt.setString(2, service_conn_no_Search);
+          //  pstmt.setString(1, zone_search);
+             pstmt.setString(1, service_conn_no_Search);
 
-            pstmt.setString(3, searchSwitchingPtName);
+            pstmt.setString(2, searchSwitchingPtName);
 
-            pstmt.setString(4, searchPoleNo);
+            pstmt.setString(3, searchPoleNo);
            
 
 

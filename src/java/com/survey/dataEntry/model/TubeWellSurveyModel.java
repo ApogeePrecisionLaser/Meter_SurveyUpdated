@@ -20,6 +20,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -162,18 +163,17 @@ public class TubeWellSurveyModel {
 
     public List<String> getSearchPole_No(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "Select poll_no from meters "
-                + " where final_revision='VALID' = 'Y' GROUP BY poll_no";
+        String query = "SELECT distinct meter_no FROM tube_well_survey where active='y'";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String pole_no = rset.getString("poll_no");
-                if (pole_no.toUpperCase().startsWith(q.toUpperCase())) {
+                String pole_no = rset.getString("meter_no");
+              
                     list.add(pole_no);
                     count++;
-                }
+              
             }
             if (count == 0) {
                 list.add("No Such Pole No Exists.");
@@ -183,6 +183,29 @@ public class TubeWellSurveyModel {
         }
         return list;
     }
+//    public List<String> getSearchPole_No(String q) {
+//        List<String> list = new ArrayList<String>();
+//        String query = "Select poll_no from meters "
+//                + " where final_revision='VALID' = 'Y' GROUP BY poll_no";
+//        try {
+//            ResultSet rset = connection.prepareStatement(query).executeQuery();
+//            int count = 0;
+//            q = q.trim();
+//            while (rset.next()) {    // move cursor from BOR to valid record.
+//                String pole_no = rset.getString("poll_no");
+//                if (pole_no.toUpperCase().startsWith(q.toUpperCase())) {
+//                    list.add(pole_no);
+//                    count++;
+//                }
+//            }
+//            if (count == 0) {
+//                list.add("No Such Pole No Exists.");
+//            }
+//        } catch (Exception e) {
+//            System.out.println("getPoleNo ERROR inside SurveyModel - " + e);
+//        }
+//        return list;
+//    }
 
     public List<String> getSwitchingPoleNo(String q) {
         List<String> list = new ArrayList<String>();
@@ -263,7 +286,7 @@ public class TubeWellSurveyModel {
     public int getSurveyId() {
         String query;
         int survey_id = 0;
-        query = "select MAX(survey_id) as id from survey where status='Y' ";
+        query = "select MAX(survey_id) as id from survey ";
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
 
@@ -444,15 +467,15 @@ public class TubeWellSurveyModel {
 
     public int insertRecord(TubeWellSurveyBean tubeWellSurveyBean, List list) {
         String query = "INSERT INTO survey (survey_file_no, survey_page_no, mobile_no, pole_no, pole_rev_no, survey_type, "
-                + " remark, survey_date,image_name,image_date_time,longitude,lattitude,survey_pole_no,survey_id,survey_meter_no) "
-                + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
+                + " remark, survey_date,image_name,image_date_time,longitude,lattitude,survey_pole_no,survey_id) "
+                + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?) ";
         String query2 = "INSERT INTO tube_well_survey (tube_well_survey_id, meter_no, meter_functional,"
                 + " r_phase, y_phase, b_phase, power, fuse_functional, starter_functional, mccb_functional,"
                 + " remark,created_by,fuse1,fuse2,fuse3,starter_id,"
                 + "starter_make_id,starter_capacity,mccb1,mccb2,mccb3,fuse_id1,fuse_id2,"
                 + "fuse_id3,mccb_id1,mccb_id2,mccb_id3,no_of_phase,meter_phase,meter_reading,"
-                + "auto_switch_type_id,main_switch_type_id,main_switch_rating,enclosure_type_id,reason_id,revison_no,pole_id)"
-                + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                + "auto_switch_type_id,main_switch_type_id,main_switch_rating,enclosure_type_id,reason_id,revison_no,service_conn_no,meter_address)"
+                + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         String imageQuery = "INSERT INTO general_image_details (image_name, image_destination_id, date_time, description) "
                 + " VALUES(?, ?, ?, ?)";
@@ -470,7 +493,7 @@ public class TubeWellSurveyModel {
 
         try {
             connection.setAutoCommit(false);
-            java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
+            java.sql.PreparedStatement pstmt = connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
             //pstmt.setInt(1, survey_id + 1);
             //pstmt.setInt(1, tubeWellSurveyBean.getSwitching_point_detail_id());
 //            if (tubeWellSurveyBean.getSurvey_type().equals("pole_type_survey")) {
@@ -497,14 +520,14 @@ public class TubeWellSurveyModel {
                 pstmt.setDate(8, convertToSqlDate(tubeWellSurveyBean.getSurvey_date()));
             } else {
                 pstmt.setNull(8, java.sql.Types.DATE);
-            }
+            }      
             pstmt.setString(9, tubeWellSurveyBean.getImage_name());
             pstmt.setString(10, null);
             pstmt.setString(11, tubeWellSurveyBean.getLongitude());
             pstmt.setString(12, tubeWellSurveyBean.getLatitude());
             pstmt.setString(13, tubeWellSurveyBean.getSurvey_pole_no());
             pstmt.setInt(14, survey_id);
-            pstmt.setString(15, tubeWellSurveyBean.getSurvey_meter_no());
+          //  pstmt.setString(15, tubeWellSurveyBean.getSurvey_meter_no());
             rowsAffected = pstmt.executeUpdate();
             if (tubeWellSurveyBean.getSurvey_type().equals("tubewell_type_survey")) {
                 if (rowsAffected > 0) {
@@ -558,21 +581,69 @@ public class TubeWellSurveyModel {
                     }
 
                     if (tubeWellSurveyBean.getNo_of_phase() == 3) {
-                        pstmt.setString(4, tubeWellSurveyBean.getR_phase());
-                        pstmt.setString(5, tubeWellSurveyBean.getY_phase());
-                        pstmt.setString(6, tubeWellSurveyBean.getB_phase());
+                          if (!tubeWellSurveyBean.getR_phase().isEmpty()) {
+                               pstmt.setString(4, tubeWellSurveyBean.getR_phase());
+                            } else {
+                                pstmt.setNull(4, java.sql.Types.NULL);
+                            }
+                            if (!tubeWellSurveyBean.getY_phase().isEmpty()) {
+                               pstmt.setString(5, tubeWellSurveyBean.getY_phase());
+                            } else {
+                                pstmt.setNull(5, java.sql.Types.NULL);
+                            }
+                              if (!tubeWellSurveyBean.getB_phase().isEmpty()) {
+                                 pstmt.setString(6, tubeWellSurveyBean.getB_phase());
+                            } else {
+                                pstmt.setNull(6, java.sql.Types.NULL);
+                            }
+                      
+                       
+                     
                     } else {
                         pstmt.setNull(4, java.sql.Types.DOUBLE);
                         pstmt.setNull(5, java.sql.Types.DOUBLE);
-                        pstmt.setString(6, tubeWellSurveyBean.getB_phase());
+                       
+                         if (!tubeWellSurveyBean.getB_phase().isEmpty()) {
+                pstmt.setString(6, tubeWellSurveyBean.getB_phase());
+            } else {
+                pstmt.setNull(6, java.sql.Types.NULL);
+            }
                     }
-
-                    pstmt.setString(7, tubeWellSurveyBean.getPower());
+ 
+   if (!tubeWellSurveyBean.getPower().isEmpty()) {
+                   pstmt.setString(7, tubeWellSurveyBean.getPower());
+            } else {
+                pstmt.setNull(7, java.sql.Types.NULL);
+            }
+   if (!tubeWellSurveyBean.getFuse_functional().isEmpty()) {
                     pstmt.setString(8, tubeWellSurveyBean.getFuse_functional());
-                    pstmt.setString(9, tubeWellSurveyBean.getStarter_functional());
+            } else {
+                pstmt.setNull(8, java.sql.Types.NULL);
+            }
+           
+           if (!tubeWellSurveyBean.getStarter_functional().isEmpty()) {
+                      pstmt.setString(9, tubeWellSurveyBean.getStarter_functional());
+            } else {
+                pstmt.setNull(9, java.sql.Types.NULL);
+            }
+           
+           if (!tubeWellSurveyBean.getMccb_functional().isEmpty()) {
+                  
                     pstmt.setString(10, tubeWellSurveyBean.getMccb_functional());
+            } else {
+                pstmt.setNull(10, java.sql.Types.NULL);
+            }
+            if (!tubeWellSurveyBean.getRemark().isEmpty()) {
+                   
+                   pstmt.setString(11, tubeWellSurveyBean.getRemark());
+           } else {
+                pstmt.setNull(11, java.sql.Types.NULL);
+             }
+                 
+                    
+                  
                     //  pstmt.setString(11, tubeWellSurveyBean.getTimer_functional());
-                    pstmt.setString(11, tubeWellSurveyBean.getRemark());
+                   
                     pstmt.setString(12, "Viney Srivastva");
                     //    pstmt.setString(13, tubeWellSurveyBean.getMeter_status());
                     if (!tubeWellSurveyBean.getFuse1().isEmpty()) {
@@ -601,7 +672,12 @@ public class TubeWellSurveyModel {
                     } else {
                         pstmt.setNull(17, java.sql.Types.INTEGER);
                     }
-                    pstmt.setString(18, tubeWellSurveyBean.getStarter_capacity());
+                     if (!tubeWellSurveyBean.getStarter_capacity().isEmpty()) {
+                       pstmt.setString(18, tubeWellSurveyBean.getStarter_capacity());
+                    } else {
+                        pstmt.setNull(18, java.sql.Types.NULL);
+                    }
+                   
                     if (!tubeWellSurveyBean.getMccb1().isEmpty()) {
                         pstmt.setString(19, tubeWellSurveyBean.getMccb1());
                     } else {
@@ -647,8 +723,13 @@ public class TubeWellSurveyModel {
                     } else {
                         pstmt.setNull(27, java.sql.Types.INTEGER);
                     }
+                    if (tubeWellSurveyBean.getNo_of_phase() != 0) {
+                         pstmt.setInt(28, tubeWellSurveyBean.getNo_of_phase());
+                    } else {
+                        pstmt.setNull(28, java.sql.Types.INTEGER);
+                    }
 
-                    pstmt.setInt(28, tubeWellSurveyBean.getNo_of_phase());
+                 
                     if (tubeWellSurveyBean.getAuto_switch_type_id() != 0) {
                         pstmt.setInt(31, tubeWellSurveyBean.getAuto_switch_type_id());
                     } else {
@@ -670,12 +751,13 @@ public class TubeWellSurveyModel {
                         pstmt.setNull(34, java.sql.Types.NULL);
                     }
                     if (tubeWellSurveyBean.getMeter_functional().equals("N")) {
-                        pstmt.setInt(35, getReasonId(tubeWellSurveyBean.getReason_type()));
+                        pstmt.setInt(35, tubeWellSurveyBean.getReason_id());
                     } else {
                         pstmt.setNull(35, java.sql.Types.INTEGER);
                     }
                     pstmt.setInt(36, survey_rev_no);
-                    pstmt.setInt(37, tubeWellSurveyBean.getPole_id());
+                  pstmt.setString(37, tubeWellSurveyBean.getService_conn_no());
+                  pstmt.setString(38, tubeWellSurveyBean.getMeter_address());
                     rowsAffected = pstmt.executeUpdate();
                     if (rowsAffected > 0) {
                         if (!tubeWellSurveyBean.getImage_name().isEmpty()) {
@@ -690,20 +772,30 @@ public class TubeWellSurveyModel {
                                     String tmp_image = tubeWellSurveyBean.getImage_name();
                                     rowsAffected = 0;
                                     if (!list.isEmpty() && writeImage(tubeWellSurveyBean, list, survey_id, survey_rev_no) > 0) {
-                                        pstmt = connection.prepareStatement(imageQuery);
-                                        pstmt.setString(1, tubeWellSurveyBean.getImage_name());
-                                        pstmt.setInt(2, getimage_destination_id(image_uploaded_for));
-                                        pstmt.setString(3, current_date);
-                                        pstmt.setString(4, "this image is for survey");
-                                        rowsAffected = pstmt.executeUpdate();
-                                        pstmt.close();
-
-                                        pstmt = connection.prepareStatement(updateQuery);
-                                        pstmt.setInt(1, getgeneral_image_details_id(tubeWellSurveyBean.getImage_name()));
-                                        pstmt.setString(2, tubeWellSurveyBean.getImage_name());
-                                        pstmt.setString(3, tmp_image);
-                                        rowsAffected = pstmt.executeUpdate();
-
+                                     
+                                        
+                                        
+                                          int gen_image_detail_id = insertPDFRecord(tubeWellSurveyBean.getImage_name());
+             int   survey_gen_image_map_id = insertSurveyImageMapRecord(survey_id, gen_image_detail_id);
+             if(survey_gen_image_map_id>0){
+             rowsAffected=1;
+             }else{
+             }
+                                              
+//                                        pstmt = connection.prepareStatement(imageQuery);
+//                                        pstmt.setString(1, tubeWellSurveyBean.getImage_name());
+//                                        pstmt.setInt(2, getimage_destination_id(image_uploaded_for));
+//                                        pstmt.setString(3, current_date);
+//                                        pstmt.setString(4, "this image is for survey");
+//                                        rowsAffected = pstmt.executeUpdate();
+//                                        pstmt.close();
+//
+//                                        pstmt = connection.prepareStatement(updateQuery);
+//                                        pstmt.setInt(1, getgeneral_image_details_id(tubeWellSurveyBean.getImage_name()));
+//                                        pstmt.setString(2, tubeWellSurveyBean.getImage_name());
+//                                        pstmt.setString(3, tmp_image);
+//                                        rowsAffected = pstmt.executeUpdate();
+  
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Exception :" + e);
@@ -715,9 +807,9 @@ public class TubeWellSurveyModel {
                         msgBgColor = COLOR_OK;
                         connection.commit();
                         if (rowsAffected > 0) {
-                            AlertsModel alertModel = new AlertsModel();
-                            alertModel.setConnection(connection);
-                            rowsAffected = alertModel.insertAlertSheetData(survey_id, pole_no);
+//                            AlertsModel alertModel = new AlertsModel();
+//                            alertModel.setConnection(connection);
+//                            rowsAffected = alertModel.insertAlertSheetData(survey_id, pole_no);
                         }
                     } else {
 
@@ -754,12 +846,66 @@ public class TubeWellSurveyModel {
             message = "Record saved successfully.";
             msgBgColor = COLOR_OK;
         } else {
-            message = "Cannot save the record, some error.";
+            message = "Record Not saved successfully";
             msgBgColor = COLOR_ERROR;
         }
         return rowsAffected;
     }
+ public int insertPDFRecord(String image_name) {
+        int rowsAffected = 0;
+        ResultSet rs=null;
+        DateFormat dateFormat = new SimpleDateFormat("dd.MMMMM.yyyy/ hh:mm:ss aaa");
+        Date date = new Date();
+        String current_date = dateFormat.format(date);     
+        String image_uploaded_for = "Survey Image";
+        String imageQuery = "INSERT INTO general_image_details (image_name, image_destination_id, date_time, description) "
+                + " VALUES(?, ?, ?, ?)";
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(imageQuery,Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, image_name);
+            pstmt.setInt(2, getimage_destination_id(image_uploaded_for));
+            pstmt.setString(3, current_date);
+            pstmt.setString(4, "this file is for survey");
+            // pstmt.setInt(5, image_type_id);
+        
+             rowsAffected = pstmt.executeUpdate();
+          
+                if (rowsAffected > 0) {
+                    rs = pstmt.getGeneratedKeys();
+                    while (rs.next()) {
+                      rowsAffected = rs.getInt(1);
+                        //        survey_rev_no = rs.getInt(14);
+                    }
+                }
+//            if (rs.next()) {
+//                rowsAffected = rs.getInt(1);
+//            }
+            pstmt.close();
+        } catch (Exception e) {
+            System.out.println("Error:metersurveyWebServicesModel--insertImageRecord-- " + e);
+        }
+        return rowsAffected;
+    }
 
+    public int insertSurveyImageMapRecord(int survey_id, int gen_image_detail_id) {
+        int rowsAffected = 0;
+        String imageQuery = "INSERT INTO survey_gen_image_map (survey_id, gen_image_detail_id) "
+                + " VALUES(?, ?)";
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(imageQuery, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setInt(1, survey_id);
+            pstmt.setInt(2, gen_image_detail_id);
+            pstmt.executeUpdate();
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                rowsAffected = rs.getInt(1);
+            }
+            pstmt.close();
+        } catch (Exception e) {
+            System.out.println("Error:metersurveyWebServicesModel--insertSurveyImageMapRecord " + e);
+        }
+        return rowsAffected;
+    }
     public int writeImage(TubeWellSurveyBean surveyBean, List<File> file, int survey_id, int survey_rev_no) {
         // getimage_destination_id();
         boolean isCreated = true;
@@ -769,7 +915,8 @@ public class TubeWellSurveyModel {
             File srcfile = null;
             survey_rev_no = survey_rev_no + 1;
             //      String dayOfMonthFolder = createAppropriateDirectories(destination_path);
-            destination_path = getRepositoryPath("Survey Image") + "//" + "tube_well";//survey_id;
+           // destination_path = getRepositoryPath("Survey Image") + "//" + "tube_well";//survey_id;
+            destination_path = "C:/ssadvt_repository/meter_survey/survey_image/tube_well/survey_id_" + survey_id;
             File desfile = new File(destination_path);
             if (!desfile.exists()) {
                 isCreated = desfile.mkdirs();
@@ -1138,15 +1285,33 @@ public class TubeWellSurveyModel {
                 rowsAffected = 0;
                 pstmt = connection.prepareStatement(query5);
                 pstmt.setInt(1, tube_well_survey_id);
-                pstmt.setInt(2, survey_rev_no);
+            
+                 pstmt.setInt(2, survey_rev_no);
+          
+             
                 rowsAffected = pstmt.executeUpdate();
 
             }
             pstmt.close();
             pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, tubeWellSurveyBean.getSurvey_file_no());
-            pstmt.setString(2, tubeWellSurveyBean.getSurvey_page_no());
-            pstmt.setString(3, tubeWellSurveyBean.getSurvey_by());
+               if (! tubeWellSurveyBean.getSurvey_file_no().isEmpty()) {
+                 pstmt.setString(1, tubeWellSurveyBean.getSurvey_file_no());
+            } else {
+                pstmt.setNull(1, java.sql.Types.NULL);
+            }
+           
+          
+             if (! tubeWellSurveyBean.getSurvey_page_no().isEmpty()) {
+                  pstmt.setString(2, tubeWellSurveyBean.getSurvey_page_no());
+            } else {
+                pstmt.setNull(2, java.sql.Types.NULL);
+            }
+         
+             if (! tubeWellSurveyBean.getSurvey_by().isEmpty()) {
+                  pstmt.setString(3, tubeWellSurveyBean.getSurvey_by());
+            } else {
+                pstmt.setNull(3, java.sql.Types.NULL);
+            }
             if (tubeWellSurveyBean.getSurvey_type().equals("pole_type_survey")) {
                 pstmt.setInt(4, tubeWellSurveyBean.getPole_id());
                 //  pstmt.setInt(5, tubeWellSurveyBean.getPole_rev_no());
@@ -1154,11 +1319,30 @@ public class TubeWellSurveyModel {
                 pstmt.setString(4, tubeWellSurveyBean.getPole_no());
                 // pstmt.setNull(5, java.sql.Types.INTEGER);
             }
-            pstmt.setString(5, tubeWellSurveyBean.getSurvey_type());
-            pstmt.setString(6, tubeWellSurveyBean.getRemark());
-
+          
+          
+  if (! tubeWellSurveyBean.getSurvey_type().isEmpty()) {
+              pstmt.setString(5, tubeWellSurveyBean.getSurvey_type());
+            } else {
+                pstmt.setNull(5, java.sql.Types.NULL);
+            }
+         
+//             if (! tubeWellSurveyBean.getRemark().isEmpty()) {
+//                pstmt.setString(6, tubeWellSurveyBean.getRemark());
+//            } else {
+                pstmt.setNull(6, java.sql.Types.NULL);
+           // }
+          
             if (tubeWellSurveyBean.getSurvey_date() != null && !(tubeWellSurveyBean.getSurvey_date().trim()).isEmpty()) {
-                pstmt.setDate(7, convertToSqlDate(tubeWellSurveyBean.getSurvey_date()));
+           String dateStr = tubeWellSurveyBean.getSurvey_date();
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    Date date1 = sdf.parse(dateStr);
+    sdf = new SimpleDateFormat("yyyy-MM-dd");
+    dateStr = sdf.format(date1);
+                
+           
+               
+                pstmt.setString(7, dateStr);
             } else {
                 pstmt.setNull(7, java.sql.Types.DATE);
             }
@@ -1172,6 +1356,7 @@ public class TubeWellSurveyModel {
             pstmt.setInt(15, survey_id);
             pstmt.setInt(16, survey_rev_no);
             rowsAffected = pstmt.executeUpdate();
+            System.out.println("rowsAffected      "+rowsAffected);
             pstmt = connection.prepareStatement(query2);
             //pstmt.setInt(1, survey_id);
             if (tubeWellSurveyBean.getMeter_status().equals("Y")) {
@@ -1215,21 +1400,65 @@ public class TubeWellSurveyModel {
             }
 
             if (tubeWellSurveyBean.getNo_of_phase() == 3) {
-                pstmt.setString(3, tubeWellSurveyBean.getR_phase());
-                pstmt.setString(4, tubeWellSurveyBean.getY_phase());
-                pstmt.setString(5, tubeWellSurveyBean.getB_phase());
+                 if (!tubeWellSurveyBean.getR_phase().isEmpty()) {
+                 pstmt.setString(3, tubeWellSurveyBean.getR_phase());
+            } else {
+                pstmt.setNull(3, java.sql.Types.NULL);
+            }
+                 if (!tubeWellSurveyBean.getY_phase().isEmpty()) {
+               pstmt.setString(4, tubeWellSurveyBean.getY_phase());
+            } else {
+                pstmt.setNull(4, java.sql.Types.NULL);
+            }
+                 if (!tubeWellSurveyBean.getB_phase().isEmpty()) {
+                 pstmt.setString(5, tubeWellSurveyBean.getB_phase());
+            } else {
+                pstmt.setNull(5, java.sql.Types.NULL);
+            }
+                
+               
+               
             } else {
                 pstmt.setNull(3, java.sql.Types.DOUBLE);
                 pstmt.setNull(4, java.sql.Types.DOUBLE);
-                pstmt.setString(5, tubeWellSurveyBean.getB_phase());
+                  if (!tubeWellSurveyBean.getB_phase().isEmpty()) {
+                 pstmt.setString(5, tubeWellSurveyBean.getB_phase());
+            } else {
+                pstmt.setNull(5, java.sql.Types.NULL);
             }
-
-            pstmt.setString(6, tubeWellSurveyBean.getPower());
-            pstmt.setString(7, tubeWellSurveyBean.getFuse_functional());
-            pstmt.setString(8, tubeWellSurveyBean.getStarter_functional());
-            pstmt.setString(9, tubeWellSurveyBean.getMccb_functional());
+            }
+   if (!tubeWellSurveyBean.getPower().isEmpty()) {
+                 pstmt.setString(6, tubeWellSurveyBean.getPower());
+            } else {
+                pstmt.setNull(6, java.sql.Types.NULL);
+            }
+   if (!tubeWellSurveyBean.getFuse_functional().isEmpty()) {
+                pstmt.setString(7, tubeWellSurveyBean.getFuse_functional());
+            } else {
+                pstmt.setNull(7, java.sql.Types.NULL);
+            }
+   if (!tubeWellSurveyBean.getStarter_functional().isEmpty()) {
+                  pstmt.setString(8, tubeWellSurveyBean.getStarter_functional());
+            } else {
+                pstmt.setNull(8, java.sql.Types.NULL);
+            }
+   if (!tubeWellSurveyBean.getMccb_functional().isEmpty()) {
+                pstmt.setString(9, tubeWellSurveyBean.getMccb_functional());
+            } else {
+                pstmt.setNull(9, java.sql.Types.NULL);
+            }
+           
+//   if (!tubeWellSurveyBean.getRemark().isEmpty()) {
+//                pstmt.setString(10, tubeWellSurveyBean.getRemark());
+//            } else {
+                pstmt.setNull(10, java.sql.Types.NULL);
+         //   }
+           
+           
+          
+            
             //  pstmt.setString(11, tubeWellSurveyBean.getTimer_functional());
-            pstmt.setString(10, tubeWellSurveyBean.getRemark());
+          
             pstmt.setString(11, "Viney Srivastva");
             //    pstmt.setString(13, tubeWellSurveyBean.getMeter_status());
             if (!tubeWellSurveyBean.getFuse1().isEmpty()) {
@@ -1258,7 +1487,12 @@ public class TubeWellSurveyModel {
             } else {
                 pstmt.setNull(16, java.sql.Types.INTEGER);
             }
-            pstmt.setString(17, tubeWellSurveyBean.getStarter_capacity());
+             if (!tubeWellSurveyBean.getStarter_capacity().isEmpty()) {
+                 pstmt.setString(17, tubeWellSurveyBean.getStarter_capacity());
+            } else {
+                pstmt.setNull(17, java.sql.Types.NULL);
+            }
+          
             if (!tubeWellSurveyBean.getMccb1().isEmpty()) {
                 pstmt.setString(18, tubeWellSurveyBean.getMccb1());
             } else {
@@ -1305,7 +1539,15 @@ public class TubeWellSurveyModel {
                 pstmt.setNull(26, java.sql.Types.INTEGER);
             }
 
-            pstmt.setInt(27, tubeWellSurveyBean.getNo_of_phase());
+            
+            
+            if (tubeWellSurveyBean.getNo_of_phase()!=0) {
+                 pstmt.setInt(27, tubeWellSurveyBean.getNo_of_phase());
+            } else {
+                pstmt.setNull(27, java.sql.Types.INTEGER);
+            }
+            
+          
             if (tubeWellSurveyBean.getAuto_switch_type_id() != 0) {
                 pstmt.setInt(30, tubeWellSurveyBean.getAuto_switch_type_id());
             } else {
@@ -1327,16 +1569,24 @@ public class TubeWellSurveyModel {
                 pstmt.setNull(33, java.sql.Types.NULL);
             }
             if (tubeWellSurveyBean.getMeter_functional().equals("N")) {
-                pstmt.setInt(34, getReasonId(tubeWellSurveyBean.getReason_type()));
+                pstmt.setInt(34, tubeWellSurveyBean.getReason_id());
             } else {
                 pstmt.setNull(34, java.sql.Types.INTEGER);
             }
             pstmt.setInt(35, tube_well_survey_rev_no + 1);
             pstmt.setInt(36, survey_rev_no + 1);
-
-            pstmt.setString(37,tubeWellSurveyBean.getMeter_status());
-
-            pstmt.setString(38, tubeWellSurveyBean.getMeter_address());
+  if (!tubeWellSurveyBean.getMeter_status().isEmpty()) {
+                pstmt.setString(37,tubeWellSurveyBean.getMeter_status());
+            } else {
+                pstmt.setNull(37, java.sql.Types.NULL);
+            }
+           
+  if (!tubeWellSurveyBean.getMeter_address().isEmpty()) {
+              pstmt.setString(38, tubeWellSurveyBean.getMeter_address());
+            } else {
+                pstmt.setNull(38, java.sql.Types.NULL);
+            }
+            
 
             pstmt.setInt(39, survey_id);
             pstmt.setInt(40, survey_rev_no);
@@ -1389,9 +1639,9 @@ public class TubeWellSurveyModel {
                 msgBgColor = COLOR_OK;
                 connection.commit();
                 if (rowsAffected > 0) {
-                    AlertsModel alertModel = new AlertsModel();
-                    alertModel.setConnection(connection);
-                    rowsAffected = alertModel.insertAlertSheetData(survey_id, pole_no);
+                //    AlertsModel alertModel = new AlertsModel();
+               //     alertModel.setConnection(connection);
+                //    rowsAffected = alertModel.insertAlertSheetData(survey_id, pole_no);
                     rowsAffected = 1;
                 }
                 // if(rowsAffected>0){
@@ -1678,18 +1928,24 @@ public class TubeWellSurveyModel {
 //                + " AND IF('" + pole_no + "' = '',  s.pole_no LIKE '%%', s.pole_no=? )"
 //                + " AND IF('" + searchIvrsNo + "' = '',  t.service_conn_no LIKE '%%', t.service_conn_no=? )"
                 + " AND IF('" + pole_no + "' = '',  s.pole_no LIKE '%%', s.pole_no=? )"
-                + " AND IF('" + searchFileNo + "' = '',  s.survey_file_no LIKE '%%', s.survey_file_no=? )"
-                + " AND IF('" + searchPageNo + "' = '',  s.survey_page_no LIKE '%%', s.survey_page_no=? )"
+             //   + " AND IF('" + searchFileNo + "' = '',  s.survey_file_no LIKE '%%', s.survey_file_no=? )"
+           //     + " AND IF('" + searchPageNo + "' = '',  s.survey_page_no LIKE '%%', s.survey_page_no=? )"
                 + " AND IF('" + searchIvrsNo + "' = '',  t.service_conn_no LIKE '%%' OR t.service_conn_no IS null, t.service_conn_no=? )"
-                + " AND IF('" + searchByDate + "' = '',  s.survey_date LIKE '%%', s.survey_date >= '"+searchByDate+"' )"
+            //    + " AND IF('" + searchByDate + "' = '',  s.survey_date LIKE '%%', s.survey_date >= '"+searchByDate+"' )"
                 //+ " AND IF('" + meter_name_auto + "' = '' OR '" + meter_name_auto + "' = 'null',  t.meter_name_auto LIKE '%%', t.meter_name_auto = '"+meter_name_auto+"' )"
                 + " AND IF('" + meter_name_auto + "' = '',  t.meter_name_auto LIKE '%%' OR t.meter_name_auto IS null, t.meter_name_auto = '"+meter_name_auto+"' )"
                 + " AND IF('" + survey_id+ "' = '',  s.survey_id LIKE '%%', s.survey_id = '"+survey_id+"' )"
                 + " AND IF('" + searchMeterFunctional+ "' = '',  t.meter_functional LIKE '%%', t.meter_functional = '"+searchMeterFunctional+"' )"
                 + " AND IF('" + searchFeeder + "' = '',  f.feeder_name LIKE '%%', f.feeder_name= '"+searchFeeder+"' )"
-                 + " AND IF('" + searchTypeOfConnection + "' = '',  top.type_of_premsis LIKE '%%', top.type_of_premsis= '"+searchTypeOfConnection+"' )"
-                 + " AND IF('" + searchToDate + "' = '',  s.survey_date LIKE '%%', s.survey_date <= '"+searchToDate+"' )"
-                + "  order by tube_well_survey_id ";
+                 + " AND IF('" + searchTypeOfConnection + "' = '',  top.type_of_premsis LIKE '%%', top.type_of_premsis= '"+searchTypeOfConnection+"' )";
+         //        + " AND IF('" + searchToDate + "' = '',  s.survey_date LIKE '%%', s.survey_date <= '"+searchToDate+"' )"
+                    if(searchByDate!=""){
+        queryy+=" and  s.survey_date='"+searchByDate+"'";
+        }
+                  if(searchToDate!=""){
+        queryy+=" and  s.survey_date='"+searchToDate+"'";
+        }
+              queryy+= " order by tube_well_survey_id desc ";
 //                + " FROM tube_well_survey as t,survey as s where  t.tube_well_survey_id=s.survey_id "
 //                + " and t.active='Y' and s.status='Y'"
 //                + " AND IF('" + pole_no + "' = '',  s.pole_no LIKE '%%', s.pole_no=? ) "
@@ -1712,9 +1968,9 @@ public class TubeWellSurveyModel {
         try {
             PreparedStatement stmt = connection.prepareStatement(queryy);
             stmt.setString(1, pole_no);
-            stmt.setString(2, searchFileNo);
-            stmt.setString(3, searchPageNo);
-            stmt.setString(4, searchIvrsNo);
+          //  stmt.setString(2, searchFileNo);
+          //  stmt.setString(3, searchPageNo);
+            stmt.setString(2, searchIvrsNo);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 noOfRows = Integer.parseInt(rs.getString("total"));
@@ -1973,82 +2229,53 @@ public class TubeWellSurveyModel {
         if(lowerLimit == -1)
             addLimit = "";
 
-//        String query = " select s.survey_id, s.tube_well_rev_no,"
-//                + "s.survey_file_no, s.survey_date, s.survey_page_no, s.survey_by "
-//                + "s.survey_type,s.created_date, s.status, s.remark, s.survey_rev_no, "
-//                + "sp.meter_no, sp.meter_functional, "
-//                + "sp.tube_well_survey_id, sp.r_phase, sp.y_phase, sp.b_phase, sp.power,"
-//                + " sp.fuse_functional, sp.tube_well_survey_rev_no "
-//                + "sp.starter_functional, sp.mccb_functional, p.pole_no, sd.pole_no_s, p.pole_rev_no, "
-//                + "sp.timer_functional, sp.tube_well_survey_rev_no "
-//                + "from survey s, tube_well_survey sp, pole p, tube_well_detail sd "
-//                + "where s.tube_well_detail_id = sd.tube_well_detail_id "
-//                + "And s.tube_well_rev_no = sd.tube_well_rev_no "
-//                + "AND s.pole_id= p.pole_id "
-//                + "AND s.pole_rev_no = p.pole_rev_no"
-//                + "AND s.survey_id= sp.survey_id ";
-   /*     String query1 = "select"
-        + " s.survey_id, s.tube_well_detail_id, s.tube_well_rev_no, s.survey_file_no, s.survey_date,"
-        + " s.survey_page_no, s.survey_by, s.pole_id, s.pole_rev_no, s.survey_type, s.created_date, s.status, s.remark, s.survey_rev_no,"
-        + " '' as tube_well_survey_id, '' as survey_id, '' as meter_no,"
-        + " '' as meter_functional, '' as r_phase, '' as y_phase, '' as b_phase,"
-        + " '' as power, '' as fuse_functional, '' as starter_functional,"
-        + " '' as mccb_functional, '' as timer_functional, '' as created_date,"
-        + " '' as active, '' as remark, '' as tube_well_survey_rev_no, '' as created_by, '' as survey_rev_no"
-        + " from survey s where tube_well_detail_id IS NULL";
-        String query2 = " SELECT"
-        + " s.survey_id,"
-        + " s.tube_well_detail_id, s.tube_well_rev_no, s.survey_file_no, s.survey_date, s.survey_page_no, s.survey_by, s.pole_id,"
-        + " s.pole_rev_no, s.survey_type, s.created_date, s.status, s.remark, s.survey_rev_no,"
-        + " sps.tube_well_survey_id, sps.survey_id, sps.meter_no,"
-        + " sps.meter_functional, sps.r_phase, sps.y_phase, sps.b_phase,"
-        + " sps.power, sps.fuse_functional, sps.starter_functional,"
-        + " sps.mccb_functional, sps.timer_functional, sps.created_date,"
-        + " sps.active, sps.remark, sps.tube_well_survey_rev_no, sps.created_by, sps.survey_rev_no"
-        + " FROM survey s , tube_well_survey sps where s.tube_well_detail_id IS NOT NULL"
-        + " And s.survey_id = sps.survey_id AND s.survey_rev_no = sps.survey_rev_no";  */  //s.survey_meter_no,
+ 
         query = "SELECT t.meter_address,s.general_image_details_id,tube_well_survey_id,s.survey_id,t.revison_no,s.survey_rev_no,  meter_no,meter_status, meter_functional,r_phase, "
-                + "y_phase, b_phase, power, fuse_functional, starter_functional, mccb_functional,   tube_well_survey_rev_no, reason_id, no_of_phase, "
+                + "y_phase, b_phase, power, fuse_functional, starter_functional, mccb_functional,   tube_well_survey_rev_no, t.reason_id, no_of_phase, "
                 + "fuse1, fuse2, fuse3,t.fuse_id1, t.fuse_id2, t.fuse_id3, mccb1, mccb2, mccb3,t.mccb_id1, t.mccb_id2, t.mccb_id3, starter_capacity,"
                 + " if(t.starter_id is null,null,sr.starter_type) as starter_type ,meter_phase, meter_reading,if(t.starter_make_id is null,null,sm.starter_make) as starter_make, "
                 + " auto_switch_type_id, main_switch_type_id, main_switch_rating, enclosure_type_id ,survey_file_no, "
-                //+ " DATE_FORMAT(survey_date, '%d-%m-%Y') AS survey_date, survey_page_no,"
-                //+ " s.created_date AS survey_date, survey_page_no,"
+               
                 + " s.survey_date as survey_date, survey_page_no,"
                 + " mobile_no, pole_no, pole_rev_no, survey_type, status, image_name, s.lattitude, s.longitude, image_date_time,  data_entry_type_id, video_name, survey_pole_no, "
-                + " t.meter_name_auto, t.service_conn_no, previous_reading, consume_unit, amount "
+                + " t.meter_name_auto, t.service_conn_no, previous_reading, consume_unit, amount,rtt.reason_type "
                 + " FROM tube_well_survey as t "
                 +" left join meters as m ON m.meter_name_auto=t.meter_name_auto AND m.final_revision='VALID' "
                 +" left join feeder as f ON f.feeder_id=m.feeder_id "
+                +" left join reason_type as rtt ON t.reason_id=rtt.reason_id "
                 +" left join (premises_tariff_map as ptm, type_of_premises as top) ON m.premises_tariff_map_id=ptm.premises_tariff_map_id "
                 +" AND top.type_of_premises_id=ptm.type_of_premises_id "
                 + ",survey as s,starter as sr,starter_make as sm "
                 + " where t.tube_well_survey_id=s.survey_id  and sr.starter_id=t.starter_id and sm.starter_make_id=t.starter_make_id and t.active='Y' and s.status='Y' "
-//                + " AND IF('" + pole_no + "' = '',  s.pole_no LIKE '%%', s.pole_no=? )"
-//                + " AND IF('" + searchIvrsNo + "' = '',  t.service_conn_no LIKE '%%', t.service_conn_no=? )"
-//                + " AND IF('" + survey_id+ "' = '',  s.survey_id LIKE '%%', s.survey_id = '"+survey_id+"' )"
-                + " AND IF('" + pole_no + "' = '',  s.pole_no LIKE '%%', s.pole_no=? )"
-                + " AND IF('" + searchFileNo + "' = '',  s.survey_file_no LIKE '%%', s.survey_file_no=? )"
-                + " AND IF('" + searchPageNo + "' = '',  s.survey_page_no LIKE '%%', s.survey_page_no=? )"
+ 
+                + " AND IF('" + pole_no + "' = '',  meter_no LIKE '%%', meter_no=? )"
+//                + " AND IF('" + searchFileNo + "' = '',  s.survey_file_no LIKE '%%', s.survey_file_no=? )"
+//                + " AND IF('" + searchPageNo + "' = '',  s.survey_page_no LIKE '%%', s.survey_page_no=? )"
                 + " AND IF('" + searchIvrsNo + "' = '',  t.service_conn_no LIKE '%%' OR t.service_conn_no IS null, t.service_conn_no=? )"
-//                + " AND IF('" + searchByDate + "' = '',  s.survey_date LIKE '%%', s.survey_date = '"+searchByDate+"' )"
-                //+ " AND IF('" + meter_name_auto + "' = '' OR '" + meter_name_auto + "' = 'null',  t.meter_name_auto LIKE '%%', t.meter_name_auto = '"+meter_name_auto+"' )"
-                + " AND IF('" + meter_name_auto + "' = '',  t.meter_name_auto LIKE '%%' OR t.meter_name_auto IS null, t.meter_name_auto = '"+meter_name_auto+"' )"
+ 
+                 + " AND IF('" + meter_name_auto + "' = '',  t.meter_name_auto LIKE '%%' OR t.meter_name_auto IS null, t.meter_name_auto = '"+meter_name_auto+"' )"
                 + " AND IF('" + survey_id+ "' = '',  s.survey_id LIKE '%%', s.survey_id = '"+survey_id+"' )"
-                + " AND IF('" + searchMeterFunctional+ "' = '',  t.meter_functional LIKE '%%', t.meter_functional = '"+searchMeterFunctional+"' )"
-                + " AND IF('" + searchFeeder + "' = '',  f.feeder_name LIKE '%%', f.feeder_name= '"+searchFeeder+"' )"
-                 + " AND IF('" + searchTypeOfConnection + "' = '',  top.type_of_premsis LIKE '%%', top.type_of_premsis= '"+searchTypeOfConnection+"' )"
-//                 + " AND IF('" + searchToDate + "' = '',  s.survey_date LIKE '%%', s.survey_date <= '"+searchToDate+"' )"
-                + "  order by tube_well_survey_id desc"
-                + addLimit;
+                + " AND IF('" + searchMeterFunctional+ "' = '',  t.meter_functional LIKE '%%', t.meter_functional = '"+searchMeterFunctional+"' )";
+             
+             
+                  if(searchByDate!=""){
+        query+=" and  s.survey_date='"+searchByDate+"'";
+        }
+                  if(searchToDate!=""){
+        query+=" and  s.survey_date='"+searchToDate+"'";
+        }
+              query+= " order by tube_well_survey_id desc ";           
+                  query+=addLimit;
+               
+              
 
 
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, pole_no);
-            pstmt.setString(2, searchFileNo);
-            pstmt.setString(3, searchPageNo);
-            pstmt.setString(4, searchIvrsNo);
+//            pstmt.setString(2, searchFileNo);
+//            pstmt.setString(3, searchPageNo);
+            pstmt.setString(2, searchIvrsNo);
 //            pstmt.setString(3, pole_no);
 //            pstmt.setString(4, pole_no);
             //  pstmt.setString(2, searchSwitchNo);
@@ -2123,6 +2350,7 @@ public class TubeWellSurveyModel {
                 surveyType.setPrevious_reading(rset.getDouble("previous_reading"));
                 surveyType.setConsume_unit(rset.getDouble("consume_unit"));
                 surveyType.setAmount(rset.getDouble("amount"));
+                surveyType.setReason_type(rset.getString("reason_type"));
 
 //                if (rset.getString("survey_type").equals("pole_type_survey")) {
 //                    surveyType.setPole_no(getPole_No(rset.getInt("pole_id"), rset.getInt("pole_rev_no")));
@@ -2142,11 +2370,7 @@ public class TubeWellSurveyModel {
 
                 surveyType.setCalculated_power(c_p);
                 surveyType.setProjected_consumption(p_c);
-//                surveyType.setPole_no(rset.getString("pole_no"));
-//                surveyType.setSwitching_point_name(rset.getString("pole_no_s"));
-//                surveyType.setActive(rset.getString("active"));
-//                surveyType.setPole_no(rset.getString("pole_no"));
-//                surveyType.setContacter_funactional(rset.getString("starter_functional"));
+ 
 
                 list.add(surveyType);
             }
@@ -2670,14 +2894,35 @@ public class TubeWellSurveyModel {
 
     public List<String> getIvrsNo(String q) {
         List<String> list = new ArrayList<String>();
-        String query = "SELECT ivrs_no FROM meters  as m,org_office as of  where final_revision='VALID' and "
-                + "of.org_office_id=m.org_office_id GROUP BY ivrs_no ORDER BY ivrs_no ";
+        String query = "select ivrs_no from tube_well_detail where active='y' ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
                 String ivrs_no = rset.getString("ivrs_no");
+                if (ivrs_no.toUpperCase().startsWith(q.toUpperCase())) {
+                    list.add(ivrs_no);
+                    count++;
+                }
+            }
+            if (count == 0) {
+                list.add("No such Contacter Type exists.");
+            }
+        } catch (Exception e) {
+            System.out.println("getIvrsNo ERROR inside SurveyModel - " + e);
+        }
+        return list;
+    }
+    public List<String> getreason_type(String q) {
+        List<String> list = new ArrayList<String>();
+        String query = "select reason_type from reason_type ";
+        try {
+            ResultSet rset = connection.prepareStatement(query).executeQuery();
+            int count = 0;
+            q = q.trim();
+            while (rset.next()) {    // move cursor from BOR to valid record.
+                String ivrs_no = rset.getString("reason_type");
                 if (ivrs_no.toUpperCase().startsWith(q.toUpperCase())) {
                     list.add(ivrs_no);
                     count++;

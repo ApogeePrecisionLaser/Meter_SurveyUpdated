@@ -56,7 +56,7 @@ public class PoleTypeModel {
     }
  public int insertRecord(PoleTypeBean poleTypeBean) {
 
-        String query = "INSERT INTO pole_type (pole_type, active, created_by, remark) VALUES (?,?,?,?) ";
+        String query = "INSERT INTO pole_type (pole_type_name, active, createdby, remark) VALUES (?,?,?,?) ";
         int rowsAffected = 0;
         try {
             java.sql.PreparedStatement pstmt = connection.prepareStatement(query);
@@ -79,7 +79,7 @@ public class PoleTypeModel {
 
     }
   public int updateRecord(PoleTypeBean poleTypeBean) {
-        String query = "UPDATE pole_type SET pole_type=?, active=?, created_by=?, remark=? WHERE pole_type_id=? ";
+        String query = "UPDATE pole_type SET pole_type_name=?, active=?, createdby=?, remark=? WHERE pole_type_id=? ";
         int rowsAffected = 0;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -103,13 +103,13 @@ public class PoleTypeModel {
     }
      public List<String> getPoleType(String q) {
         List<String> list = new ArrayList<String>();
-        String query = " SELECT pole_type_id, pole_type FROM pole_type GROUP BY pole_type ORDER BY pole_type ";
+        String query = " SELECT pole_type_id, pole_type_name FROM pole_type GROUP BY pole_type_name ORDER BY pole_type_name ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String pole_type = rset.getString("pole_type");
+                String pole_type = rset.getString("pole_type_name");
                 if (pole_type.toUpperCase().startsWith(q.toUpperCase())) {
                     list.add(pole_type);
                     count++;
@@ -126,8 +126,8 @@ public class PoleTypeModel {
     public int getNoOfRows(String searchPoleType) {
         String query = " SELECT Count(*) "
                 + " FROM pole_type "
-                + " WHERE IF('" + searchPoleType + "' = '', pole_type LIKE '%%',pole_type =?) "
-                + " ORDER BY pole_type ";
+                + " WHERE IF('" + searchPoleType + "' = '', pole_type_name LIKE '%%',pole_type_name =?) "
+                + " ORDER BY pole_type_name ";
         int noOfRows = 0;
         try {
             PreparedStatement stmt = connection.prepareStatement(query);
@@ -145,10 +145,10 @@ public class PoleTypeModel {
     public List<PoleTypeBean> showData(int lowerLimit, int noOfRowsToDisplay, String searchPoleType) {
         List<PoleTypeBean> list = new ArrayList<PoleTypeBean>();
 
-       String query = " SELECT pole_type_id, pole_type, active, DATE_FORMAT(created_date,'%d-%m-%Y') AS created_date, created_by, remark "
+       String query = " SELECT pole_type_id, pole_type_name, active, DATE_FORMAT(created_date,'%d-%m-%Y') AS created_date, createdby, remark "
                 + " FROM pole_type "
-                + " WHERE IF('" + searchPoleType + "' = '',pole_type  LIKE '%%', pole_type =?) "
-                + " ORDER BY pole_type "
+                + " WHERE IF('" + searchPoleType + "' = '',pole_type_name  LIKE '%%', pole_type_name =?) "
+                + " ORDER BY pole_type_name "
                 + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -157,10 +157,10 @@ public class PoleTypeModel {
             while (rset.next()) {
                 PoleTypeBean poleType = new PoleTypeBean();
                 poleType.setPole_type_id(rset.getInt("pole_type_id"));
-                poleType.setPole_type(rset.getString("pole_type"));
+                poleType.setPole_type(rset.getString("pole_type_name"));
                 poleType.setActive(rset.getString("active"));
                 poleType.setCreated_date(rset.getString("created_date"));
-                poleType.setCreated_by(rset.getString("created_by"));
+                poleType.setCreated_by(rset.getString("createdby"));
                 poleType.setRemark(rset.getString("remark"));
                 list.add(poleType);
             }
@@ -172,10 +172,10 @@ public class PoleTypeModel {
     public List<PoleTypeBean> showAllData(String searchPoleType) {
         List<PoleTypeBean> listAll = new ArrayList<PoleTypeBean>();
 
-       String query = " SELECT pole_type_id, pole_type, active, DATE_FORMAT(created_date,'%d-%m-%Y') AS created_date, created_by, remark "
+       String query = " SELECT pole_type_id, pole_type_name, active, DATE_FORMAT(created_date,'%d-%m-%Y') AS created_date, createdby, remark "
                 + " FROM pole_type "
-                + " WHERE IF('" + searchPoleType + "' = '',pole_type  LIKE '%%', pole_type =?) "
-                + " ORDER BY pole_type ";
+                + " WHERE IF('" + searchPoleType + "' = '',pole_type_name  LIKE '%%', pole_type_name =?) "
+                + " ORDER BY pole_type_name ";
               //  + " LIMIT " + lowerLimit + ", " + noOfRowsToDisplay;
         try {
             PreparedStatement pstmt = connection.prepareStatement(query);
@@ -184,10 +184,10 @@ public class PoleTypeModel {
             while (rset.next()) {
                 PoleTypeBean poleType = new PoleTypeBean();
                 poleType.setPole_type_id(rset.getInt("pole_type_id"));
-                poleType.setPole_type(rset.getString("pole_type"));
+                poleType.setPole_type(rset.getString("pole_type_name"));
                 poleType.setActive(rset.getString("active"));
                 poleType.setCreated_date(rset.getString("created_date"));
-                poleType.setCreated_by(rset.getString("created_by"));
+                poleType.setCreated_by(rset.getString("createdby"));
                 poleType.setRemark(rset.getString("remark"));
                 listAll.add(poleType);
             }

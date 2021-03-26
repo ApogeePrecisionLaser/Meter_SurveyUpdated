@@ -331,8 +331,11 @@ public class TubeWellDetailController extends HttpServlet {
                 tubeWellTypeBean.setRoad_rev_no(Integer.parseInt(road_id_rev_no.split("_")[1]));
             }
             //        tubeWellTypeBean.setRoad_id(tubeWellSurveyTypeModel.getRoadId(request.getParameter("road_name").trim(), road_category, road_use));
-            tubeWellTypeBean.setPhase(Integer.parseInt(request.getParameter("phase").trim()));
-            tubeWellTypeBean.setIs_working(request.getParameter("is_working").trim());
+            if(request.getParameter("phase")!=""){
+                 tubeWellTypeBean.setPhase(Integer.parseInt(request.getParameter("phase")));
+            }else{
+            tubeWellTypeBean.setPhase(0);}
+            tubeWellTypeBean.setIs_working(request.getParameter("is_working"));
             tubeWellTypeBean.setRemark(request.getParameter("remark").trim());
             // tubeWellTypeBean.setFuse_id(tubeWellSurveyTypeModel.getFuseId(request.getParameter("fuse_type").trim()));
             tubeWellTypeBean.setFuse_quantity(request.getParameter("fuse_quantity").trim());
@@ -341,7 +344,7 @@ public class TubeWellDetailController extends HttpServlet {
             //   tubeWellTypeBean.setContacter_quantity(request.getParameter("contacter_quantity").trim());
             //  tubeWellTypeBean.setMccb();
             //  tubeWellTypeBean.setMccb_id(tubeWellSurveyTypeModel.getMccbId(request.getParameter("mccb_type").trim()));
-            tubeWellTypeBean.setMccb_quantity(request.getParameter("mccb_quantity").trim());
+            tubeWellTypeBean.setMccb_quantity(request.getParameter("mccb_quantity").trim());     
             // tubeWellTypeBean.setTimer();
             // tubeWellTypeBean.setTimer_id(tubeWellSurveyTypeModel.getTimerId(request.getParameter("timer_type").trim()));
             // tubeWellTypeBean.setTimer_quantity(request.getParameter("timer_quantity").trim());
@@ -417,7 +420,17 @@ public class TubeWellDetailController extends HttpServlet {
                     // if (tubeWellSurveyTypeModel.validationCheckforRevise(request.getParameter("service_conn_no").trim(), request.getParameter("ivrs_no").trim(), tubeWellTypeBean.getPole_no(), tube_well_detail_id, switching_rev_no, tubeWellTypeBean.getIsCheckedTrue())) {
                     tubeWellSurveyTypeModel.reviseRecord(tubeWellTypeBean);
                     //  }
-                } else if (task.equals("Update")) {
+                } 
+                
+                  if (task.equals("Save") && tube_well_detail_id!=0) {
+                    // if (tubeWellSurveyTypeModel.validationCheckforRevise(request.getParameter("service_conn_no").trim(), request.getParameter("ivrs_no").trim(), tubeWellTypeBean.getPole_no(), tube_well_detail_id, switching_rev_no, tubeWellTypeBean.getIsCheckedTrue())) {
+                    tubeWellSurveyTypeModel.reviseRecord(tubeWellTypeBean);
+                    //  }
+                } 
+                
+                
+                
+                else if (task.equals("Update")) {
                     if (tubeWellSurveyTypeModel.validationCheckforRevise(request.getParameter("service_conn_no").trim(), request.getParameter("ivrs_no").trim(), tubeWellTypeBean.getPole_no(), tube_well_detail_id, switching_rev_no, tubeWellTypeBean.getIsCheckedTrue())) {
                         tubeWellSurveyTypeModel.updateRecord(tubeWellTypeBean);
                     }

@@ -12,9 +12,56 @@ public class PoleDetailTypeBean {
 
     private int pole_id;
     private int pole_type_id;
+    private int pole_light_type_id;
+
+    public int getPole_light_type_id() {
+        return pole_light_type_id;
+    }
+
+    public void setPole_light_type_id(int pole_light_type_id) {
+        this.pole_light_type_id = pole_light_type_id;
+    }
     private int mounting_type_id;
+    private int tubewell_id;
+    private int tubewell_revno;
+    
+    public int getTubewell_revno() {
+        return tubewell_revno;
+    }
+
+    public void setTubewell_revno(int tubewell_revno) {
+        this.tubewell_revno = tubewell_revno;
+    }
+
+   
+
+    public int getTubewell_id() {
+        return tubewell_id;
+    }
+
+    public void setTubewell_id(int tubewell_id) {
+        this.tubewell_id = tubewell_id;
+    }
     private int pole_rev_no;
     private String pole_span;
+    private String lightname;
+    private String imgpath;
+
+    public String getImgpath() {
+        return imgpath;
+    }
+
+    public void setImgpath(String imgpath) {
+        this.imgpath = imgpath;
+    }
+
+    public String getLightname() {
+        return lightname;
+    }
+
+    public void setLightname(String lightname) {
+        this.lightname = lightname;
+    }
     private String pole_height;
     private String mounting_type;
     private String mounting_height;

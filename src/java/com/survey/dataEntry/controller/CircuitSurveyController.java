@@ -193,9 +193,108 @@ public class CircuitSurveyController extends HttpServlet {
          }
         
         // view image part end 
+   
+           String ivrsno1="";        String circuitno1="";  String circuitname="";int switchingid=0;        String time1="";        String ischild1="";        String parent1="";        
+        String timestamptime1="";     String syncstatus1="";     String accuracylastpole1=""; String acuracyfirstpole1=""; String  lattitudefirstpole1="";
+      String lattitudelastpole1="";     String longitudefirstpole1="";     String longitudelastpole1="";  String altitudefirstpole=""; String altitudelastpole="";
+    int firstpoleid=0;  
+    int lastpoleid=0;  
+    int cableid=0;  
+     String firstpoleimage="";
+     String lastpoleimage=""; 
+      if (task.equals("cirdata")) {
+           String cid=request.getParameter("circuit_id");
         
+          List<CircuitSurveyBean> dataList = areaTypeModel.showData11(cid);
+           // System.out.println("  datalist -------------"+CircuitSurveyBean.);
+//        String ivrsno1="";        String circuitno1="";  String circuitname="";int switchingid=0;        String time1="";        String ischild1="";        String parent1="";        
+//        String timestamptime1="";     String syncstatus1="";     String accuracylastpole1=""; String acuracyfirstpole1=""; String  lattitudefirstpole1="";
+//      String lattitudelastpole1="";     String longitudefirstpole1="";     String longitudelastpole1="";  String altitudefirstpole=""; String altitudelastpole="";
+//    int firstpoleid=0;  
+//    int lastpoleid=0;  
+//    int cableid=0;  
+//     String firstpoleimage="";
+//     String lastpoleimage="";
+      
+      for(int k=0;k<dataList.size();k++){
+       ivrsno1=dataList.get(k).getIrvs_no();
+       circuitno1=dataList.get(k).getCircuitno();
+       circuitname=dataList.get(k).getCircuit_name();
+       switchingid=dataList.get(k).getSwitchingpointid();
+       firstpoleid=dataList.get(k).getFirstpoleid();
+       lastpoleid=dataList.get(k).getLastpoleid();
+       cableid=dataList.get(k).getCabletypeid();
+       firstpoleimage=dataList.get(k).getImagepathoffirstpole();
+       lastpoleimage=dataList.get(k).getImagepathoflastpole();
+       time1=dataList.get(k).getTime();
+       ischild1=dataList.get(k).getIs_child();
+       parent1=dataList.get(k).getParent();
+       timestamptime1=dataList.get(k).getTimestamptime();
+       syncstatus1=dataList.get(k).getSync_status();
+       acuracyfirstpole1=dataList.get(k).getAccuracyfirstpole();
+       accuracylastpole1=dataList.get(k).getAccuracylasttpole();
+       lattitudefirstpole1= Double.toString(dataList.get(k).getLattitudefirstpole());
+       lattitudelastpole1= Double.toString(dataList.get(k).getLattitudelasttpole());
+       longitudefirstpole1= Double.toString(dataList.get(k).getLongitudefirstpole());
+       longitudelastpole1= Double.toString(dataList.get(k).getLongitudelasttpole());
+       altitudefirstpole= Double.toString(dataList.get(k).getAltitudefirstpole());
+       altitudelastpole= Double.toString(dataList.get(k).getAltitudelastpole());
         
+      request.setAttribute("ivrsno1", ivrsno1);    
+      request.setAttribute("circuitname", circuitname);    
+      request.setAttribute("switchingid", switchingid);    
+      request.setAttribute("firstpoleid", firstpoleid);    
+      request.setAttribute("lastpoleid", lastpoleid);    
+      request.setAttribute("cableid", cableid);    
+      request.setAttribute("firstpoleimage", firstpoleimage);    
+      request.setAttribute("lastpoleimage", lastpoleimage);    
+      request.setAttribute("circuitno1", circuitno1);    
+      request.setAttribute("time1", time1);    
+      request.setAttribute("ischild1", ischild1);    
+      request.setAttribute("parent1", parent1);    
+      request.setAttribute("timestamptime1", timestamptime1);    
+      request.setAttribute("syncstatus1", syncstatus1);    
+      request.setAttribute("acuracyfirstpole1", acuracyfirstpole1);    
+      request.setAttribute("accuracylastpole1", accuracylastpole1);    
+      request.setAttribute("lattitudefirstpole1", lattitudefirstpole1);    
+      request.setAttribute("lattitudelastpole1", lattitudelastpole1);    
+      request.setAttribute("longitudefirstpole1", longitudefirstpole1);    
+      request.setAttribute("longitudelastpole1", longitudelastpole1);    
+      request.setAttribute("altitudefirstpole", altitudefirstpole);    
+      request.setAttribute("altitudelastpole", altitudelastpole);    
+      
+       }
+     }
+        if (task.equals("Save")) {
+            ivrsno1=request.getParameter("ivrsno1");
+            ischild1=request.getParameter("ischild1");
+            time1=request.getParameter("time1");
+            circuitno1=request.getParameter("circuitno1");
+            circuitname=request.getParameter("circuitname");
+            lastpoleimage=request.getParameter("lastpoleimage");
+            firstpoleimage=request.getParameter("firstpoleimage");
+           String cabletypeid=request.getParameter("cableid");
+           String firstpole_id=request.getParameter("firstpoleid");
+           String lastpole_id=request.getParameter("lastpoleid");
+           String switching_id=request.getParameter("switchingid");
+            parent1=request.getParameter("parent1");
+            timestamptime1=request.getParameter("timestamptime1");
+            syncstatus1=request.getParameter("syncstatus1");
+            acuracyfirstpole1=request.getParameter("acuracyfirstpole1");
+            accuracylastpole1=request.getParameter("accuracylastpole1");
+            lattitudefirstpole1=request.getParameter("lattitudefirstpole1");
+            lattitudelastpole1=request.getParameter("lattitudelastpole1");
+            longitudefirstpole1=request.getParameter("longitudefirstpole1");
+            longitudelastpole1=request.getParameter("longitudelastpole1");
+            altitudefirstpole=request.getParameter("altitudefirstpole");
+            altitudelastpole=request.getParameter("altitudelastpole");
+            
+                int i=areaTypeModel.insertRecordPrimary(circuitname,ivrsno1,circuitno1,switching_id,firstpole_id,lastpole_id,cabletypeid,parent1,time1,ischild1,firstpoleimage,lastpoleimage,lattitudefirstpole1,longitudefirstpole1,altitudefirstpole,acuracyfirstpole1,lattitudelastpole1,longitudelastpole1,altitudelastpole ,accuracylastpole1);
+            
         
+            
+        }
+      
         //view image
               /// view image part 
          if (task.equals("viewlastPoleImage")) {

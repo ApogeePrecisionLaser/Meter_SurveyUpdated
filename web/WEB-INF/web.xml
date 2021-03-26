@@ -7,7 +7,7 @@
     </context-param>
     <context-param>
         <param-name>connectionString</param-name>
-        <param-value>jdbc:mysql://localhost:3306/meter_survey2</param-value>      
+        <param-value>jdbc:mysql://localhost:3306/meter_survey</param-value>      
     </context-param>
     <context-param>
         <param-name>db_username</param-name>
@@ -54,6 +54,14 @@
     <servlet-mapping>
         <servlet-name>misView</servlet-name>
         <url-pattern>/misView</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>poledatasurveyview</servlet-name>
+        <jsp-file>/view/dataEntry/poledatasurveyview.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>poledatasurveyview</servlet-name>
+        <url-pattern>/poledatasurveyview</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>consumptionDetail</servlet-name>
@@ -537,7 +545,14 @@
         <servlet-name>primary_survey</servlet-name>
         <url-pattern>/primary_survey</url-pattern>
     </servlet-mapping>
-    
+    <servlet>
+        <servlet-name>circuit_surveydata</servlet-name>
+        <jsp-file>/view/dataEntry/circuit_survey_1.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>circuit_surveydata</servlet-name>
+        <url-pattern>/circuit_surveydata</url-pattern>
+    </servlet-mapping>
      <servlet>
         <servlet-name>circuit_survey</servlet-name>
         <jsp-file>/view/dataEntry/circuit_survey.jsp</jsp-file>
@@ -546,7 +561,10 @@
         <servlet-name>circuit_survey</servlet-name>
         <url-pattern>/circuit_survey</url-pattern>
     </servlet-mapping>
-    
+     <servlet>
+        <servlet-name>CircuitSurveyDataController</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.CircuitSurveyDataController</servlet-class>
+    </servlet>
      <servlet>
         <servlet-name>CircuitSurveyController</servlet-name>
         <servlet-class>com.survey.dataEntry.controller.CircuitSurveyController</servlet-class>
@@ -925,6 +943,10 @@
     <servlet-mapping>
         <servlet-name>PopulateTables</servlet-name>
         <url-pattern>/PopulateTables</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CircuitSurveyDataController</servlet-name>
+        <url-pattern>/CircuitSurveyDataController</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CircuitSurveyController</servlet-name>
@@ -1601,8 +1623,30 @@
         <url-pattern>/chartCont.do</url-pattern>
     </servlet-mapping>
     
-    
-    
+      <servlet>
+        <servlet-name>PoleLightTypeCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.PoleLightTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PoleLightTypeCont</servlet-name>
+        <url-pattern>/PoleLightTypeCont</url-pattern>
+    </servlet-mapping>
+      <servlet>
+        <servlet-name>PoleSurveyCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.PoleSurveyDataController1</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PoleSurveyCont</servlet-name>
+        <url-pattern>/PoleSurveyCont</url-pattern>
+    </servlet-mapping>
+      <servlet>
+        <servlet-name>Pole_Light_Type_View</servlet-name>
+        <jsp-file>/view/dataEntry/Pole_Light_Type.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Pole_Light_Type_View</servlet-name>
+        <url-pattern>/Pole_Light_Type_View</url-pattern>
+    </servlet-mapping>
      <servlet>
         <servlet-name>MultipleImagesurvey_reading</servlet-name>
         <jsp-file>/view/dataEntry/MultipleImagesurvey_reading.jsp</jsp-file>
@@ -1610,6 +1654,14 @@
     <servlet-mapping>
         <servlet-name>MultipleImagesurvey_reading</servlet-name>
         <url-pattern>/MultipleImagesurvey_reading</url-pattern>
+    </servlet-mapping>
+     <servlet>
+        <servlet-name>MultipleImagePolesurvey</servlet-name>
+        <jsp-file>/view/dataEntry/MultipleImagePolesurvey.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MultipleImagePolesurvey</servlet-name>
+        <url-pattern>/MultipleImagePolesurvey</url-pattern>
     </servlet-mapping>
 </web-app>
 

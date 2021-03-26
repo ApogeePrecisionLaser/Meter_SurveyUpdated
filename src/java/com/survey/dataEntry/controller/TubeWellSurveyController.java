@@ -96,7 +96,12 @@ public class TubeWellSurveyController extends HttpServlet {
                     list = tubeWellSurveyModel.getSwitchingPtName(q);
                 } else if (JQstring.equals("getSearchPole_No")) {
                     list = tubeWellSurveyModel.getSearchPole_No(q);
-                } else if (JQstring.equals("getAutoSwitchType")) {
+                } 
+                
+//                else if (JQstring.equals("getSearchPole_No")) {
+//                    list = tubeWellSurveyModel.getSearchPole_No(q);
+//                } 
+                else if (JQstring.equals("getAutoSwitchType")) {
                     list = tubeWellSurveyModel.getAutoSwitchType(q);
                 } else if (JQstring.equals("getMainSwitchType")) {
                     list = tubeWellSurveyModel.getMainSwitchType(q);
@@ -112,6 +117,9 @@ public class TubeWellSurveyController extends HttpServlet {
                     list = tubeWellSurveyModel.getStarterMake(q);
                 }else if (JQstring.equals("getSearchIvrsNo")) {
                     list = tubeWellSurveyModel.getIvrsNo(q);
+                }
+                else if (JQstring.equals("getreason_type")) {
+                    list = tubeWellSurveyModel.getreason_type(q);
                 }
                 Iterator<String> iter = list.iterator();
                 while (iter.hasNext()) {
@@ -360,7 +368,7 @@ public class TubeWellSurveyController extends HttpServlet {
         if (task == null) {
             task = "";
         }
-        if (task.equals("Save") || task.equals("Save AS New") || task.equals("Revise") || task.equals("Cancel")) {
+        if (task.equalsIgnoreCase("Save") || task.equals("Save AS New") || task.equals("Revise") || task.equals("Cancel")) {
             int survey_id;
             int survey_rev_no;
             int tube_well_survey_id;
@@ -401,6 +409,7 @@ public class TubeWellSurveyController extends HttpServlet {
             tubeWellSurveyBean.setTube_well_survey_id(tube_well_survey_id);
             tubeWellSurveyBean.setTube_well_survey_rev_no(tube_well_survey_rev_no);
             tubeWellSurveyBean.setSurvey_type(map.get("survey_type"));
+            tubeWellSurveyBean.setService_conn_no(map.get("ivrs_no"));
             tubeWellSurveyBean.setSurvey_by(map.get("survey_by"));
             tubeWellSurveyBean.setSurvey_date(map.get("survey_date"));
             //tubeWellSurveyBean.setStatus(map.get("status"));
@@ -450,6 +459,7 @@ public class TubeWellSurveyController extends HttpServlet {
 
 
             tubeWellSurveyBean.setY_phase(map.get("y_phase"));
+            tubeWellSurveyBean.setRemark(map.get("remark2"));
             tubeWellSurveyBean.setPole_id(tubeWellSurveyModel.getPole_id(map.get("pole_no")));
 
             tubeWellSurveyBean.setMeter_address(map.get("meter_address"));
@@ -552,14 +562,14 @@ public class TubeWellSurveyController extends HttpServlet {
                 int general_image_details_id =tubeWellSurveyModel.getGeneral_image_details_id(survey_id);
                 String destination = tubeWellSurveyModel.getdestinationPathForMulImage(general_image_details_id);
               //  destination=destination+"//"+survey_id;
-                String image_name = tubeWellSurveyModel.getImageList(survey_id);
-                String[] imageName=image_name.split(",");
+             
                 if (destination.equals("") || destination.isEmpty())
                 {
-                    list1.add(destination + "//" + "no_image.png");
+                    list1.add("C:\\ssadvt_repository\\no_image.png");
                 } else {
                     //path = destination + "\\" + survey_id + "\\" + image_name;
-
+   String image_name = tubeWellSurveyModel.getImageList(survey_id);
+                String[] imageName=image_name.split(",");
                     for(int i=0;i<imageName.length;i++)
                    {
                        String imageDestination = "";
@@ -570,7 +580,7 @@ public class TubeWellSurveyController extends HttpServlet {
                         }
                         else
                         {
-                            imageDestination = destination + "//" + "no_image.png";                            
+                            imageDestination = destination + "\\" + "no_image.png";                            
                         }
                         imageDestination = imageDestination.replace("\\", "$");
                         list1.add(imageDestination);
@@ -655,7 +665,7 @@ public class TubeWellSurveyController extends HttpServlet {
                         listAll = tubeWellSurveyModel.showData(-1, -1, "", ivrs_no, "","","","","","","","","");
                         jrxmlFilePath = ctx.getRealPath("/Report/tubeWellSurvey_2.jrxml");                      
                     }
-                    tubeWellSurveyModel.SavePdf(jrxmlFilePath, listAll, report);
+                  tubeWellSurveyModel.SavePdf(jrxmlFilePath, listAll, report);
                     Iterator itrr=listAll.iterator();
                     String image=null;
                     //String path="C:/ssadvt_repository/meter_survey/survey_image/tube_well";

@@ -74,6 +74,16 @@
                 action1: function() { return "getSearchIvrsNo"}
             }
         });
+        $("#reason_type").autocomplete("tubeWellSurveyCont", {
+            extraParams: {
+                action1: function() { return "getreason_type"}
+            }
+        });
+        $("#ivrs_no").autocomplete("tubeWellSurveyCont", {
+            extraParams: {
+                action1: function() { return "getSearchIvrsNo"}
+            }
+        });
         $("#pole_no").autocomplete("tubeWellSurveyCont", {
             extraParams: {
                 action1: function() { return "getPole_No"},
@@ -285,7 +295,7 @@
         $("#hours").attr("disabled",false);
         $("#survey_meter_no").attr("disabled",false);
         $("#meter_address").attr("disabled",false);
-        document.getElementById("save").disabled = true;
+        document.getElementById("save").disabled = false;
         document.getElementById("save_As").disabled = false;
         document.getElementById("cancel").disabled = false;
         document.getElementById("revise").disabled = false;
@@ -313,8 +323,8 @@
             document.getElementById("pole_no").focus();
             document.getElementById("revise").disabled = true;
             document.getElementById("save").disabled = false;
-            document.getElementById("save_As").disabled = true;
-            document.getElementById("cancel").disabled = true;
+            document.getElementById("save_As").disabled = false;
+            document.getElementById("cancel").disabled = false;
             setDefaultColor(document.getElementById("noOfRowsTraversed").value, 25);
         }
 
@@ -537,7 +547,7 @@
 
 
                         function setStatus(id) {
-                            if(id == 'save'){
+                            if(id === 'save'){
                                 document.getElementById("clickedButton").value = "Save";
                             }
                             else if(id == 'save_As'){
@@ -636,6 +646,14 @@
                                 return false;
                             return true;
                         }
+                        function closetable(){
+                        //    alert("hello");
+                            $("#table3").css("display", "none");
+                        }
+                        function opentable(){
+                         //   alert("hello");
+                            $("#table3").css("display", "table");
+                        }
                         function displayImageList(id){
 
                             var image = document.getElementById('image'+id).value;
@@ -683,9 +701,11 @@
                                                 <td><input type="button" class="pdf_button" id="viewPdf" name="viewPdf" value="" onclick="displayMapList()"></td>
                                             </tr>--%>
                                             <tr>
-                                                <td>Page No<input class="input" type="text" id="searchPageNo" name="searchPageNo" value="${searchPageNo}" size="15" ></td>
-                                                <td>File No<input class="input" type="text" id="searchFileNo" name="searchFileNo" value="${searchFileNo}" size="15" ></td>
-                                                <td>Pole No<input class="input" type="text" id="searchPoleNo" name="searchPoleNo" value="${searchPoleNo}" size="15" ></td>
+                                                  <td>Ivrs No<input class="input" type="text" id="searchIvrsNo" name="searchIvrsNo" value="${searchIvrsNo}" size="15" ></td>
+<!--                                                <td>Page No<input class="input" type="text" id="searchPageNo" name="searchPageNo" value="${searchPageNo}" size="15" ></td>
+                                                <td>File No<input class="input" type="text" id="searchFileNo" name="searchFileNo" value="${searchFileNo}" size="15" ></td>-->
+                                                <td>Meter No<input class="input" type="text" id="searchPoleNo" name="searchPoleNo" value="${searchPoleNo}" size="15" ></td>
+<!--                                                <td>Pole No<input class="input" type="text" id="searchPoleNo" name="searchPoleNo" value="${searchPoleNo}" size="15" ></td>-->
                                                 <td>Meter Functional
                                                      <select class="dropdown"  name="searchMeterFunctional" id="searchMeterFunctional" value="${searchMeterFunctional}">
                                                          <option value=""${searchMeterFunctional == ""?'selected':''}>Select</option>
@@ -693,7 +713,7 @@
                                                         <option value="N" ${searchMeterFunctional == "N"?'selected':''}>No</option>
                                                     </select>
                                                 </td>
-                                                <td>Ivrs No<input class="input" type="text" id="searchIvrsNo" name="searchIvrsNo" value="${searchIvrsNo}" size="15" ></td>
+                                              
                                             </tr>
                                             <tr align="center">
                                                 <td>Feeder<input class="input" type="text" id="searchFeeder" name="searchFeeder" value="${searchFeeder}" size="15" ></td>
@@ -727,7 +747,7 @@
                                                 <th style="white-space: normal" class="heading">Survey File No</th>
                                                 <th style="white-space: normal" class="heading">Survey Page No</th>
                                                 <th style="white-space: normal" class="heading">Survey By</th>
-                                                <th style="white-space: normal" class="heading">Pole No</th>
+<!--                                                <th style="white-space: normal"  class="heading">Pole No</th>-->
                                                 <th style="white-space: normal" class="heading">Survey Pole No</th>
                                                 <!--  <th style="white-space: normal; display:none" class="heading">Pole Rev No</th>-->
                                                 <th style="white-space: normal" class="heading">Survey type</th>
@@ -777,6 +797,7 @@
                                                 <th style="white-space: normal" class="heading">Previous Reading</th>
                                                 <th style="white-space: normal" class="heading">Consume Unit</th>
                                                 <th style="white-space: normal" class="heading">Amount</th>
+                                                <th style="white-space: normal" class="heading">Reason</th>
                                                 <th style="white-space: normal" class="heading">Update Detail</th>
                                                 <th style="white-space: normal" class="heading">View Map</th>
                                                 <th style="white-space: normal" class="heading">View Image</th>
@@ -796,7 +817,7 @@
                                                     <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${surveyTypeBean.survey_file_no}</td>
                                                     <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${surveyTypeBean.survey_page_no}</td>
                                                     <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${surveyTypeBean.survey_by}</td>
-                                                    <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${surveyTypeBean.pole_no}</td>
+                                                    <td  style="display:none" id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${surveyTypeBean.pole_no}</td>
                                                     <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${surveyTypeBean.survey_pole_no}</td>
                                                     <%--<td style="display:none" id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${surveyTypeBean.pole_rev_no}</td>--%>
                                                     <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${surveyTypeBean.survey_type}</td>
@@ -848,6 +869,7 @@
                                                     <td id=""  onclick="" >${surveyTypeBean.previous_reading}</td>
                                                     <td id=""  onclick="" >${surveyTypeBean.consume_unit}</td>
                                                     <td id=""  onclick="" >${surveyTypeBean.amount}</td>
+                                                    <td id=""  onclick="" >${surveyTypeBean.reason_type}</td>
                                                     <td ><a target="_blank" href="tubeWellDetailCont?task=showSurveyData&poll_no=${surveyTypeBean.pole_no}&meter_no=${surveyTypeBean.meter_no}&service_conn_no=${surveyTypeBean.service_conn_no}" id="surveyView${loopCounter.count}">Update</a></td>
                                                     <td>
                                                         <input type="button" class="btn"  value ="View Map" id="map_container${loopCounter.count}" onclick="openMap('${surveyTypeBean.longitude}' , '${surveyTypeBean.latitude}');"/>
@@ -936,10 +958,14 @@
                                                 <option value="tubewell_type_survey">TubeWell Type Survey</option>
                                                 <option value="upload_file_data">Upload File Data</option>
                                             </select>
-                                            <b class="heading">Pole No.</b>
-                                            <input class="input" type="text" id="pole_no" name="pole_no" value="" required>
-
-                                            </tr><br><br>
+<!--                                            <b class="heading">Pole No.</b>-->
+                                            <input class="input" type="hidden" id="pole_no" name="pole_no" value="T_7" > 
+                                            <b class="heading">IVRS No.</b>
+                                            <input class="input" type="text" id="ivrs_no" name="ivrs_no" value="" >
+                                            
+ <input type="button" value="Minimize" onclick="closetable()">
+ <input type="button" value="Maxmize" onclick="opentable()">
+                                            </tr></table><br><br>
                                             <table id="table5"  class="content" border="0"  align="center" width="953">
                                                 <tr>
 
@@ -957,7 +983,9 @@
                                                 </tr>
                                                 <tr>
                                                     <th class="heading1" style=" width:18%">Survey Date</th>
-                                                    <td><input class="input" type="text" id="survey_date" name="survey_date" value="" size="18" disabled>
+                                                    <td>
+                                                        
+                                                        <input class="input" type="text" id="survey_date" name="survey_date" value="" size="18" disabled>
                                                         <a href="#" onclick="setYears(1947,2022);showCalender(this,'survey_date')">
                                                             <img alt=""  src="images/calender.png">
                                                         </a>
@@ -967,13 +995,13 @@
                                                     <td>
                                                         <input type="file" id="image_name" name="image_name" value="" size="35" multiple="muliple" >
                                                     </td>
-                                                    <th class="heading1" style=" width:18%">Survey Meter No</th>
-                                                    <td><input class="input" type="text" id="survey_meter_no" name="survey_meter_no" value="" size="18" disabled>
+<!--                                                    <th class="heading1" style=" width:18%">Survey Meter No</th>-->
+                                                    <td><input class="input" type="hidden" id="survey_meter_no" name="survey_meter_no" value="survey_meter_no" size="18" >
 
                                                     </td>
                                                 </tr>
                                             </table>
-                                        </table>
+                                        
 
                                         <!-- hidden fields-->
                                         <table id="table3" class="content" border="0"  align="center" width="600" style="">

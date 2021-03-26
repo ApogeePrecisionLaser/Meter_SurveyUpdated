@@ -18,6 +18,33 @@ public class LightTypeBean {
   private String created_by;
   private String created_date;
   private String remark;
+  private String isParent;
+  private String ischild;
+  private int childid;
+
+    public String getIsParent() {
+        return isParent;
+    }
+
+    public void setIsParent(String isParent) {
+        this.isParent = isParent;
+    }
+
+    public String getIschild() {
+        return ischild;
+    }
+
+    public void setIschild(String ischild) {
+        this.ischild = ischild;
+    }
+
+    public int getChildid() {
+        return childid;
+    }
+
+    public void setChildid(int childid) {
+        this.childid = childid;
+    }
 
     public String getCreated_by() {
         return created_by;

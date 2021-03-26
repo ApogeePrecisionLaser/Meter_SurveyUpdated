@@ -9,6 +9,7 @@ import com.survey.dataEntry.model.NewSwitchingPointSurveyModel;
 import com.survey.dataEntry.model.TubeWellSurveyModel;
 import com.survey.dbcon.DBConnection;
 import com.survey.energyMeter.model.EnergyMeterWebServiceModel;
+import com.survey.tableClasses.PoleDetailTypeBean;
 import com.survey.tableClasses.SurveyBean;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -451,6 +452,11 @@ public class MeterSuverWebServices {
             surveyBean.setNo_of_phase(0);
         }
         try {
+            surveyBean.setMeter_address(inputJsonObj.get("meter_address").toString());
+        } catch (Exception e) {
+           surveyBean.setMeter_address("no address");
+        }
+        try {
             surveyBean.setMeter_phase(Integer.parseInt(inputJsonObj.get("meter_phase").toString()));
         } catch (Exception e) {
             surveyBean.setMeter_phase(0);
@@ -543,7 +549,12 @@ public class MeterSuverWebServices {
 //                surveyBean.setPole_rev_no(0);
 //            }
             } else if (surveyBean.getSurvey_type().equals("Switching Point")) {
-                surveyBean.setRemark(inputJsonObj.get("survey_remark").toString());
+                 try {
+            surveyBean.setRemark(inputJsonObj.get("survey_remark").toString());
+        } catch (Exception e) {
+            surveyBean.setRemark(null);
+        }
+               
 //            try {
 //                //surveyBean.setSwitching_point_detail_id(Integer.parseInt(inputJsonObj.get("switching_point_detail_id").toString()));
 //                surveyBean.setSwitching_point_detail_id(0);
@@ -1001,7 +1012,7 @@ public class MeterSuverWebServices {
             }
             //pole Type
  try {
-                json = wsSurveyModel.getPole_data();
+                json = wsSurveyModel.getPoletype_data();
                 obj.put("pole_type", json);
             } catch (Exception e) {
                 System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
@@ -1013,6 +1024,67 @@ public class MeterSuverWebServices {
             } catch (Exception e) {
                 System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
             }
+  
+  //////////
+   try {
+                json = wsSurveyModel.getRoad_data();
+                obj.put("Road", json);
+            } catch (Exception e) {
+                System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
+            }
+   try {
+                json = wsSurveyModel.getRoad_Use_data();
+                obj.put("Road_Use", json);
+            } catch (Exception e) {
+                System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
+            }
+    try {
+                json = wsSurveyModel.getRoad_Category();
+                obj.put("Road_Category", json);
+            } catch (Exception e) {
+                System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
+            }
+     try {
+                json = wsSurveyModel.getTraffic_Type();
+                obj.put("Traffic_Type", json);
+            } catch (Exception e) {
+                System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
+            }
+      try {
+                json = wsSurveyModel.getMounting_Type();
+                obj.put("Mounting_Type", json);
+            } catch (Exception e) {
+                System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
+            }
+      try {
+                json = wsSurveyModel.getWattage();
+                obj.put("Wattage", json);
+            } catch (Exception e) {
+                System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
+            }
+      try {
+                json = wsSurveyModel.getPole_Light_type();
+                obj.put("Pole_Light_type", json);
+            } catch (Exception e) {
+                System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
+            }
+      try {
+                json = wsSurveyModel.getPole();
+                obj.put("Pole", json);
+            } catch (Exception e) {
+                System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
+            }
+      try {
+                json = wsSurveyModel.getTubewelldetails();
+                obj.put("tubewell_details", json);
+            } catch (Exception e) {
+                System.out.println("Error in MeterSurveyWebServices 'requestData' url calling getImageType()..." + e);
+            }
+  
+  
+  
+  
+  ////////////////
             NewSwitchingPointSurveyModel nsp = new NewSwitchingPointSurveyModel();
             nsp.setConnection(wsSurveyModel.getConnection());
             json = nsp.showSwitchingJsonData();
@@ -1033,6 +1105,46 @@ public class MeterSuverWebServices {
         return obj;
     }
 
+    
+    
+    
+    
+     @POST
+    @Path("/requestipport")
+    @Produces(MediaType.APPLICATION_JSON)//http://192.168.1.15:8084/meter_survey/api/service/hello
+    @Consumes(MediaType.APPLICATION_JSON)
+    public JSONObject sendIp() {
+        JSONObject obj = new JSONObject();
+        try {
+          
+            wsSurveyModel = new MeterSurveyWebServicesModel();
+            //wsSurveyModel.setConnection();
+            wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
+            wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
+            wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
+            wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
+            wsSurveyModel.setConnection();     
+            //String imei = "";
+            JSONArray json = null;       
+            
+            try {
+                json = wsSurveyModel.getIPData();
+                obj.put("IPData", json);
+            } catch (Exception e) {
+                System.out.println("requestData getBoreCasingTypeData()..." + e);
+            }
+
+  
+            System.out.println("Data Retrived : " + new Date() + " " + json);
+
+        } catch (Exception ex) {
+            Logger.getLogger(MeterSuverWebServices.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return obj;
+    }
+
+    
+    
     @POST
     @Path("/surveyCordinates")
     @Produces(MediaType.APPLICATION_JSON)//http://192.168.1.15:8084/meter_survey/api/service/hello
@@ -1508,5 +1620,257 @@ public class MeterSuverWebServices {
         return responseCheck;
     }
 
+    
+    
+    
+    
+    
+    
     // primary meter survey data get end
+      @POST
+    @Path("/polesurvey")
+    @Produces(MediaType.APPLICATION_JSON)//http://192.168.1.15:8084/meter_survey/api/service/hello
+    @Consumes(MediaType.APPLICATION_JSON)
+    public String poleSurveyData(JSONObject json) throws Exception {
+        String responseCheck = "Data success fail";
+          OutputStream out = null;
+        try {
+            wsSurveyModel = new MeterSurveyWebServicesModel();
+            wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
+            wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
+            wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
+            wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
+            wsSurveyModel.setConnection();
+           // String poleid=json.getString("pole_id");
+            String pole_type_id=json.getString("pole_type_id");
+     
+           String pole_span=json.getString("pole_span");
+           String pole_height=json.getString("pole_height");
+           String mounting_height=json.getString("mounting_height");
+           String remark=json.getString("remark");
+           String mounting_type_id=json.getString("mounting_type_id");
+           String active=json.getString("active");
+           String pole_no=json.getString("pole_no");
+           String gps_code=json.getString("gps_code");
+           String max_avg_lux_level=json.getString("max_avg_lux_level");
+           String min_avg_lux_level=json.getString("min_avg_lux_level");
+           String avg_lux_level=json.getString("avg_lux_level");
+           String standard_lux_level=json.getString("standard_lux_level");
+           String is_working=json.getString("is_working");
+           String pole_rev_no=json.getString("pole_rev_no");
+           String latitude=json.getString("latitude");
+           String longitude=json.getString("longitude");
+           String isSwitchingPoint=json.getString("isSwitchingPoint");
+           String area_id=json.getString("area_id");
+           String road_id=json.getString("road_id");
+           String traffic_type_id=json.getString("traffic_type_id");
+           String road_rev_no=json.getString("road_rev_no");
+           String tube_well_detail_id=json.getString("tube_well_detail_id");
+           String tube_well_rev_no=json.getString("tube_well_rev_no");
+           String switching_point_detail_id=json.getString("switching_point_detail_id");
+           String switching_rev_no=json.getString("switching_rev_no");
+           String pole_light_type_id=json.getString("pole_light_type_id");
+            PoleDetailTypeBean ptb=new PoleDetailTypeBean();
+          //  ptb.setPole_id(Integer.parseInt(poleid));
+               if (pole_type_id == null ||  pole_type_id.equals("")) {
+         
+             ptb.setPole_type_id(0);
+            }else{
+             ptb.setPole_type_id(Integer.parseInt(pole_type_id));
+            }
+           
+            ptb.setPole_span(pole_span);
+            ptb.setPole_height(pole_height);
+            ptb.setMounting_height(mounting_height);
+            ptb.setRemark(remark);
+               if (mounting_type_id == null ||  mounting_type_id.equals("")) {
+         
+              ptb.setMounting_type_id(0);
+            }else{
+            ptb.setMounting_type_id(Integer.parseInt(mounting_type_id));
+            }
+          
+            ptb.setActive(active);
+            ptb.setPole_no(pole_no);
+            ptb.setGps_code(gps_code);
+            ptb.setMin_avg_lux_level(min_avg_lux_level);
+            ptb.setMax_avg_lux_level(max_avg_lux_level);
+            ptb.setStandard_lux_level(standard_lux_level);
+            ptb.setAvg_lux_level(avg_lux_level);
+            ptb.setIs_working(is_working);
+            if (pole_rev_no == null ||  pole_rev_no.equals("")) {
+         
+              ptb.setPole_rev_no(0);
+            }else{
+            ptb.setPole_rev_no(Integer.parseInt(pole_rev_no));
+            }
+          
+        
+              if (longitude == null ||  longitude.equals("")) {
+         
+             ptb.setLongitude(0.0);
+            }else{
+              ptb.setLongitude(Double.parseDouble(longitude));
+            } 
+              if (latitude == null ||  latitude.equals("")) {
+         
+              ptb.setLatitude(0.0);
+            }else{
+            ptb.setLatitude(Double.parseDouble(latitude));
+            }   
+           
+                if (area_id == null ||  area_id.equals("")) {
+         
+              ptb.setArea_id(0);
+            }else{
+            ptb.setArea_id(Integer.parseInt(area_id));
+            }   
+                if (road_id == null ||  road_id.equals("")) {
+         
+              ptb.setRoad_id(0);
+            }else{
+            ptb.setRoad_id(Integer.parseInt(road_id));
+            }   
+                if (traffic_type_id == null ||  traffic_type_id.equals("")) {
+         
+              ptb.setTraffic_type_id(0);
+            }else{
+            ptb.setTraffic_type_id(Integer.parseInt(traffic_type_id));
+            }   
+            ptb.setIs_switch_point(isSwitchingPoint);
+               if (road_rev_no == null ||  road_rev_no.equals("")) {
+         
+              ptb.setRoad_rev_no(0);
+            }else{
+            ptb.setRoad_rev_no(Integer.parseInt(road_rev_no));
+            }   
+               if (tube_well_rev_no == null ||  tube_well_rev_no.equals("")) {
+         
+              ptb.setTubewell_revno(0);
+            }else{
+            ptb.setTubewell_revno(Integer.parseInt(tube_well_rev_no));
+            }   
+               if (tube_well_detail_id == null ||  tube_well_detail_id.equals("")) {
+         
+              ptb.setTubewell_id(1);
+            }else{
+            ptb.setTubewell_id(Integer.parseInt(tube_well_detail_id));
+            }   
+               if (switching_point_detail_id == null ||  switching_point_detail_id.equals("")) {
+         
+              ptb.setSwitch_point_detail_id(0);
+            }else{
+            ptb.setSwitch_point_detail_id(Integer.parseInt(switching_point_detail_id));
+            }   
+               if (switching_rev_no == null ||  switching_rev_no.equals("")) {
+         
+              ptb.setSwitching_rev_no(0);
+            }else{
+            ptb.setSwitching_rev_no(Integer.parseInt(switching_rev_no));
+            }   
+               if (pole_light_type_id == null ||  pole_light_type_id.equals("")) {
+         
+              ptb.setPole_light_type_id(0);
+            }else{
+            ptb.setPole_light_type_id(Integer.parseInt(pole_light_type_id));
+            }   
+            
+            
+            
+       int survey_idinserted=wsSurveyModel.insertPoleSurveyRecord(ptb);
+          List<File> fileList = new ArrayList<File>();
+        if(survey_idinserted>0){
+                String getBackEncodedString = json.get("imagebyte").toString();
+                String fileName = json.get("imgname").toString();
+                    byte[] imageAsBytes = new BASE64Decoder().decodeBuffer(getBackEncodedString);
+    
+                    String destination_path  =  "C:/ssadvt_repository/meter_survey/survey_image/polesurvey/ps"+survey_idinserted;
+                   wsSurveyModel.makeDirectory(destination_path);
+                    String file = destination_path + "/" + fileName;
+                    fileList.add(new File(file));
+                    out = new FileOutputStream(file);
+                    out.write(imageAsBytes);
+                    out.close();
+  
+                int    survey_gen_image_map_id = wsSurveyModel.insertPoleSurveyImageRecord(String.valueOf(survey_idinserted), destination_path);
+if(survey_gen_image_map_id>0){
+  responseCheck="success";
+}                
+      
+        }
+       
+       
+
+        } catch (Exception ex) {
+            System.out.println("Exception in web service Controller: " + ex);
+        }
+        return responseCheck;
+    }
+    
+     @POST
+    @Path("/poleSurveyImage")
+    @Produces(MediaType.APPLICATION_JSON)//http://192.168.1.15:8084/meter_survey/api/service/hello
+    @Consumes(MediaType.APPLICATION_JSON)
+
+    public String poleSurveyimage(JSONObject inputJsonObj) throws Exception {
+
+        wsSurveyModel = new MeterSurveyWebServicesModel();
+        wsSurveyModel.setDriverClass(servletContext.getInitParameter("driverClass"));
+        wsSurveyModel.setConnectionString(servletContext.getInitParameter("connectionString"));
+        wsSurveyModel.setDb_username(servletContext.getInitParameter("db_username"));
+        wsSurveyModel.setDb_password(servletContext.getInitParameter("db_password"));
+        wsSurveyModel.setConnection();
+     
+        String response = null;
+        String survey_id1 = inputJsonObj.get("pole_id").toString();
+        String fileName = inputJsonObj.get("imgname").toString();
+       OutputStream out = null;
+        org.json.JSONObject jsn = new org.json.JSONObject(inputJsonObj.toString());
+       List<File> fileList = new ArrayList<File>();
+
+        try {
+             int size = 1;
+              
+                String fileNameArray[] = new String[size];
+ 
+                String destination_path = "";
+                for (int i = 1; i <= size; i++) {
+
+                  
+                    String getBackEncodedString = inputJsonObj.get("imagebyte").toString();
+                    byte[] imageAsBytes = new BASE64Decoder().decodeBuffer(getBackEncodedString);
+//                    fileName = (json2.get("imgnamemeternumber" + i).toString());
+                   
+                    fileNameArray[i - 1] = fileName;
+                    if (fileName.isEmpty()) {
+                        fileName = "out.jpg";
+                    }
+ 
+                    fileNameArray[i - 1] = fileName;
+                    
+                     destination_path         =  "C:/ssadvt_repository/meter_survey/survey_image/polesurvey/ps"+survey_id1;
+                    
+                    wsSurveyModel.makeDirectory(destination_path);
+                    String file = destination_path + "/" + fileName;
+                    fileList.add(new File(file));
+                    out = new FileOutputStream(file);
+                    out.write(imageAsBytes);
+                    out.close();
+
+ 
+                 
+                int    survey_gen_image_map_id = wsSurveyModel.insertPoleSurveyImageRecord(survey_id1, destination_path);
+if(survey_gen_image_map_id>0){
+response="success";
+}                
+
+                }
+            }
+        catch (Exception e) {
+            System.out.println("Exception in image insertion web service:" + e);
+        }
+        wsSurveyModel.closeConnection();
+
+        return response;
+    }
 }

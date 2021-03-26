@@ -13,10 +13,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 /**
  *
@@ -288,6 +292,64 @@ public List<String> getSearchMeterName(String q) {
         }
         return noOfRows;
     }
+      public List<CircuitSurveyBean> showData11(String circuitid) {
+        List<CircuitSurveyBean> list = new ArrayList<CircuitSurveyBean>();
+        //PreparedStatement pstmt = null;
+int parent_id=0;
+String parent_name="";
+        String query = " SELECT id, circuit_name, irvs_no, circuitno,parent_id, remark, description, timestamp,"
+                + "  time, sync_status, is_child,  lattitudefirstpole,lattitudelasttpole, longitudefirstpole,"
+                + " altitudefirstpole, accuracyfirstpole, longitudelasttpole, "
+                + " altitudelastpole, accuracylasttpole ,switching_point_detail_id,first_pole_id,last_pole_id,cable_type_id,imageoffirstpole,imageoflastpole"
+                       +" FROM circuit_survey "
+                       +" WHERE id=? "
+                 ;
+        try {
+          PreparedStatement pstmt = connection.prepareStatement(query);
+            
+            pstmt.setString(1, circuitid);
+            
+            ResultSet rset = pstmt.executeQuery();
+            while (rset.next()) {
+                CircuitSurveyBean bean = new CircuitSurveyBean();
+                bean.setCircuit_id(rset.getInt("id"));
+                bean.setSwitchingpointid(rset.getInt("switching_point_detail_id"));
+                bean.setFirstpoleid(rset.getInt("first_pole_id"));
+                bean.setLastpoleid(rset.getInt("last_pole_id"));
+                bean.setCabletypeid(rset.getInt("cable_type_id"));
+               
+                bean.setImagepathoffirstpole(rset.getString("imageoffirstpole"));
+                bean.setImagepathoflastpole(rset.getString("imageoflastpole"));
+                bean.setCircuit_name(rset.getString("circuit_name"));
+                bean.setIrvs_no(rset.getString("irvs_no"));
+                 bean.setCircuitno(rset.getString("circuitno"));
+                bean.setTimestamptime(rset.getString("timestamp"));
+                
+                 bean.setTime(rset.getString("time"));
+                bean.setSync_status(rset.getString("sync_status"));
+                 bean.setIs_child(rset.getString("is_child"));
+             bean.setAccuracylasttpole(rset.getString("accuracylasttpole"));
+                bean.setAccuracyfirstpole(rset.getString("accuracyfirstpole"));
+                bean.setLattitudefirstpole(rset.getDouble("lattitudefirstpole"));
+                bean.setLattitudelasttpole(rset.getDouble("lattitudelasttpole"));
+                bean.setLongitudefirstpole(rset.getDouble("longitudefirstpole"));
+                 bean.setLongitudelasttpole(rset.getDouble("longitudelasttpole"));
+                bean.setAltitudefirstpole(rset.getDouble("altitudefirstpole"));
+                bean.setAltitudelastpole(rset.getDouble("altitudelastpole"));
+               
+                //bean.setActive(rset.getString("active"));
+                parent_id= rset.getInt("parent_id");
+                if(parent_id>0){
+                    parent_name= getparentname(parent_id);
+                }
+                 bean.setParent(parent_name);
+                list.add(bean);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in ShowData() :AreaTypeModel" + e);
+        }
+        return list;
+    }
 
     public List<CircuitSurveyBean> showData(int lowerLimit, int noOfRowsToDisplay, String circuit_name, String irvs_no,String circuitno) {
         List<CircuitSurveyBean> list = new ArrayList<CircuitSurveyBean>();
@@ -299,6 +361,62 @@ String parent_name="";
                 + " altitudefirstpole, accuracyfirstpole, lattitudelasttpole, longitudelasttpole, "
                 + " altitudelastpole, accuracylasttpole "
                        +" FROM circuit "
+                       +" WHERE "
+                       +"  if( '" + circuit_name + "'  = '' , circuit_name like '%%' , circuit_name = ? )"
+                       +" AND  if( '" + irvs_no + "'  = '' , irvs_no like '%%' , irvs_no = ? )"
+                 +" AND  if( '" + circuitno + "'  = '' , circuitno like '%%' , circuitno = ? )"
+                       +" LIMIT " + lowerLimit + "," + noOfRowsToDisplay;
+        try {
+          PreparedStatement pstmt = connection.prepareStatement(query);
+            
+            pstmt.setString(1, circuit_name);
+            pstmt.setString(2, irvs_no);
+              pstmt.setString(3, circuitno);
+            ResultSet rset = pstmt.executeQuery();
+            while (rset.next()) {
+                CircuitSurveyBean bean = new CircuitSurveyBean();
+                bean.setCircuit_id(rset.getInt("id"));
+               
+               
+                bean.setCircuit_name(rset.getString("circuit_name"));
+                bean.setIrvs_no(rset.getString("irvs_no"));
+                 bean.setCircuitno(rset.getString("circuitno"));
+                bean.setTimestamptime(rset.getString("timestamp"));
+                
+                 bean.setTime(rset.getString("time"));
+                bean.setSync_status(rset.getString("sync_status"));
+                 bean.setIs_child(rset.getString("is_child"));
+             bean.setAccuracylasttpole(rset.getString("accuracylasttpole"));
+                bean.setAccuracyfirstpole(rset.getString("accuracyfirstpole"));
+                bean.setLattitudefirstpole(rset.getDouble("lattitudefirstpole"));
+                bean.setLattitudelasttpole(rset.getDouble("lattitudelasttpole"));
+                bean.setLongitudefirstpole(rset.getDouble("longitudefirstpole"));
+                 bean.setLattitudelasttpole(rset.getDouble("longitudelasttpole"));
+                bean.setAltitudefirstpole(rset.getDouble("altitudefirstpole"));
+                bean.setAltitudelastpole(rset.getDouble("altitudelastpole"));
+                //bean.setActive(rset.getString("active"));
+                parent_id= rset.getInt("parent_id");
+                if(parent_id>0){
+                    parent_name= getparentname(parent_id);
+                }
+                 bean.setParent(parent_name);
+                list.add(bean);
+            }
+        } catch (Exception e) {
+            System.out.println("Error in ShowData() :AreaTypeModel" + e);
+        }
+        return list;
+    }
+    public List<CircuitSurveyBean> showData1(int lowerLimit, int noOfRowsToDisplay, String circuit_name, String irvs_no,String circuitno) {
+        List<CircuitSurveyBean> list = new ArrayList<CircuitSurveyBean>();
+        //PreparedStatement pstmt = null;
+int parent_id=0;
+String parent_name="";
+        String query = " SELECT id, circuit_name, irvs_no, circuitno,parent_id, remark, description, timestamp,"
+                + "  time, sync_status, is_child,  lattitudefirstpole, longitudefirstpole,"
+                + " altitudefirstpole, accuracyfirstpole, lattitudelasttpole, longitudelasttpole, "
+                + " altitudelastpole, accuracylasttpole "
+                       +" FROM circuit_survey "
                        +" WHERE "
                        +"  if( '" + circuit_name + "'  = '' , circuit_name like '%%' , circuit_name = ? )"
                        +" AND  if( '" + irvs_no + "'  = '' , irvs_no like '%%' , irvs_no = ? )"
@@ -417,6 +535,44 @@ String parent_name="";
 //        }
 //        return rowsAffected;
 //    }
+ 
+ 
+ 
+ 
+  public int insertRecordPrimary(String meter_no,String ivrs_no,String circuitno,String swicthing_point_detail_id,String first_pole_id,String last_pole_id,String cable_type_id,
+         String parent_id,String time,String is_child,String imagefirstpolePath,String imagelastpolePath,String latitudefirstpole,String longitudefirstpole,String altitudefirstpole,String accuracyfirstpole
+                 ,String latitudelastpole,String longitudelastpole,String altitudelastpole,String accuracylastpole) {
+        int roweffected = 0;
+        try {
+
+        
+
+            String query = "insert into circuit(circuit_name, irvs_no, circuitno, "
+                    + " switching_point_detail_id, first_pole_id, last_pole_id, cable_type_id, parent_id, "
+                    + " time, is_child, imageoffirstpole, imageoflastpole, "
+                    + " lattitudefirstpole, longitudefirstpole, altitudefirstpole, accuracyfirstpole, lattitudelasttpole, "
+                    + " longitudelasttpole, altitudelastpole, accuracylasttpole"
+                    + " )" + " VALUES('" + meter_no + "','" + ivrs_no + "','" + circuitno + "',"
+                    + swicthing_point_detail_id + "," + first_pole_id + "," + last_pole_id + "," + cable_type_id + ","
+                    + parent_id + ",'" + time + "','" + is_child + "','" + imagefirstpolePath + "',"
+                    + " '" + imagelastpolePath + "'," + latitudefirstpole + "," + longitudefirstpole + "," + altitudefirstpole + ","
+                    + " '" + accuracyfirstpole + "'," + latitudelastpole + "," + longitudelastpole + "," + altitudelastpole + ","
+                    + "'" + accuracylastpole + "')";
+ 
+            try {
+                PreparedStatement psmt = connection.prepareStatement(query);
+
+                roweffected = psmt.executeUpdate();
+            } catch (Exception e) {
+                System.out.println("DataSendModel Error: " + e);
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(MeterSurveyWebServicesModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return roweffected;
+    }
+ 
  public int deleteRecord(int area_id) {
         String query = " update area "
                        +" set active='N' "
@@ -490,6 +646,10 @@ String parent_name="";
 
     public void setDriverClass(String driverClass) {
         this.driverClass = driverClass;
+    }
+
+    public int insertRecordPrimary(String circuitname, String ivrsno1, String circuitno1, String switching_id, String firstpole_id, String lastpole_id, String cabletypeid, String parent1, String time1, String child1, String firstpoleimage, String lastpoleimage, String lattitudefirstpole1, String longitudefirstpole1, String altitudefirstpole, String acuracyfirstpole1, String lattitudelastpole1, String longitudelastpole1, String altitudelastpole) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
 
