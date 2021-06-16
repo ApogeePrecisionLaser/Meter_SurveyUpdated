@@ -18,7 +18,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,16 +28,35 @@ import java.util.logging.Logger;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author Administrator
  */
+@MultipartConfig
 public class CircuitSurveyDataController extends HttpServlet {
+private File tmpDir;
+    private static final long serialVersionUID = 1L;
+    private static final String Save_dir = "images";
 
+    private String extractfileName(Part part) {
+        String content = part.getHeader("content-disposition");
+        String[] items = content.split(";");
+        for (String s : items) {
+            if (s.trim().startsWith("filename")) {
+
+                return s.substring(s.indexOf("=") + 2, s.length() - 1);
+            }
+
+        }
+
+        return null;
+    }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
@@ -67,7 +88,19 @@ public class CircuitSurveyDataController extends HttpServlet {
                     list = areaTypeModel.getSearchMeterName(q);
                 }else if (JQstring.equals("getirvs_search")) {
                     list = areaTypeModel.getSearchIrvsNo(q);
-                } else if (JQstring.equals("getcircuit_search")) {
+                }else if (JQstring.equals("getirvs_no")) {
+                    list = areaTypeModel.getSearchIrvsNo(q);
+                } else if (JQstring.equals("getCircuitName")) {
+                    list = areaTypeModel.getCurcuitName(q);
+                 
+                } else if (JQstring.equals("getPole")) {
+                    list = areaTypeModel.getPoleNo(q);
+                }  
+                 else if (JQstring.equals("getCircuitIndex")) {
+                      String name = request.getParameter("action2");
+                    list = areaTypeModel.getCurcuitIndex(name);
+                } 
+                else if (JQstring.equals("getcircuit_search")) {
                     list = areaTypeModel.getCircuitNo(q);
                 }
                 Iterator<String> iter = list.iterator();
@@ -287,7 +320,32 @@ public class CircuitSurveyDataController extends HttpServlet {
             System.out.println("exception in image view part" + e);
         }
          }
-       
+       if(task.equalsIgnoreCase("GetCordinates")){
+        String latti = request.getParameter("lattitudefirstpole1");
+                String longi = request.getParameter("longitudefirstpole1");
+                if(longi == null || longi.equals("undefined"))
+                    longi = "0";
+                if(latti == null || latti.equals("undefined"))
+                    latti = "0";
+                request.setAttribute("longi", longi);
+                request.setAttribute("latti", latti);
+                System.out.println(latti + "," + longi);
+                request.getRequestDispatcher("/view/MapView/getCordinateMapWindow1_1.jsp").forward(request, response);
+                return;
+       }
+       if(task.equalsIgnoreCase("GetCordinates1")){
+        String latti = request.getParameter("lattitudelastpole1");
+                String longi = request.getParameter("longitudelastpole1");
+                if(longi == null || longi.equals("undefined"))
+                    longi = "0";
+                if(latti == null || latti.equals("undefined"))
+                    latti = "0";
+                request.setAttribute("longi", longi);
+                request.setAttribute("latti", latti);
+                System.out.println(latti + "," + longi);
+                request.getRequestDispatcher("/view/MapView/getCordinateMapWindow1_2.jsp").forward(request, response);
+                return;
+       }
          try {
             lowerLimit = Integer.parseInt(request.getParameter("lowerLimit"));
             noOfRowsTraversed = Integer.parseInt(request.getParameter("noOfRowsTraversed"));
@@ -325,6 +383,61 @@ public class CircuitSurveyDataController extends HttpServlet {
             irvs_search = "";
            circuit_search="";
         }
+         
+           Date dt = new Date();
+    
+    SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    String cut_dt = df1.format(dt);
+    cut_dt=cut_dt.replace("-", "");
+    cut_dt=cut_dt.replace(":", "");
+    cut_dt=cut_dt.replace(" ", ""); 
+    
+    
+    
+    
+         if(task.equalsIgnoreCase("Save")){
+             CircuitSurveyBean c=new CircuitSurveyBean();
+            String ivrsno1=request.getParameter("ivrsno1"); 
+            String circuitno1=request.getParameter("circuitno1");
+            String circuitname=request.getParameter("circuitname");
+            String firstpole=request.getParameter("firstpole");
+            String lastpole=request.getParameter("lastpole");
+                       
+            String syncstatus1=request.getParameter("syncstatus1");
+            String accuracylastpole1=request.getParameter("acuracyfirstpole1");
+            String acuracyfirstpole1=request.getParameter("accuracylastpole1");
+            String  lattitudefirstpole1=request.getParameter("lattitudefirstpole1");
+      String lattitudelastpole1=request.getParameter("lattitudelastpole1");   
+      String longitudefirstpole1=request.getParameter("longitudefirstpole1");     
+      String longitudelastpole1=request.getParameter("longitudelastpole1");  
+      String altitudefirstpole=request.getParameter("altitudefirstpole");
+      String altitudelastpole=request.getParameter("altitudelastpole");
+    int firstpoleid=0;  
+    int lastpoleid=0;  
+    int cableid=0;  
+     String firstpoleimage="";
+     String lastpoleimage=""; 
+     
+      String savepath = "C:\\ssadvt_repository\\meter_survey" + File.separator;
+            File file = new File(savepath);
+            Part part = request.getPart("img");
+            String filename = extractfileName(part);
+            filename="Pole".concat(cut_dt)+".jpg";
+            part.write(savepath + File.separator + filename);
+              c.setFirst_pole_image(savepath + File.separator + filename);
+            File file1 = new File(savepath);
+            Part part1 = request.getPart("img1");
+            String filename1 = extractfileName(part1);
+            filename1="Pole".concat(cut_dt)+".jpg";
+            part1.write(savepath + File.separator + filename1);
+              c.setLast_pole_image(savepath + File.separator + filename);
+              String firstpole_id="1";  
+               String time1="2021-03-15";        String ischild1="";        String parent1="0";  String cabletypeid="1"; String switching_id="1";
+              String lastpole_id="2";
+            int i=areaTypeModel.insertRecordPrimary(circuitname,ivrsno1,circuitno1,switching_id,firstpole_id,lastpole_id,cabletypeid,parent1,time1,ischild1,c.getFirst_pole_image(),c.getLast_pole_image(),lattitudefirstpole1,longitudefirstpole1,altitudefirstpole,acuracyfirstpole1,lattitudelastpole1,longitudelastpole1,altitudelastpole ,accuracylastpole1);
+            
+        
+         }
         List<CircuitSurveyBean> dataTypeList = areaTypeModel.showData1(lowerLimit, noOfRowsToDisplay, meter_name_search,irvs_search,circuit_search);
         lowerLimit = lowerLimit + dataTypeList.size();
         noOfRowsTraversed = dataTypeList.size();

@@ -115,7 +115,7 @@ public class CircuitSurveyModel {
       public String getImageDestinationPath(int imageid1) {
         String destination_path = "";
 
-        String query = " SELECT imageoffirstpole FROM circuit where id=" + imageid1 + " ";
+        String query = " SELECT imageoffirstpole FROM circuit_survey where id=" + imageid1 + " ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             if (rset.next()) {
@@ -130,7 +130,7 @@ public class CircuitSurveyModel {
          public String getImageDestinationPath1(int imageid1) {
         String destination_path = "";
 
-        String query = " SELECT imageoflastpole FROM circuit where id=" + imageid1 + " ";
+        String query = " SELECT imageoflastpole FROM circuit_survey where id=" + imageid1 + " ";
         try {
             ResultSet rset = connection.prepareStatement(query).executeQuery();
             if (rset.next()) {
@@ -174,8 +174,8 @@ public List<String> getSearchMeterName(String q) {
     public List<String> getSearchIrvsNo(String q) {
         List<String> list = new ArrayList<String>();
 
-        String query =" select irvs_no "
-                    +" from circuit ";
+        String query =" select ivrs_no "
+                    +" from meters ";
                 
 
         try {
@@ -185,7 +185,7 @@ public List<String> getSearchMeterName(String q) {
             int count = 0;
             q = q.trim();
             while (rset.next()) {    // move cursor from BOR to valid record.
-                String ward_no_m = rset.getString("irvs_no");
+                String ward_no_m = rset.getString("ivrs_no");
                 if (ward_no_m.toUpperCase().startsWith(q.toUpperCase())) {
                     list.add(ward_no_m);
                     count++;
@@ -199,6 +199,88 @@ public List<String> getSearchMeterName(String q) {
         }
         return list;
     }
+      public List<String> getCurcuitName(String q) {
+        List<String> list = new ArrayList<String>();
+ String finalname="";
+        String query =" SELECT c.circuit_name,t.index_no FROM circuit_info as c ,tree as t where t.circuitinfo_id=c.circuitinfo_id ";
+                
+
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+
+            ResultSet rset = pstmt.executeQuery();
+            int count = 0;
+            q = q.trim();
+            while (rset.next()) {    // move cursor from BOR to valid record.
+                String cname = rset.getString("circuit_name");
+                String indexno = rset.getString("index_no");
+                finalname=cname.concat("("+indexno+")");
+                list.add(cname);
+                 count++;
+            }
+            if (count == 0) {
+                list.add("No such primary Survey Type exists.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error:primary Survey Type exists. Error-" + e);
+        }
+        return list;
+    }
+      public List<String> getPoleNo(String q) {
+        List<String> list = new ArrayList<String>();
+ String finalname="";
+        String query =" SELECT pole_no from pole";
+                
+
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+
+            ResultSet rset = pstmt.executeQuery();
+            int count = 0;
+            q = q.trim();
+            while (rset.next()) {    // move cursor from BOR to valid record.
+                String cname = rset.getString("pole_no");
+               
+                list.add(cname);
+                 count++;
+            }
+            if (count == 0) {
+                list.add("No such primary Survey Type exists.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error:primary Survey Type exists. Error-" + e);
+        }
+        return list;
+    }
+      public List<String> getCurcuitIndex(String q) {
+        List<String> list = new ArrayList<String>();
+ String finalname="";
+        String query =" SELECT c.circuit_name,t.index_no FROM circuit_info as c ,tree as t where t.circuitinfo_id=c.circuitinfo_id and c.circuit_name='"+q+"' ";
+                
+
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+
+            ResultSet rset = pstmt.executeQuery();
+            int count = 0;
+            
+            while (rset.next()) {    // move cursor from BOR to valid record.
+                String cname = rset.getString("circuit_name");
+                String indexno = rset.getString("index_no");
+                finalname=cname.concat("("+indexno+")");
+                list.add(indexno);
+                 count++;
+            }
+            if (count == 0) {
+                list.add("No such primary Survey Type exists.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error:primary Survey Type exists. Error-" + e);
+        }
+        return list;
+    }
+    
+    
    public List<String> getCircuitNo(String q) {
         List<String> list = new ArrayList<String>();
 
@@ -479,64 +561,6 @@ String parent_name="";
      
         return parent_name;
     }
-// public List<AreaTypeBean>showAllData(String area_name, String ward_no) {
-//        List<AreaTypeBean> list = new ArrayList<AreaTypeBean>();
-//        //PreparedStatement pstmt = null;
-//
-//        String query = " SELECT a.area_id, a.area_name, w.ward_no_m, a.remark,DATE_FORMAT(a.created_date,'%d-%m-%Y') AS created_date FROM area a, ward_m w  "
-//                + " WHERE a.ward_id_m=w.ward_id_m  and a.active='Y' "
-//                + " AND  if( '" + ward_no + "'  = '' , w.ward_no_m like '%%' , w.ward_no_m = ? )"
-//                + " AND  if( '" + area_name + "'  = '' , a.area_name like '%%' , a.area_name = ? )";
-//              //  + " LIMIT " + lowerLimit + "," + noOfRowsToDisplay;
-//        try {
-//           PreparedStatement pstmt = connection.prepareStatement(query);
-//           
-//            pstmt.setString(1, ward_no);
-//            pstmt.setString(2, area_name);
-//            ResultSet rset = pstmt.executeQuery();
-//            while (rset.next()) {
-//                AreaTypeBean bean = new AreaTypeBean();
-//                bean.setArea_id(rset.getInt("area_id"));
-//                bean.setArea_name(rset.getString("area_name"));
-//                bean.setWard_no(rset.getString("ward_no"));
-//             //   bean.setWard_name(rset.getString("ward_name"));
-//                //bean.setCity_name(rset.getString("city_name"));
-//                bean.setCreated_date(rset.getString("created_date"));
-//                bean.setRemark(rset.getString("remark"));
-//                //bean.setActive(rset.getString("active"));
-//                list.add(bean);
-//            }
-//        } catch (Exception e) {
-//            System.out.println("Error in ShowData() :AreaTypeModel" + e);
-//        }
-//        return list;
-//    }
-// public int updateRecord(AreaTypeBean areaTypeBean) {
-//        String query = " UPDATE area SET  area_name = ?, remark=?, ward_id_m=? WHERE area_id = ? ";
-//        int rowsAffected = 0;
-//        try {
-//            PreparedStatement pstmt = (PreparedStatement) connection.prepareStatement(query);
-//
-//            pstmt.setString(1, areaTypeBean.getArea_name());
-//            pstmt.setString(2, areaTypeBean.getRemark());
-//            pstmt.setInt(3, areaTypeBean.getWard_id());
-////            pstmt.setString(4, areaTypeBean.getActive());
-//            pstmt.setInt(4, areaTypeBean.getArea_id());
-//            rowsAffected = pstmt.executeUpdate();
-//        } catch (Exception e) {
-//            System.out.println("AreaModel updateRecord() Error: " + e);
-//        }
-//        if (rowsAffected > 0) {
-//            message = "Record updated successfully......";
-//            msgBgColor = COLOR_OK;
-//        } else {
-//            message = "Cannot update the record, some error......";
-//            msgBgColor = COLOR_ERROR;
-//        }
-//        return rowsAffected;
-//    }
- 
- 
  
  
   public int insertRecordPrimary(String meter_no,String ivrs_no,String circuitno,String swicthing_point_detail_id,String first_pole_id,String last_pole_id,String cable_type_id,
@@ -547,21 +571,21 @@ String parent_name="";
 
         
 
-            String query = "insert into circuit(circuit_name, irvs_no, circuitno, "
-                    + " switching_point_detail_id, first_pole_id, last_pole_id, cable_type_id, parent_id, "
+            String query = "insert into circuit_survey(circuit_name, irvs_no, circuitno, "
+                    + " switching_point_detail_id, first_pole_id, last_pole_id, cable_type_id, parent_id,"
                     + " time, is_child, imageoffirstpole, imageoflastpole, "
                     + " lattitudefirstpole, longitudefirstpole, altitudefirstpole, accuracyfirstpole, lattitudelasttpole, "
                     + " longitudelasttpole, altitudelastpole, accuracylasttpole"
                     + " )" + " VALUES('" + meter_no + "','" + ivrs_no + "','" + circuitno + "',"
                     + swicthing_point_detail_id + "," + first_pole_id + "," + last_pole_id + "," + cable_type_id + ","
-                    + parent_id + ",'" + time + "','" + is_child + "','" + imagefirstpolePath + "',"
+                    + parent_id + "," + time + ",'" + is_child + "','" + imagefirstpolePath + "',"
                     + " '" + imagelastpolePath + "'," + latitudefirstpole + "," + longitudefirstpole + "," + altitudefirstpole + ","
                     + " '" + accuracyfirstpole + "'," + latitudelastpole + "," + longitudelastpole + "," + altitudelastpole + ","
                     + "'" + accuracylastpole + "')";
  
             try {
                 PreparedStatement psmt = connection.prepareStatement(query);
-
+ 
                 roweffected = psmt.executeUpdate();
             } catch (Exception e) {
                 System.out.println("DataSendModel Error: " + e);

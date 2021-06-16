@@ -16,7 +16,6 @@
 <script type="text/javascript" src="JS/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="JS/jquery.autocomplete.js"></script>
 <script type="text/javascript" language="javascript">
-
       jQuery(function(){
       
         $("#meter_name_search1").autocomplete("CircuitSurveyDataController", {
@@ -31,13 +30,50 @@
                 }
             }
         });
+       $("#ivrsno1").autocomplete("CircuitSurveyDataController", {
+            extraParams: {
+                action1: function () {
+                    return "getirvs_no"
+                }
+            }
+        });
+       $("#circuitname").autocomplete("CircuitSurveyDataController", {
+            extraParams: {
+                action1: function () {
+                    return "getCircuitName"
+                }
+            }
+        });
+       $("#circuitno1").autocomplete("CircuitSurveyDataController", {
+            extraParams: {
+                action1: function () {
+                    return "getCircuitIndex"
+                },
+                action2: function() { return  $("#circuitname").val();}
+            }
+        });
+       $("#firstpole").autocomplete("CircuitSurveyDataController", {
+            extraParams: {
+                action1: function () {
+                    return "getPole"
+                },
+                action2: function() { return  $("#circuitname").val();}
+            }
+        });
+       $("#lastpole").autocomplete("CircuitSurveyDataController", {
+            extraParams: {
+                action1: function () {
+                    return "getPole"
+                },
+                action2: function() { return  $("#circuitname").val();}
+            }
+        });
         
          $("#circuit_search1").autocomplete("CircuitSurveyDataController", {
             extraParams: {
                 action1: function () {
                     return "getcircuit_search"
                 }
-
             }
         });
     });
@@ -64,13 +100,26 @@
             }
         }
     }
-    function makeEditable(id) {
+       function openMapForCord() {
+            var url="CircuitSurveyDataController?task=GetCordinates";//"getCordinate";
+            popupwin = openPopUp(url, "",  600, 630);
+        }
+       function openMapForCord1() {
+            var url="CircuitSurveyDataController?task=GetCordinates1";//"getCordinate";
+            popupwin = openPopUp(url, "",  600, 630);
+        }
+         function openPopUp(url, window_name, popup_height, popup_width) {
+            var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
+            var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
+            var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=yes, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
 
+            return window.open(url, window_name, window_features);
+        }
+    function makeEditable(id) {
         document.getElementById("area_name").disabled = false;
         document.getElementById("ward_no").disabled = false;
 //        document.getElementById("ward_name").disabled = false;
         document.getElementById("remark").disabled = false;
-
         document.getElementById("save").disabled = false;
         if (id == 'new') {
             $("#message").html("");
@@ -114,7 +163,6 @@
 //        document.getElementById("ward_name").value = document.getElementById(t1id + (lowerLimit + 3)).innerHTML;
         document.getElementById("ward_no").value = document.getElementById(t1id + (lowerLimit + 3)).innerHTML;
         document.getElementById("remark").value = document.getElementById(t1id + (lowerLimit + 4)).innerHTML;
-
         // Now enable/disable various buttons.
         document.getElementById("edit").disabled = false;
         if (!document.getElementById("save").disabled) {
@@ -154,7 +202,6 @@
                 document.getElementById("city_name").focus();
                 return false; // code to stop from submitting the form2.
             }
-
             if (myLeftTrim(ward_no).length == 0) {
                 $("#message").html("<td colspan='2' bgcolor='coral'><b>Ward No is required...</b></td>");
                 document.getElementById("ward_no").focus();
@@ -171,27 +218,21 @@
             } else {
                 result = true;
             }
-
         } else {
             result = confirm("Are you sure you want to delete this record?");
         }
         return result;
     }
-
     var popupwin = null;
     function displayMapList() {
-
         var queryString = "task=areaDetailReport";
         var url = "areaTypeCont?" + queryString;
         popupwin = openPopUp(url, "Area Details", 500, 1000);
-
     }
-
     function openPopUp(url, window_name, popup_height, popup_width) {
         var popup_top_pos = (screen.availHeight / 2) - (popup_height / 2);
         var popup_left_pos = (screen.availWidth / 2) - (popup_width / 2);
         var window_features = "left=" + popup_left_pos + ", top=" + popup_top_pos + ", width=" + popup_width + ", height=" + popup_height + ", resizable=yes, scrollbars=yes, location=0, menubar=no, status=no, dependent=yes";
-
         return window.open(url, window_name, window_features);
     }
   
@@ -199,33 +240,25 @@
     {
         debugger;
         var queryString = "task=viewFirstPoleImage&circiut_id=" + circiut_id;
-
         var url = "CircuitSurveyDataController?" + queryString;
   
-
         popupwin = openPopUp(url, "Mounting Type Map Details", 500, 1000);
     }
     function viewLastPoleImage(circiut_id)
     {
-
         debugger;
         var queryString = "task=viewlastPoleImage&circiut_id=" + circiut_id;
-
         var url = "CircuitSurveyDataController?" + queryString;
        alert(url);
-
         popupwin = openPopUp(url, "Mounting Type Map Details", 500, 1000);
     }
    
     function updatedata(circiut_id)
     {
-
         debugger;
         var queryString = "task=cirdata&circuit_id=" + circiut_id;
-
        var url = "CircuitSurveyController?" + queryString;
       window.open(url);
-
         
     }
     
@@ -292,8 +325,9 @@
                                             <table  border="1" id="table1" align="center" width="600" class="content">
                                                 <tr>
                                                     <th class="heading">S.No.</th>
-                                                    <th class="heading">Circuit Name </th>
+                                                   
                                                     <th class="heading">Irvs No</th>
+                                                     <th class="heading">Circuit Name </th>
                                                     <th class="heading">Circuit No</th>
                                                     <th class="heading">Survey Time</th>
 
@@ -329,9 +363,10 @@
                                                     <tr  class="${loopCounter.index % 2 == 0 ? 'even': 'odd'}" >
                                                         <td id="t1c${IDGenerator.uniqueID}" style="display:none" onclick="fillColumns(id)">${area.circuit_id}</td>
                                                         <td id="t1c${IDGenerator.uniqueID}" onclick="fillColumns(id)" align="center">${lowerLimit - noOfRowsTraversed + loopCounter.count}</td>
-                                                        <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${area.circuit_name}</td>
+                                                      
 
                                                         <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${area.irvs_no}</td>
+                                                         <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${area.circuit_name}</td>
                                                         <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)">${area.circuitno}</td>
                                                         <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)">${area.time}</td>
                                                         <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)">${area.is_child}</td>
@@ -409,44 +444,152 @@
                                 </td>
                             </tr>
 
-                            <!--                            <tr>
-                                                            <td align="center">
-                                                                <DIV>
-                                                                    <form name="form2" method="POST" action="areaTypeCont" onsubmit="return verify()">
-                                                                        <table  border="0" id="table2" align="center" width="600" class="content">
-                                                                            <tr id="message">
-                            <c:if test="${not empty message}">
-                                <td colspan="2" bgcolor="${msgBgColor}"><b>Result: ${message}</b></td>
-                            </c:if>
-                        </tr>
                         <tr>
-                            <th class="heading1">Area Name</th>
-                            <td><input type="hidden" id="area_id" name="area_id" value="" >
-                                <input class="input" type="text" id="area_name" name="area_name" size="30" value="" disabled>
-                            </td>
-                             <th class="heading1">Ward No</th>
-                            <td>
-                                <input class="input" type="text" id="ward_no" name="ward_no" size="30" value="" disabled>
-                            </td>
-                        </tr>
-                            <tr>
-                            
-                            <th class="heading1">Remark</th>
-                          <td><input class="input" type="text" id="remark" name="remark" value="" size="30" disabled></td>
-                        </tr>
-                       
-                        
-                        
-                      
-                        <tr>
-                            <td align='center' colspan="4">
-                                <input class="button" type="button" name="edit" id="edit" value="Edit" onclick="makeEditable(id)" disabled>
-                                <input class="button" type="submit" name="task" id="save" value="Save" onclick="setStatus(id)" disabled>
-                                <input class="button" type="submit" name="task" id="save_As" value="Save AS New" onclick="setStatus(id)" disabled>
-                                <input class="button" type="reset" name="new" id="new" value="New" onclick="makeEditable(id)">
-                                <input class="button" type="submit" name="task" id="delete" value="Delete" onclick="setStatus(id)" disabled>
-                            </td>
-                        </tr>-->
+
+                                                    <td align="center">
+                                                       
+                                                            <form name="form2" method="POST" action="CircuitSurveyDataController"  enctype='multipart/form-data'>
+                                                                <table id="table2"  class="content" border="0"  align="center" width="600">
+                                                                  
+
+                                                                    <tr>
+                                                                         <th class="heading">ivrsno</th>
+                                                                         <td>
+                                                                            <input class="input" type="text" id="ivrsno1" name="ivrsno1" value="${ivrsno1}" size="20"  >
+                                                                         </td>
+                                                                          <th class="heading">Datetime</th>
+                                                                        <td>
+                                                                            <input class="input" type="text" id="time1" name="time1" value="${time1}" size="20"  >
+                                                                        </td>
+                                                                             <input class="input" type="hidden" id="switchingid" name="switchingid" value="${switchingid}" size="20"  >
+                                                                        
+                                                                        
+                                                                             <input class="input" type="hidden" id="cableid" name="cableid" value="${cableid}" size="20"  >
+                                                                        
+                                                                        
+                                                                            <input class="input" type="hidden" id="firstpoleid" name="firstpoleid" value="${firstpoleid}" size="20"  >
+                                                                       
+                                                                       
+                                                                       
+                                                                            <input class="input" type="hidden" id="lastpoleid" name="lastpoleid" value="${lastpoleid}" size="20"   >
+                                                                       
+                                                                      
+                                                                            <input class="input" type="hidden" id="firstpoleimage" name="firstpoleimage" value="${firstpoleimage}" size="20"  >
+                                                                       
+                                                                        
+                                                                            <input class="input" type="hidden" id="lastpoleimage" name="lastpoleimage" value="${lastpoleimage}" size="20"  >
+                                                                       
+                                                                    
+                                                                        
+                                                                    </tr>
+                                                                    <tr>
+                                                              
+                                                                           <th class="heading">circuitname</th>
+                                                                        <td>    <input class="input" type="text" id="circuitname" name="circuitname"   value=" ${circuitname}" size="20"></td>
+                                                                        </td> 
+                                                                            <th class="heading">circuitno</th>
+                                                                        <td>
+                                                                        
+                                                                            <input class="input" type="text" id="circuitno1" name="circuitno1" value="${circuitno1}" size="20"  >
+                                                                        </td>
+
+                                                                    </tr>
+
+                               
+                                                                    <tr>
+
+                                                                       
+                                                                            <input class="input" type="hidden" id="timestamptime1" name="timestamptime1"  value="${timestamptime1}" size="20">
+
+                                                                     
+                                                                        <th class="heading">FirstPole</th>
+
+                                                                        <td>
+                                                                            <input class="input" type="text" id="firstpole" name="firstpole" title="${firstpole}" size="20"    >
+                                                                        </td>
+                                                                         <th class="heading">LastPole</th>
+                                                                        <td>
+                                                                            <input class="input" type="text" id="lastpole" name="lastpole" title="${lastpole}" size="20"    >
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+
+                                                                       
+                                                                            <input class="input" type="hidden" id="timestamptime1" name="timestamptime1"  value="${timestamptime1}" size="20">
+
+                                                                     
+                                                                        <th class="heading">acuracyfirstpole</th>
+
+                                                                        <td>
+                                                                            <input class="input" type="text" id="acuracyfirstpole1" name="acuracyfirstpole1" title="${acuracyfirstpole1}" size="20"    >
+                                                                        </td>
+                                                                         <th class="heading">acuracylastpole</th>
+                                                                        <td>
+                                                                            <input class="input" type="text" id="acuracylastpole1" name="accuracylastpole1" title="${accuracylastpole1}" size="20"    >
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                       
+
+
+                                                                        <th class="heading">lattitudefirstpole1e</th>
+                                                                        <td>    <input class="input" type="text" id="lattitudefirstpole1" name="lattitudefirstpole1"   value=" ${lattitudefirstpole1}" size="20"></td>
+                                                                          <th class="heading">longitudefirstpole1</th>
+                                                                        <td>    <input class="input" type="text" id="longitudefirstpole1" name="longitudefirstpole1"   value=" ${longitudefirstpole1}" size="20"></td>
+                                                                           <td><input type="button" id="loc1" name="loc1" value="GetLocation" onclick="openMapForCord()"  ></td> 
+                                                                    
+                                                                    
+                                                                    </tr>
+                                                                    
+                                                                    
+                                                                    <tr>
+                                                                        <th class="heading">lattitudelastpole1</th>
+                                                                        <td>    <input class="input" type="text" id="lattitudelastpole1" name="lattitudelastpole1"   value=" ${lattitudelastpole1}" size="20"></td>
+                                                                       
+
+                                                                        <th class="heading">longitudelastpole1</th>
+                                                                        <td>    <input class="input" type="text" id="longitudelastpole1" name="longitudelastpole1"   value=" ${longitudelastpole1}" size="20"></td>
+                                                                     <td><input type="button" id="loc" name="loc" value="GetLocation" onclick="openMapForCord1()"  ></td>       
+                                                                    </tr>
+                                                                    <tr>
+                                                                      
+
+
+
+                                                                        <th class="heading">altitudefirstpole</th>
+                                                                        <td>    <input class="input" type="text" id="altitudefirstpole" name="altitudefirstpole"   value=" ${altitudefirstpole}" size="20"></td>
+                                                                        </td>  
+                                                                        <th class="heading">altitudelastpole</th>
+                                                                        <td>    <input class="input" type="text" id="altitudelastpole" name="altitudelastpole"   value=" ${altitudelastpole}" size="20"></td>
+                                                                        </td> 
+                                                                        
+                                                                    </tr>
+                                                                    <tr>
+                                                                      
+
+
+
+                                                                        <th class="heading">Imagefirstpole</th>
+                                                                        <td>    <input class="input" type="file" id="img" name="img"   value="" size="20"></td>
+                                                                        </td>  
+                                                                        <th class="heading">Imagelastpole</th>
+                                                                        <td>    <input class="input" type="file" id="img1" name="img1"   value="" size="20"></td>
+                                                                        </td> 
+                                                                        
+                                                                    </tr>
+                                                                    <tr> <th class="heading">syncstatus1</th>
+                                                                        <td>
+                                                                            <input class="input" type="text" id="syncstatus1" name="syncstatus1" value="${syncstatus1}" size="20"  >
+                                                                        </td></tr>
+                                                                    <tr> 
+                                                                    <td>      <input class="button" type="submit" name="task" id="save" value="Save" onclick="setStatus(id)" ></td>
+                                                                        </td> 
+                                                                       
+                                                                    </tr>
+                                                                </table>
+                                                            </form>
+                                                            </td>
+                                                                </tr>
                             <%-- These hidden fields "lowerLimit", "noOfRowsTraversed", and "clickedButton" belong to form2 of table2. --%>
                             <input type="hidden" name="lowerLimit" value="${lowerLimit}">
                             <input type="hidden" name="noOfRowsTraversed" value="${noOfRowsTraversed}">
@@ -468,4 +611,3 @@
 </table>
 </body>
 </html>
-

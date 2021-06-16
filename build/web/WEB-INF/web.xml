@@ -7,7 +7,7 @@
     </context-param>
     <context-param>
         <param-name>connectionString</param-name>
-        <param-value>jdbc:mysql://localhost:3306/meter_survey</param-value>      
+        <param-value>jdbc:mysql://localhost:3306/meter_survey2</param-value>      
     </context-param>
     <context-param>
         <param-name>db_username</param-name>
@@ -1640,6 +1640,36 @@
         <url-pattern>/PoleSurveyCont</url-pattern>
     </servlet-mapping>
       <servlet>
+        <servlet-name>CircuitInfoCont</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.CircuitInfoController</servlet-class>
+    </servlet>
+    
+    
+    
+    <servlet>
+        <servlet-name>GetParentHeaderController</servlet-name>
+        <servlet-class>com.survey.dataEntry.controller.GetParentHeaderController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetParentHeaderController</servlet-name>
+        <url-pattern>/getParentHeaderCont.do</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>GetParentHeaderView</servlet-name>
+        <jsp-file>/view/dataEntry/getParentHeader.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetParentHeaderView</servlet-name>
+        <url-pattern>/getParentHeaderView</url-pattern>
+    </servlet-mapping>
+    
+    
+    
+    <servlet-mapping>
+        <servlet-name>CircuitInfoCont</servlet-name>
+        <url-pattern>/CircuitInfoCont</url-pattern>
+    </servlet-mapping>
+      <servlet>
         <servlet-name>Pole_Light_Type_View</servlet-name>
         <jsp-file>/view/dataEntry/Pole_Light_Type.jsp</jsp-file>
     </servlet>
@@ -1662,6 +1692,14 @@
     <servlet-mapping>
         <servlet-name>MultipleImagePolesurvey</servlet-name>
         <url-pattern>/MultipleImagePolesurvey</url-pattern>
+    </servlet-mapping>
+     <servlet>
+        <servlet-name>CircuitInfoView</servlet-name>
+        <jsp-file>/view/dataEntry/CircuitInfo.jsp</jsp-file>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CircuitInfoView</servlet-name>
+        <url-pattern>/CircuitInfoView</url-pattern>
     </servlet-mapping>
 </web-app>
 

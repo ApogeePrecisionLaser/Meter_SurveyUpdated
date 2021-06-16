@@ -458,7 +458,7 @@
                             function fillColumns(id) {
 
                             var noOfRowsTraversed = document.getElementById("noOfRowsTraversed").value;
-                            var noOfColumns =47;
+                            var noOfColumns =48;
                             var columnId = id;                              <%-- holds the id of the column being clicked, excluding the prefix t1c e.g. t1c3 (column 3 of table 1). --%>
                             columnId = columnId.substring(3, id.length);    <%-- for e.g. suppose id is t1c3 we want characters after t1c i.e beginIndex = 3. --%>
                             var lowerLimit, higherLimit, rowNo = 0;
@@ -489,45 +489,46 @@
                             var survey_type = document.getElementById(t1id + (lowerLimit + 11)).innerHTML;
                             selectServeyType(survey_type);
                             document.getElementById("meter_status").value= document.getElementById(t1id + (lowerLimit + 12)).innerHTML;
-                            document.getElementById("meter_no").value= document.getElementById(t1id + (lowerLimit + 13)).innerHTML;//
-                            document.getElementById("meter_functional").value= document.getElementById(t1id + (lowerLimit + 14)).innerHTML;
-                            document.getElementById("r_phase").value= document.getElementById(t1id + (lowerLimit + 15)).innerHTML;
-                            document.getElementById("y_phase").value= document.getElementById(t1id + (lowerLimit + 16)).innerHTML;
-                            document.getElementById("b_phase").value= document.getElementById(t1id + (lowerLimit + 17)).innerHTML;
-                            document.getElementById("power").value= document.getElementById(t1id + (lowerLimit + 18)).innerHTML;
-                            document.getElementById("fuse_functional").value= document.getElementById(t1id + (lowerLimit + 19)).innerHTML;
-                            document.getElementById("fuse_1").value= document.getElementById(t1id + (lowerLimit + 20)).innerHTML;
-                            document.getElementById("fuse_2").value= document.getElementById(t1id + (lowerLimit + 21)).innerHTML;
-                            document.getElementById("fuse_3").value= document.getElementById(t1id + (lowerLimit + 22)).innerHTML;
-                            document.getElementById("fuse_type1").value= document.getElementById(t1id + (lowerLimit + 23)).innerHTML;
-                            document.getElementById("fuse_type2").value= document.getElementById(t1id + (lowerLimit + 24)).innerHTML;
-                            document.getElementById("fuse_type3").value= document.getElementById(t1id + (lowerLimit + 25)).innerHTML;
-                            document.getElementById("mccb_functional").value= document.getElementById(t1id + (lowerLimit + 26)).innerHTML;
-                            document.getElementById("mccb_1").value= document.getElementById(t1id + (lowerLimit + 27)).innerHTML;
-                            document.getElementById("mccb_2").value= document.getElementById(t1id + (lowerLimit + 28)).innerHTML;
-                            document.getElementById("mccb_3").value= document.getElementById(t1id + (lowerLimit + 29)).innerHTML;
-                            document.getElementById("mccb_type1").value= document.getElementById(t1id + (lowerLimit +30)).innerHTML;
-                            document.getElementById("mccb_type2").value= document.getElementById(t1id + (lowerLimit + 31)).innerHTML;
-                            document.getElementById("mccb_type3").value= document.getElementById(t1id + (lowerLimit + 32)).innerHTML;
-                            document.getElementById("starter_functional").value= document.getElementById(t1id + (lowerLimit + 33)).innerHTML;
-                            document.getElementById("starter_type").value= document.getElementById(t1id + (lowerLimit + 34)).innerHTML;
-                            document.getElementById("starter_make").value= document.getElementById(t1id + (lowerLimit + 35)).innerHTML;
-                            document.getElementById("starter_capacity").value= document.getElementById(t1id + (lowerLimit + 36)).innerHTML;
-                            document.getElementById("latitude").value= document.getElementById(t1id + (lowerLimit + 37)).innerHTML;
-                            document.getElementById("longitude").value= document.getElementById(t1id + (lowerLimit + 38)).innerHTML;
+                            document.getElementById("ivrs_no").value= document.getElementById(t1id + (lowerLimit + 13)).innerHTML;
+                            document.getElementById("meter_no").value= document.getElementById(t1id + (lowerLimit + 14)).innerHTML;//
+                            document.getElementById("meter_functional").value= document.getElementById(t1id + (lowerLimit + 15)).innerHTML;
+                            document.getElementById("r_phase").value= document.getElementById(t1id + (lowerLimit + 16)).innerHTML;
+                            document.getElementById("y_phase").value= document.getElementById(t1id + (lowerLimit + 17)).innerHTML;
+                            document.getElementById("b_phase").value= document.getElementById(t1id + (lowerLimit + 18)).innerHTML;
+                            document.getElementById("power").value= document.getElementById(t1id + (lowerLimit + 19)).innerHTML;
+                            document.getElementById("fuse_functional").value= document.getElementById(t1id + (lowerLimit + 20)).innerHTML;
+                            document.getElementById("fuse_1").value= document.getElementById(t1id + (lowerLimit + 21)).innerHTML;
+                            document.getElementById("fuse_2").value= document.getElementById(t1id + (lowerLimit + 22)).innerHTML;
+                            document.getElementById("fuse_3").value= document.getElementById(t1id + (lowerLimit + 23)).innerHTML;
+                            document.getElementById("fuse_type1").value= document.getElementById(t1id + (lowerLimit + 24)).innerHTML;
+                            document.getElementById("fuse_type2").value= document.getElementById(t1id + (lowerLimit + 25)).innerHTML;
+                            document.getElementById("fuse_type3").value= document.getElementById(t1id + (lowerLimit + 26)).innerHTML;
+                            document.getElementById("mccb_functional").value= document.getElementById(t1id + (lowerLimit + 27)).innerHTML;
+                            document.getElementById("mccb_1").value= document.getElementById(t1id + (lowerLimit + 28)).innerHTML;
+                            document.getElementById("mccb_2").value= document.getElementById(t1id + (lowerLimit + 29)).innerHTML;
+                            document.getElementById("mccb_3").value= document.getElementById(t1id + (lowerLimit + 30)).innerHTML;
+                            document.getElementById("mccb_type1").value= document.getElementById(t1id + (lowerLimit +31)).innerHTML;
+                            document.getElementById("mccb_type2").value= document.getElementById(t1id + (lowerLimit + 32)).innerHTML;
+                            document.getElementById("mccb_type3").value= document.getElementById(t1id + (lowerLimit + 33)).innerHTML;
+                            document.getElementById("starter_functional").value= document.getElementById(t1id + (lowerLimit + 34)).innerHTML;
+                            document.getElementById("starter_type").value= document.getElementById(t1id + (lowerLimit + 35)).innerHTML;
+                            document.getElementById("starter_make").value= document.getElementById(t1id + (lowerLimit + 36)).innerHTML;
+                            document.getElementById("starter_capacity").value= document.getElementById(t1id + (lowerLimit + 37)).innerHTML;
+                            document.getElementById("latitude").value= document.getElementById(t1id + (lowerLimit + 38)).innerHTML;
+                            document.getElementById("longitude").value= document.getElementById(t1id + (lowerLimit + 39)).innerHTML;
 
-                            document.getElementById("auto_switch_type").value= document.getElementById(t1id + (lowerLimit + 39)).innerHTML;
+                            document.getElementById("auto_switch_type").value= document.getElementById(t1id + (lowerLimit + 40)).innerHTML;
                             // document.getElementById("main_switch_rating").value= document.getElementById(t1id + (lowerLimit + 40)).innerHTML;
-                            document.getElementById("main_switch_type").value= document.getElementById(t1id + (lowerLimit +40)).innerHTML;
-                            document.getElementById("main_switch_rating").value= document.getElementById(t1id + (lowerLimit +41)).innerHTML;
-                            document.getElementById("enclosure_type").value= document.getElementById(t1id + (lowerLimit + 42)).innerHTML;
-                            document.getElementById("meter_reading").value= document.getElementById(t1id + (lowerLimit + 43)).innerHTML;
-                            document.getElementById("meter_phase").value= document.getElementById(t1id + (lowerLimit + 44)).innerHTML;
-                            document.getElementById("survey_meter_no").value=document.getElementById(t1id + (lowerLimit + 45)).innerHTML;
+                            document.getElementById("main_switch_type").value= document.getElementById(t1id + (lowerLimit +41)).innerHTML;
+                            document.getElementById("main_switch_rating").value= document.getElementById(t1id + (lowerLimit +42)).innerHTML;
+                            document.getElementById("enclosure_type").value= document.getElementById(t1id + (lowerLimit + 43)).innerHTML;
+                            document.getElementById("meter_reading").value= document.getElementById(t1id + (lowerLimit + 44)).innerHTML;
+                            document.getElementById("meter_phase").value= document.getElementById(t1id + (lowerLimit + 45)).innerHTML;
+                            document.getElementById("survey_meter_no").value=document.getElementById(t1id + (lowerLimit + 46)).innerHTML;
 
-                            document.getElementById("meter_address").value=document.getElementById(t1id + (lowerLimit + 46)).innerHTML;
+                            document.getElementById("meter_address").value=document.getElementById(t1id + (lowerLimit + 47)).innerHTML;
                             //  d
-                            //  document.getElementById("remark1").value= document.getElementById(t1id + (lowerLimit + 21)).innerHTML;
+                          //  document.getElementById("ivrs_no").value= document.getElementById(t1id + (lowerLimit + 47)).innerHTML;
 
                             //alert(document.getElementById("switching_point_detail_id"+rowNo).value);
                             // document.getElementById("switching_point_detail_id").value= document.getElementById("switching_point_detail_id" + rowNo).value;
@@ -824,7 +825,7 @@
                                                     <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${surveyTypeBean.meter_status}</td>
                                                     <%--    <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${surveyTypeBean.pole_no_s}</td>
                                                           <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${surveyTypeBean.switching_point_detail_rev_no}</td> --%>
-                                                    <td id=""  onclick="" >${surveyTypeBean.service_conn_no}</td>
+                                                    <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id) ">${surveyTypeBean.service_conn_no}</td>
 
                                                     <td id="t1c${IDGenerator.uniqueID}"  onclick="fillColumns(id)" >${surveyTypeBean.meter_no}</td>
 

@@ -1376,71 +1376,15 @@ public class SwitchingPointSurveyModel {
         try {
             connection.setAutoCommit(false);
             pstmt = connection.prepareStatement(query1,Statement.RETURN_GENERATED_KEYS);
-//            pstmt.setInt(1, survey_id + 1);
-            /* pstmt.setString(1, surveyTypeBean.getSwitching_point_name());
-            pstmt.setString(2, surveyTypeBean.getPole_no_s());
-            pstmt.setString(3, surveyTypeBean.getGps_code_s());
-            if (surveyTypeBean.getIsCheckedTrue().equals("Y")) {
-                pstmt.setNull(4, java.sql.Types.INTEGER);
-                pstmt.setNull(5, java.sql.Types.INTEGER);
-                pstmt.setNull(7, java.sql.Types.INTEGER);
-                pstmt.setNull(26, java.sql.Types.INTEGER);
-            } else {
-                pstmt.setInt(4, surveyTypeBean.getArea_id());
-                pstmt.setInt(5, surveyTypeBean.getRoad_id());
-                pstmt.setInt(7, surveyTypeBean.getTraffic_type_id());
-                pstmt.setInt(26, surveyTypeBean.getRoad_rev_no());
-            }
-            pstmt.setString(6, surveyTypeBean.getIs_working());
-            pstmt.setString(8, surveyTypeBean.getCreated_by());
-            pstmt.setString(9, surveyTypeBean.getRemark());
-            pstmt.setString(10, surveyTypeBean.getMeter_no_s());
-            pstmt.setInt(11, surveyTypeBean.getPhase());
-            pstmt.setInt(12, surveyTypeBean.getControl_mechanism_id());
-            pstmt.setString(13, surveyTypeBean.getFuse());
-            pstmt.setString(14, surveyTypeBean.getContacter());
-            pstmt.setString(15, surveyTypeBean.getMccb());
-            pstmt.setString(16, surveyTypeBean.getFuse_quantity());
-            pstmt.setString(17, surveyTypeBean.getMccb_quantity());
-            pstmt.setInt(18, surveyTypeBean.getNo_of_poles());
-            pstmt.setDouble(19, surveyTypeBean.getLongitude());
-            pstmt.setDouble(20, surveyTypeBean.getLattitude());
-            pstmt.setString(21, surveyTypeBean.getService_conn_no());
-            pstmt.setString(22, surveyTypeBean.getIvrs_no());
-            pstmt.setDouble(23, surveyTypeBean.getMeasured_load());
-            pstmt.setInt(24, surveyTypeBean.getFeeder_id());
-            pstmt.setString(25, surveyTypeBean.getIsCheckedTrue());
-            pstmt.setString(27, surveyTypeBean.getFuse1());
-            pstmt.setString(28, surveyTypeBean.getFuse2());
-            pstmt.setString(29, surveyTypeBean.getFuse3());
-            pstmt.setString(30, surveyTypeBean.getMccb1());
-            pstmt.setString(31, surveyTypeBean.getMccb2());
-            pstmt.setString(32, surveyTypeBean.getMccb3());
-            pstmt.setInt(33, surveyTypeBean.getFuse_id1());
-            pstmt.setInt(34, surveyTypeBean.getFuse_id2());
-            pstmt.setInt(35, surveyTypeBean.getFuse_id3());
-            pstmt.setInt(36, surveyTypeBean.getContacter_id());
-            pstmt.setString(37, surveyTypeBean.getContacter_capacity());
-            pstmt.setString(38, surveyTypeBean.getContacter_make());
-            pstmt.setInt(39, surveyTypeBean.getMccb_id1());
-            pstmt.setInt(40, surveyTypeBean.getMccb_id2());
-            pstmt.setInt(41, surveyTypeBean.getMccb_id3());
-            pstmt.setInt(42, surveyTypeBean.getAuto_switch_type_id());
-            pstmt.setInt(43, surveyTypeBean.getMain_switch_type_id());
-            pstmt.setString(44, surveyTypeBean.getMain_switch_reading());
-            pstmt.setInt(45, surveyTypeBean.getEnclosure_type_id());*/
+ 
 
- /*       if (surveyTypeBean.getPole_type_id() != 0) {
-            pstmt.setInt(32, surveyTypeBean.getPole_type_id());   // its POLE ID
-            }  */
-
- /*pstmt.setString(33, surveyTypeBean.getController_model());
-            pstmt.setString(34, surveyTypeBean.getMobile_no());
-            pstmt.setString(35, surveyTypeBean.getSim_no());
-            pstmt.setString(36, surveyTypeBean.getImei_no());
-            pstmt.setString(37, surveyTypeBean.getPanel_file_no());
-             */
-            pstmt.setString(1, surveyTypeBean.getSwitching_point_name());
+  
+ if(surveyTypeBean.getSwitching_point_name()==null){
+   pstmt.setString(1, "Yes");
+ }else{
+  pstmt.setString(1, surveyTypeBean.getSwitching_point_name());
+ }
+          
             pstmt.setString(2, surveyTypeBean.getPole_no_s());
             pstmt.setString(3, surveyTypeBean.getGps_code_s());
             if (surveyTypeBean.getIsCheckedTrue().equals("Y")) {
@@ -1495,7 +1439,12 @@ public class SwitchingPointSurveyModel {
             pstmt.setDouble(19, surveyTypeBean.getLongitude());
             pstmt.setDouble(20, surveyTypeBean.getLattitude());
             pstmt.setString(21, surveyTypeBean.getService_conn_no());
-            pstmt.setString(22, surveyTypeBean.getIvrs_no());
+            if(surveyTypeBean.getIvrs_no()==null){
+   pstmt.setString(22, "0");
+ }else{
+  pstmt.setString(22, surveyTypeBean.getIvrs_no());
+ }
+           
             pstmt.setDouble(23, surveyTypeBean.getMeasured_load());
             pstmt.setInt(24, surveyTypeBean.getFeeder_id());
             pstmt.setString(25, surveyTypeBean.getIsCheckedTrue());
@@ -1516,71 +1465,7 @@ public class SwitchingPointSurveyModel {
             switching_rev_no = surveyTypeBean.getSwitching_rev_no();
             pstmt.setInt(47, surveyTypeBean.getSwitching_point_detail_id());
             pstmt.setString(48, getMeterNameAuto(surveyTypeBean.getIvrs_no()));
-            /*pstmt.setInt(1, surveyTypeBean.getSwitching_point_detail_id());
-
-            pstmt.setString(2, surveyTypeBean.getPole_no_s());
-            pstmt.setString(3, surveyTypeBean.getGps_code_s());
-            if (surveyTypeBean.getIsCheckedTrue().equals("Y")) {
-                pstmt.setNull(4, java.sql.Types.INTEGER);
-                pstmt.setNull(5, java.sql.Types.INTEGER);
-                pstmt.setNull(7, java.sql.Types.INTEGER);
-                pstmt.setNull(35, java.sql.Types.INTEGER);
-            } else {
-                pstmt.setInt(4, surveyTypeBean.getArea_id());
-                pstmt.setInt(5, surveyTypeBean.getRoad_id());
-                pstmt.setInt(7, surveyTypeBean.getTraffic_type_id());
-                pstmt.setInt(35, surveyTypeBean.getRoad_rev_no());
-            }
-
-
-            //   pstmt.setInt(4, surveyTypeBean.getArea_id());
-
-            //   pstmt.setInt(5, surveyTypeBean.getRoad_id());
-            pstmt.setString(6, surveyTypeBean.getIs_working());
-            //   pstmt.setInt(7, surveyTypeBean.getTraffic_type_id());
-            pstmt.setString(8, surveyTypeBean.getCreated_by());
-            pstmt.setString(9, surveyTypeBean.getRemark());
-            pstmt.setInt(10, surveyTypeBean.getSwitching_rev_no() + 1);
-            pstmt.setString(11, surveyTypeBean.getMeter_no_s());
-            pstmt.setInt(12, surveyTypeBean.getPhase());
-            pstmt.setInt(13, surveyTypeBean.getControl_mechanism_id());
-            pstmt.setString(14, surveyTypeBean.getFuse());
-            pstmt.setString(15, surveyTypeBean.getContacter());
-            pstmt.setString(16, surveyTypeBean.getMccb());
-            pstmt.setInt(17, surveyTypeBean.getFuse_id());
-            pstmt.setInt(18, surveyTypeBean.getContacter_id());
-            pstmt.setInt(19, surveyTypeBean.getMccb_id());
-            pstmt.setString(20, surveyTypeBean.getTimer());
-            pstmt.setInt(21, surveyTypeBean.getTimer_id());
-            pstmt.setString(22, surveyTypeBean.getFuse_quantity());
-            //   pstmt.setString(23, surveyTypeBean.getContacter_quantity());
-            pstmt.setString(24, surveyTypeBean.getMccb_quantity());
-            // pstmt.setString(25, surveyTypeBean.getTimer_quantity());
-
-            pstmt.setDouble(26, surveyTypeBean.getLongitude());
-            pstmt.setDouble(27, surveyTypeBean.getLattitude());
-            pstmt.setDouble(28, surveyTypeBean.getMeasured_load());
-            pstmt.setInt(29, surveyTypeBean.getFeeder_id());
-            pstmt.setString(30, surveyTypeBean.getIsCheckedTrue());
-            //   pstmt.setString(32, surveyTypeBean.getPole_no());
-       /*     if (surveyTypeBean.getIsCheckedTrue().equals("Y") && surveyTypeBean.getPole_id() != 0) {
-            pstmt.setInt(32, surveyTypeBean.getPole_rev_no());
-            } else {
-            pstmt.setNull(32, java.sql.Types.INTEGER);
-            }   */
- /*
-            pstmt.setInt(31, surveyTypeBean.getNo_of_poles());
-            pstmt.setString(32, surveyTypeBean.getService_conn_no());
-            pstmt.setString(33, surveyTypeBean.getIvrs_no());
-            pstmt.setString(34, surveyTypeBean.getSwitching_point_name());
-
-             */
- /*pstmt.setString(35, surveyTypeBean.getController_model());
-            pstmt.setString(36, surveyTypeBean.getMobile_no());
-            pstmt.setString(37, surveyTypeBean.getSim_no());
-            pstmt.setString(38, surveyTypeBean.getImei_no());
-            pstmt.setString(39, surveyTypeBean.getPanel_file_no());*/
-            //     pstmt.setInt(40, surveyTypeBean.getRoad_rev_no());
+            
             rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
                 rs = pstmt.getGeneratedKeys();

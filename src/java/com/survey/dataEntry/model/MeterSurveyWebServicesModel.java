@@ -52,6 +52,7 @@ public class MeterSurveyWebServicesModel {
     private final String COLOR_OK = "yellow";
     private final String COLOR_ERROR = "red";
     String destination_path = "";
+    int p_id = 0;
 
     public String getDriverClass() {
         return driverClass;
@@ -1929,6 +1930,25 @@ connection.setAutoCommit(true);
         }
         return survey_id;
     }
+    public int getCircuitId() {
+        String query;
+        int survey_id = 0;
+        query = "select id from circuit_survey order  by id desc limit 1";
+        try {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+
+            ResultSet rset = pstmt.executeQuery();
+            if (rset.next()) {
+
+                survey_id = rset.getInt("id");
+                
+            }
+
+        } catch (Exception ex) {
+            System.out.println("Error: getSurveyId() " + ex);
+        }
+        return survey_id;
+    }
     public int getSurveyId12() {
         String query;
         int survey_id = 0;
@@ -2784,6 +2804,7 @@ connection.setAutoCommit(true);
             meter_no = json1.get("meter_no").toString();
             circuitno = json1.get("circuitno").toString();
             time = json1.get("survey_time").toString();
+            is_child = json1.get("is_child").toString();
 
             try {
                 longitudefirstpole = Double.parseDouble(json1.get("longitudefirstpole").toString());
@@ -2809,7 +2830,11 @@ connection.setAutoCommit(true);
             cable_type_id = 1;
             int parent_id = 0;
             parent_id = getparentid(meter_no);
-
+if(is_child.equals("Y")){
+parent_id=getCircuitId();
+}else{
+parent_id=0;
+}
             String query = "insert into circuit_survey(circuit_name, irvs_no, circuitno, "
                     + " switching_point_detail_id, first_pole_id, last_pole_id, cable_type_id, parent_id, "
                     + " time, is_child, imageoffirstpole, imageoflastpole, "
@@ -2833,9 +2858,15 @@ connection.setAutoCommit(true);
 //                        + " '"+ accuracyfirstpole+"',"+ latitudelastpole+","+ longitudelastpole+","+ altitudelastpole+","
 //                        + "'"+ accuracylastpole+"')";
             try {
-                PreparedStatement psmt = connection.prepareStatement(query);
+                PreparedStatement psmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
                 roweffected = psmt.executeUpdate();
+                  ResultSet rs = psmt.getGeneratedKeys();
+                    while (rs.next()) {
+                        p_id = rs.getInt(1);
+                        
+                        //survey_rev_no = rs.getInt(36);
+                    }
             } catch (Exception e) {
                 System.out.println("DataSendModel Error: " + e);
             }
@@ -2861,7 +2892,7 @@ connection.setAutoCommit(true);
     public int getNoOfRowsCircuit() {
         int noOfRows = 0;
         try {
-            ResultSet rset = connection.prepareStatement("select count(*) from circuit ").executeQuery();
+            ResultSet rset = connection.prepareStatement("select count(*) from circuit_survey ").executeQuery();
             rset.next();
             noOfRows = Integer.parseInt(rset.getString(1));
         } catch (Exception e) {
@@ -2873,7 +2904,7 @@ connection.setAutoCommit(true);
     public int getparentid(String meter_no) {
         int circuit_id = 0;
         try {
-            ResultSet rset = connection.prepareStatement("select id from circuit where circuit_name= " + meter_no).executeQuery();
+            ResultSet rset = connection.prepareStatement("select id from circuit_Survey where circuit_name= " + meter_no).executeQuery();
             rset.next();
             circuit_id = Integer.parseInt(rset.getString(1));
         } catch (Exception e) {

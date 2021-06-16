@@ -185,6 +185,7 @@
                         <li><a href="switchingtypeCont.do">Switching Type</a></li>
                          <li><a href="ShowMeterDataCont.do">Meter Details</a></li>
                          <li><a href="PrimarySurveyController">Primary Survey</a></li>
+                         <li><a href="CircuitInfoCont">Create Circuit</a></li>
                            <li><a href="CircuitSurveyController">Circuit Data</a></li>
                            <li><a href="CircuitSurveyDataController">Circuit Survey</a></li>
                     </ul>
